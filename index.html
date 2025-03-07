@@ -1,0 +1,3185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- استيراد خط Rubik من Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- استيراد خط Tajawal من Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <title>MATH</title>
+    <style>
+      /* تضمين جميع أوزان الخطوط */
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Black.otf' %}")
+          format("opentype");
+        font-weight: 900;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-BlackItalic.otf' %}")
+          format("opentype");
+        font-weight: 900;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Bold.otf' %}")
+          format("opentype");
+        font-weight: bold;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-BoldItalic.otf' %}")
+          format("opentype");
+        font-weight: bold;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraBold.otf' %}")
+          format("opentype");
+        font-weight: 800;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraBoldItalic.otf' %}")
+          format("opentype");
+        font-weight: 800;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraLight.otf' %}")
+          format("opentype");
+        font-weight: 200;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraLightItalic.otf' %}")
+          format("opentype");
+        font-weight: 200;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Light.otf' %}")
+          format("opentype");
+        font-weight: 300;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-LightItalic.otf' %}")
+          format("opentype");
+        font-weight: 300;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Medium.otf' %}")
+          format("opentype");
+        font-weight: 500;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-MediumItalic.otf' %}")
+          format("opentype");
+        font-weight: 500;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Regular.otf' %}")
+          format("opentype");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-RegularItalic.otf' %}")
+          format("opentype");
+        font-weight: 400;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-SemiBold.otf' %}")
+          format("opentype");
+        font-weight: 600;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-SemiBoldItalic.otf' %}")
+          format("opentype");
+        font-weight: 600;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Thin.otf' %}")
+          format("opentype");
+        font-weight: 100;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ThinItalic.otf' %}")
+          format("opentype");
+        font-weight: 100;
+        font-style: italic;
+      }
+
+      /*____________________________________________________________*/
+
+      /* منع التمرير الأفقي */
+      /* منع التمرير الأفقي نهائيًا */
+      /* أضف هذه القواعد في نهاية الكود دون تعديل أي شيء آخر */
+      html,
+      body {
+        overflow-x: hidden;
+      }
+
+      /* تضمين بقية الخطوط كما في الكود الأصلي */
+      :root {
+        --main-font: "SomarSans", sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: var(--main-font);
+      }
+      section {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+      }
+      /* تطبيق الخط على جميع النصوص في الصفحة */
+      body,
+      * {
+        font-family: var(--main-font);
+      }
+      /*-------------------------------------------------------------------*/
+      /* تصميم القسم الرئيسي */
+      .flexible-section {
+        width: 100%;
+        background-color: #262b4d; /* الخلفية الرئيسية */
+        padding: 10px 0; /* مسافة رأسية */
+        box-sizing: border-box;
+        position: fixed; /* يجعل القسم ثابتًا */
+        top: 0;
+        left: 0;
+        z-index: 1000; /* لضمان ظهوره فوق باقي العناصر */
+      }
+      /* الحاوية الداخلية */
+      .content-container {
+        width: 100%;
+        max-width: 1200px; /* تحديد أقصى عرض للمحتوى */
+        margin: 0 auto; /* الهامش المتساوي */
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* محاذاة العناصر بشكل أفقي في المنتصف */
+        box-sizing: border-box;
+      }
+      /* تصميم الأيقونة */
+      .theme-icon {
+        width: 80px;
+        height: 80px;
+        margin-right: -570px; /* نقل الصورة بشكل أكبر لجعلها قريبة جدًا */
+        border-radius: 20px 5px 20px 5px;
+      }
+      /* الحاوية للصورة التفاعلية */
+      .interactive-image-container {
+        display: inline-block;
+        position: relative;
+        margin-left: 0; /* إزالة أي مسافة إضافية بين الصورتين */
+      }
+      .interactive-image {
+        width: 40px; /* تقليل عرض الصورة */
+        height: 40px; /* تقليل ارتفاع الصورة */
+        border-radius: 50%; /* الحفاظ على الشكل الدائري */
+        cursor: pointer;
+      }
+      #interactive-links {
+        display: none;
+        position: absolute;
+        top: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+        width: 200px; /* عرض الحاوية المنسدلة */
+        height: auto; /* الارتفاع يعتمد على المحتوى */
+        text-align: right;
+        direction: rtl; /* تحديد اتجاه النصوص للغة العربية */
+      }
+      #interactive-links a {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; /* الحفاظ على الترتيب دون تغيير */
+        color: #262b4d;
+        text-decoration: none;
+        margin-bottom: 10px;
+        padding: 10px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        border-radius: 8px;
+      }
+      #interactive-links a:hover {
+        background-color: #f5f5f5;
+        color: #0bce83;
+      }
+      #interactive-links a i {
+        margin-right: 2px; /* إضافة مسافة واضحة بين الأيقونات والنصوص */
+        color: #0bce83;
+        font-size: 1.2rem;
+        margin-left: 10px; /* إضافة مسافة فقط بين النصوص والأيقونات */
+      }
+      /* أزرار التسجيل */
+      .right-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      /* أزرار برسوم متحركة وحواف مضيئة مع تطبيق خط Tajawal */
+      .login-button,
+      .signup-button {
+        padding: 15px 30px;
+        background-color: #0bce83;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden; /* إخفاء العناصر المتحركة خارج الزر */
+        transition: color 0.4s ease, box-shadow 0.4s ease;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* ظل خفيف قبل التمرير */
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+      .login-button::before,
+      .signup-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.2);
+        transition: left 0.4s ease;
+      }
+      .login-button:hover::before,
+      .signup-button:hover::before {
+        left: 100%; /* تتحرك الرسوم المتحركة عبر الزر */
+      }
+      .login-button:hover,
+      .signup-button:hover {
+        color: #262b4d;
+        box-shadow: 0 0 20px rgba(11, 206, 131, 0.7); /* حواف مضيئة عند التمرير */
+      }
+      /*-----------------------------------------------------------------------*/
+      /* تنسيقات القسم المعزول مع تعديل صورة الخلفية */
+      .custom-design-isolated {
+        margin: 80px 0 0 0; /* هامش علوي لتعويض الهيدر */
+        height: calc(120vh - 80px); /* زيادة الارتفاع قليلاً */
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("{% static 'images/laptop-2562211.jpg' %}");
+        background-size: cover;
+        background-position: top;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        transform: translateZ(0);
+      }
+      /* تعديل على الصورة في container بحيث تغطي المساحة بالكامل */
+      .custom-design-isolated .container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 60px;
+        width: 1000px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        height: 400px;
+        transform: translateY(-50px);
+      }
+      /* تعديل على image-box بحيث تحافظ على أبعاد الصورة بشكل مناسب */
+      .custom-design-isolated .image-box {
+        width: 250px;
+        height: 300px; /* زيادة الارتفاع قليلاً */
+        border-radius: 10px;
+        overflow: hidden;
+        margin-left: 20px;
+        box-shadow: rgba(62, 63, 168, 0.8) 0px 10px 30px 8px,
+          rgba(62, 63, 168, 0.8) 0px 0px 0px 2px;
+      }
+      /* تغيير طريقة عرض الصورة داخل الصورة بحيث تغطي المساحة بالكامل */
+      .custom-design-isolated .image-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* ستغطى الصورة المساحة بدون تشويه */
+        transition: transform 0.3s ease;
+      }
+      /* تأثير التكبير عند التمرير فوق الصورة */
+      .custom-design-isolated .image-box:hover img {
+        transform: scale(1.2) rotate(5deg);
+      }
+      /* تنسيق المحتوى داخل الـ container */
+      .custom-design-isolated .content {
+        text-align: right;
+        margin-right: 20px;
+      }
+      .custom-design-isolated .content .description {
+        margin-bottom: 20px;
+      }
+      /* تنسيق الجملة الأولى */
+      .custom-design-isolated .content .highlight-text {
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+        background-image: linear-gradient(
+          123deg,
+          #333 24%,
+          #007bff 65%
+        ) !important;
+        -webkit-text-fill-color: transparent !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        display: block;
+        margin-bottom: 10px;
+      }
+      /* تنسيق الجملة الثانية */
+      .custom-design-isolated .content .custom-text {
+        font-family: SomarSans, sans-serif;
+        font-size: 1.5rem;
+        line-height: 1.2; /* زيادة المسافة بين الأسطر */
+        margin-bottom: 15px; /* زيادة المسافة بين الفقرات */
+      }
+      .custom-design-isolated .content .social-icons {
+        margin-top: 20px; /* المسافة بين النص والأيقونات */
+      }
+      .custom-design-isolated .social-icons a {
+        margin: 0 10px;
+        color: white;
+        text-decoration: none;
+        font-size: 1.5em;
+      }
+      .custom-design-isolated .social-icons a:hover {
+        color: #00aced;
+      }
+      /*-------------------------------------------------------------------------------------*/
+      /* عزل التنسيقات باستخدام معرف فريد */
+      /* عزل التنسيقات باستخدام معرف فريد */
+      #features-page {
+        /* تعريف المتغيرات الأساسية للخلفية (لم تتغير) */
+        --primary-color: #2575fc;
+        --secondary-color: #6a11cb;
+        --background-gradient: linear-gradient(
+          135deg,
+          var(--secondary-color),
+          var(--primary-color)
+        );
+        /* متغيرات ألوان النصوص */
+        --text-gradient-start: #00ced1;
+        --text-gradient-end: #20b2aa;
+      }
+
+      /* تضمين جميع أوزان خط SomarSans */
+      /* عزل باقي التنسيقات داخل معرف #features-page */
+      #features-page * {
+        box-sizing: border-box;
+      }
+      #features-page body,
+      #features-page {
+        margin: 0;
+        padding: 0;
+        font-family: "SomarSans", sans-serif;
+        background: var(--background-gradient);
+        color: #fff;
+        direction: rtl;
+      }
+      #features-page .features-section {
+        padding: 80px 20px;
+        text-align: center;
+      }
+      #features-page .features-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      #features-page .features-title {
+        font-size: 3.2rem;
+        font-weight: 600;
+        background-image: linear-gradient(123deg, #1e90ff 24%, #00bfff 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        letter-spacing: -2px;
+        line-height: 1.6em;
+        margin-bottom: 22px;
+      }
+      #features-page .features-description {
+        background-image: linear-gradient(
+          123deg,
+          var(--text-gradient-start) 24%,
+          var(--text-gradient-end) 65%
+        );
+        font-size: 3.2rem;
+        font-weight: 600;
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem;
+        padding: 0;
+      }
+      /* تعديل الكروت لتكون جميعها في صف واحد بدون شريط تمرير */
+      #features-page .features-grid {
+        display: flex;
+        flex-wrap: nowrap; /* منع لف الكروت للسطر التالي */
+        justify-content: space-between; /* توزيع الكروت بالتساوي */
+        gap: 30px;
+        /* تم إزالة خاصية overflow-x: auto */
+        padding-bottom: 20px;
+      }
+      #features-page .feature-card {
+        flex: 1;
+        min-width: 280px;
+        background: #00c8ff;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px 30px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s forwards;
+      }
+      #features-page .feature-card:nth-child(1) {
+        animation-delay: 0.2s;
+      }
+      #features-page .feature-card:nth-child(2) {
+        animation-delay: 0.4s;
+      }
+      #features-page .feature-card:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+      #features-page .feature-card:nth-child(4) {
+        animation-delay: 0.8s;
+      }
+      #features-page .feature-card:hover {
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      }
+      #features-page .feature-icon {
+        font-size: 4rem;
+        color: #fff;
+        margin-bottom: 20px;
+      }
+      #features-page .feature-card-title {
+        font-size: 3.2rem;
+        font-weight: 600;
+        background-image: linear-gradient(123deg, #002b5c 24%, #004b87 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem;
+        padding: 0;
+      }
+      #features-page .feature-card-text {
+        font-size: 1.8rem;
+        margin-bottom: 40px;
+        background-image: linear-gradient(123deg, #ffffff 24%, #dfe7fd 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        line-height: 1.6;
+      }
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Responsive Styles للتأكد من ظهور كل العناصر بشكل مناسب على جميع الشاشات */
+      @media (max-width: 768px) {
+        #features-page .features-title {
+          font-size: 2.5rem;
+        }
+        #features-page .features-description {
+          font-size: 1.6rem;
+        }
+        #features-page .feature-card {
+          width: 90%;
+        }
+        /* التعديل الأساسي لضمان لف الكروت وتوزيعها بشكل متمركز */
+        #features-page .features-grid {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
+
+      /*------------------------------------------------------------------------------------*/
+      /* الأنماط الخاصة بالسيكشن */
+      #my-section {
+        display: flex;
+        justify-content: center; /* محاذاة العناصر أفقياً للوسط */
+        align-items: center; /* محاذاة العناصر عمودياً للوسط */
+        height: 60vh; /* تقليل الارتفاع إلى 60% من ارتفاع الشاشة */
+        margin: 0;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        font-family: Arial, sans-serif;
+      }
+
+      #my-section .button-container {
+        display: flex;
+        flex-direction: column; /* ترتيب الأزرار بشكل عمودي */
+        gap: 20px; /* المسافة بين الأزرار */
+        align-items: center; /* محاذاة الأزرار في المنتصف */
+        margin-top: 80px; /* إضافة مسافة من الأعلى */
+        margin-bottom: 20px; /* إضافة مسافة من الأسفل */
+      }
+
+      #my-section .rounded-button {
+        background-color: #f56336; /* لون الخلفية البرتقالي */
+        color: white; /* لون النص */
+        padding: 25px 50px; /* تكبير المسافات الداخلية */
+        border: none; /* إزالة الحدود */
+        border-radius: 40px; /* الزوايا المستديرة */
+        font-size: 20px; /* تكبير حجم الخط */
+        font-family: Arial, sans-serif; /* نوع الخط */
+        cursor: pointer; /* شكل المؤشر */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* الظل */
+        transition: box-shadow 0.3s ease, transform 0.3s ease; /* تأثير التحويم */
+        width: 300px; /* تحديد عرض ثابت للأزرار ليكونوا بنفس الحجم */
+        text-align: center; /* محاذاة النص للوسط */
+        background-image: url("path-to-your-image.jpg"); /* صورة الخلفية */
+        background-size: cover; /* جعل صورة الخلفية تغطي الزر بالكامل */
+        background-position: center; /* وضع صورة الخلفية في المنتصف */
+      }
+
+      #my-section .rounded-button:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* تكثيف الظل عند التحويم */
+        transform: scale(1.05); /* تكبير الزر قليلاً عند التحويم */
+      }
+
+      /*-------------------------------------------------*/
+      /* إعدادات الخلفية */
+      .background-container {
+        width: 100%;
+        height: 110vh; /* زيادة الارتفاع إلى 110% من ارتفاع العرض الكامل */
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        background: linear-gradient(135deg, #b09acd, #a3b9e6);
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .background-container .circle {
+        width: 500px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.1); /* اللون الفاتح الداخلي */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: overlay; /* وضع المزج لإنشاء التأثير المطلوب */
+      }
+
+      /* قسم السنوات الدراسية */
+      .custom-section {
+        margin: 0;
+        padding: 0;
+        width: 100%; /* تعديل العرض ليصبح مثل عرض الفوتر */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(120deg, #ff7e5f, #feb47b);
+        font-family: "Arial", sans-serif;
+        overflow: hidden;
+      }
+
+      .custom-container {
+        position: relative;
+        width: 80%;
+        height: 85%; /* زيادة بسيطة في ارتفاع القسم */
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .custom-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .custom-circle1 {
+        width: 520px; /* حجم الدائرة الخلفية الأولى */
+        height: 520px;
+        top: -140px;
+        left: -140px;
+        background-color: #ff6f61;
+      }
+
+      .custom-circle2 {
+        width: 420px; /* حجم الدائرة الخلفية الثانية */
+        height: 420px;
+        bottom: -120px;
+        right: -120px;
+        background-color: #ff9f43;
+      }
+
+      .custom-card-container {
+        display: flex;
+        gap: 27px; /* المسافة بين الكروت */
+      }
+
+      .custom-card {
+        width: 340px; /* عرض الكارت */
+        height: 240px; /* ارتفاع الكارت */
+        background-color: #7d46f7;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        color: white;
+        padding: 20px;
+        cursor: pointer; /* تحويل المؤشر إلى يد */
+      }
+
+      @keyframes custom-float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .custom-card .custom-circle {
+        width: 95px; /* حجم الدائرة داخل الكارت */
+        height: 95px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: -45px; /* موقع الدائرة داخل الكارت */
+        left: 0;
+        right: 0;
+        margin: auto;
+        animation: custom-float 6s ease-in-out infinite;
+        z-index: 10;
+      }
+
+      .custom-card .custom-circle i {
+        font-size: 47px; /* حجم الأيقونة داخل الكارت */
+        color: #7d46f7;
+      }
+
+      /* الخط والنصوص في الكروت */
+      .custom-text-container {
+        position: relative;
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 50px; /* يمكنك تعديل القيمة حسب الحاجة */
+      }
+
+      .custom-text-above {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #255ae0 24%, #1c048a 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      .custom-line {
+        width: 80%;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.2); /* لون شفاف للخط */
+        margin: 0 auto;
+      }
+
+      .custom-text-below {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      /*=============================*/
+      /* نقاط توقف لضمان التوافق مع جميع الأجهزة */
+      /*=============================*/
+
+      /* للشاشات المتوسطة (أقل من 992px) */
+      @media only screen and (max-width: 992px) {
+        /* تحسين الحاوية الداخلية في القسم الرئيسي */
+        .content-container {
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 0 15px;
+        }
+        /* تعديل أيقونة الثيم لتناسب الشاشات الأصغر */
+        .theme-icon {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+        /* تعديل حجم الحاوية المنسدلة للروابط التفاعلية */
+        #interactive-links {
+          width: 90%;
+          max-width: 200px;
+          padding: 15px;
+        }
+        /* تقليل حجم أزرار التسجيل */
+        .login-button,
+        .signup-button {
+          font-size: 1.3rem;
+          padding: 12px 25px;
+        }
+      }
+      /* لشاشات العرض الصغيرة والمتوسطة (أقل من 768px) */
+      @media only screen and (max-width: 768px) {
+        /* تعديل الحاوية في التصميم المعزول */
+        .custom-design-isolated .container {
+          width: 90%;
+          padding: 40px;
+          height: auto;
+          flex-direction: column;
+          align-items: center;
+        }
+        .custom-design-isolated .content {
+          margin-right: 0;
+          text-align: center;
+        }
+        .custom-design-isolated .image-box {
+          width: 200px;
+          height: 250px;
+          margin-left: 0;
+          margin-top: 20px;
+        }
+        /* تعديل قسم my-section */
+        #my-section {
+          height: auto;
+          padding: 20px;
+        }
+        #my-section .rounded-button {
+          width: 80%;
+          padding: 20px;
+          font-size: 18px;
+        }
+        /* تعديل الخلفية */
+        .background-container {
+          height: auto;
+          padding: 40px 20px;
+        }
+        .background-container .circle {
+          width: 300px;
+          height: 300px;
+        }
+        /* تعديل القسم المخصص */
+        .custom-container {
+          width: 95%;
+          height: auto;
+          flex-direction: column;
+          padding: 20px;
+        }
+        .custom-card-container {
+          flex-direction: column;
+          gap: 20px;
+        }
+        .custom-card {
+          width: 90%;
+          margin: 0 auto;
+        }
+        /* تعديل الفوتر */
+        footer {
+          height: auto;
+          padding: 20px 10px;
+        }
+        footer .footer-line {
+          width: 80%;
+        }
+        .footer-text {
+          font-size: 14px;
+        }
+      }
+      /* لشاشات العرض الصغيرة جدًا (أقل من 480px) */
+      @media only screen and (max-width: 480px) {
+        .content-container {
+          padding: 0 10px;
+        }
+        .interactive-image {
+          width: 35px;
+          height: 35px;
+        }
+        #interactive-links {
+          padding: 10px;
+        }
+        .login-button,
+        .signup-button {
+          padding: 10px 20px;
+          font-size: 1.2rem;
+        }
+        .custom-design-isolated .container {
+          padding: 30px;
+          width: 95%;
+        }
+        #my-section .rounded-button {
+          width: 90%;
+          padding: 15px;
+          font-size: 16px;
+        }
+        .custom-card {
+          width: 100%;
+        }
+        .custom-card-container {
+          gap: 15px;
+        }
+        footer .icons a {
+          font-size: 20px;
+        }
+        .footer-text {
+          font-size: 12px;
+        }
+      }
+      /*------------------------------------------------------------------------------------*/
+      footer {
+        background: #262b4d;
+        padding: 20px 0;
+        text-align: center;
+        width: 100%;
+        height: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #b0b0b0; /* لون النص العام */
+      }
+      footer .icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 10px;
+      }
+      footer .icons a {
+        text-decoration: none;
+        color: #4ca1ff; /* لون أيقونات جديد */
+        font-size: 24px;
+      }
+      footer .footer-line {
+        width: 50%;
+        border: none;
+        border-top: 2px solid #4ca1ff;
+        margin: 20px auto;
+      }
+      .footer-text {
+        font-size: 16px;
+        margin: 10px 0; /* مسافة بين السطور */
+        color: #e0e0e0; /* لون جديد للنص العام */
+      }
+      .footer-text .dev-text {
+        color: #a8a8a8; /* لون خافت للنص العادي */
+        font-weight: normal;
+      }
+      .footer-text .highlight {
+        color: #ffffff; /* لون أبيض لكلمة "Ziad" */
+        font-weight: bold;
+        font-size: 18px;
+        text-shadow: 0 0 8px #ffffff, 0 0 12px #ffffff; /* تأثير الإضاءة */
+        animation: glow 1.5s infinite alternate;
+      }
+      @keyframes glow {
+        from {
+          text-shadow: 0 0 8px #ffffff, 0 0 12px #ffffff;
+        }
+        to {
+          text-shadow: 0 0 12px #ffffff, 0 0 18px #ffffff, 0 0 24px #ffffff;
+        }
+      }
+      /* التنسيقات المطلوبة للجملة المحددة */
+      .footer-text-nasu {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem;
+        padding: 0;
+      }
+      /*-----------------------------------------------------------------*/
+      /*=============================*/
+      /* Responsive Styles */
+      /*=============================*/
+      /* لشاشات العرض المتوسطة (أقل من 992px) */
+      @media only screen and (max-width: 992px) {
+        /* تحسين الحاوية الداخلية في القسم الرئيسي */
+        .content-container {
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 0 15px;
+        }
+        /* تعديل أيقونة الثيم لتناسب الشاشات الأصغر */
+        .theme-icon {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+        /* تعديل حجم الحاوية المنسدلة للروابط التفاعلية */
+        #interactive-links {
+          width: 90%;
+          max-width: 200px;
+          padding: 15px;
+        }
+        /* تقليل حجم أزرار التسجيل */
+        .login-button,
+        .signup-button {
+          font-size: 1.3rem;
+          padding: 12px 25px;
+        }
+      }
+      /* لشاشات العرض الصغيرة والمتوسطة (أقل من 768px) */
+      @media only screen and (max-width: 768px) {
+        /* تعديل الحاوية في التصميم المعزول */
+        .custom-design-isolated .container {
+          width: 90%;
+          padding: 40px;
+          height: auto;
+          flex-direction: column;
+          align-items: center;
+        }
+        .custom-design-isolated .content {
+          margin-right: 0;
+          text-align: center;
+        }
+        .custom-design-isolated .image-box {
+          width: 200px;
+          height: 250px;
+          margin-left: 0;
+          margin-top: 20px;
+        }
+        /* تعديل قسم my-section */
+        #my-section {
+          height: auto;
+          padding: 20px;
+        }
+        #my-section .rounded-button {
+          width: 80%;
+          padding: 20px;
+          font-size: 18px;
+        }
+        /* تعديل الخلفية */
+        .background-container {
+          height: auto;
+          padding: 40px 20px;
+        }
+        .background-container .circle {
+          width: 300px;
+          height: 300px;
+        }
+        /* تعديل القسم المخصص */
+        .custom-container {
+          width: 95%;
+          height: auto;
+          flex-direction: column;
+          padding: 20px;
+        }
+        .custom-card-container {
+          flex-direction: column;
+          gap: 20px;
+        }
+        .custom-card {
+          width: 90%;
+          margin: 0 auto;
+        }
+        /* تعديل الفوتر */
+        footer {
+          height: auto;
+          padding: 20px 10px;
+        }
+        footer .footer-line {
+          width: 80%;
+        }
+        .footer-text {
+          font-size: 14px;
+        }
+      }
+      /* لشاشات العرض الصغيرة جدًا (أقل من 480px) */
+      @media only screen and (max-width: 480px) {
+        .content-container {
+          padding: 0 10px;
+        }
+        .interactive-image {
+          width: 35px;
+          height: 35px;
+        }
+        #interactive-links {
+          padding: 10px;
+        }
+        .login-button,
+        .signup-button {
+          padding: 10px 20px;
+          font-size: 1.2rem;
+        }
+        .custom-design-isolated .container {
+          padding: 30px;
+          width: 95%;
+        }
+        #my-section .rounded-button {
+          width: 90%;
+          padding: 15px;
+          font-size: 16px;
+        }
+        .custom-card {
+          width: 100%;
+        }
+        .custom-card-container {
+          gap: 15px;
+        }
+        footer .icons a {
+          font-size: 20px;
+        }
+        .footer-text {
+          font-size: 12px;
+        }
+      }
+      /*------------------------------------------------------------------------------------*/
+      /*=============================*/
+      /* الأنماط الخاصة بالسيكشن */
+      #my-section {
+        display: flex;
+        justify-content: center; /* محاذاة العناصر أفقياً للوسط */
+        align-items: center; /* محاذاة العناصر عمودياً للوسط */
+        height: 60vh; /* تقليل الارتفاع إلى 60% من ارتفاع الشاشة */
+        margin: 0;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        font-family: Arial, sans-serif;
+      }
+
+      #my-section .button-container {
+        display: flex;
+        flex-direction: column; /* ترتيب الأزرار بشكل عمودي */
+        gap: 20px; /* المسافة بين الأزرار */
+        align-items: center; /* محاذاة الأزرار في المنتصف */
+        margin-top: 80px; /* إضافة مسافة من الأعلى */
+        margin-bottom: 20px; /* إضافة مسافة من الأسفل */
+      }
+
+      #my-section .rounded-button {
+        background-color: #f56336; /* لون الخلفية البرتقالي */
+        color: white; /* لون النص */
+        padding: 25px 50px; /* تكبير المسافات الداخلية */
+        border: none; /* إزالة الحدود */
+        border-radius: 40px; /* الزوايا المستديرة */
+        font-size: 20px; /* تكبير حجم الخط */
+        font-family: Arial, sans-serif; /* نوع الخط */
+        cursor: pointer; /* شكل المؤشر */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* الظل */
+        transition: box-shadow 0.3s ease, transform 0.3s ease; /* تأثير التحويم */
+        width: 300px; /* تحديد عرض ثابت للأزرار ليكونوا بنفس الحجم */
+        text-align: center; /* محاذاة النص للوسط */
+        background-image: url("path-to-your-image.jpg"); /* صورة الخلفية */
+        background-size: cover; /* جعل صورة الخلفية تغطي الزر بالكامل */
+        background-position: center; /* وضع صورة الخلفية في المنتصف */
+      }
+
+      #my-section .rounded-button:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* تكثيف الظل عند التحويم */
+        transform: scale(1.05); /* تكبير الزر قليلاً عند التحويم */
+      }
+
+      /*-------------------------------------------------*/
+      /* إعدادات الخلفية */
+      .background-container {
+        width: 100%;
+        height: 110vh; /* زيادة الارتفاع إلى 110% من ارتفاع العرض الكامل */
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        background: linear-gradient(135deg, #b09acd, #a3b9e6);
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .background-container .circle {
+        width: 500px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.1); /* اللون الفاتح الداخلي */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: overlay; /* وضع المزج لإنشاء التأثير المطلوب */
+      }
+
+      /* قسم السنوات الدراسية */
+      .custom-section {
+        margin: 0;
+        padding: 0;
+        width: 100%; /* تعديل العرض ليصبح مثل عرض الفوتر */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(120deg, #ff7e5f, #feb47b);
+        font-family: "Arial", sans-serif;
+        overflow: hidden;
+      }
+
+      .custom-container {
+        position: relative;
+        width: 80%;
+        height: 85%; /* زيادة بسيطة في ارتفاع القسم */
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .custom-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .custom-circle1 {
+        width: 520px; /* حجم الدائرة الخلفية الأولى */
+        height: 520px;
+        top: -140px;
+        left: -140px;
+        background-color: #ff6f61;
+      }
+
+      .custom-circle2 {
+        width: 420px; /* حجم الدائرة الخلفية الثانية */
+        height: 420px;
+        bottom: -120px;
+        right: -120px;
+        background-color: #ff9f43;
+      }
+
+      .custom-card-container {
+        display: flex;
+        gap: 27px; /* المسافة بين الكروت */
+      }
+
+      .custom-card {
+        width: 340px; /* عرض الكارت */
+        height: 240px; /* ارتفاع الكارت */
+        background-color: #7d46f7;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        color: white;
+        padding: 20px;
+        cursor: pointer; /* تحويل المؤشر إلى يد */
+      }
+
+      @keyframes custom-float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .custom-card .custom-circle {
+        width: 95px; /* حجم الدائرة داخل الكارت */
+        height: 95px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: -45px; /* موقع الدائرة داخل الكارت */
+        left: 0;
+        right: 0;
+        margin: auto;
+        animation: custom-float 6s ease-in-out infinite;
+        z-index: 10;
+      }
+
+      .custom-card .custom-circle i {
+        font-size: 47px; /* حجم الأيقونة داخل الكارت */
+        color: #7d46f7;
+      }
+
+      /* الخط والنصوص في الكروت */
+      .custom-text-container {
+        position: relative;
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 50px; /* يمكنك تعديل القيمة حسب الحاجة */
+      }
+
+      .custom-text-above {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #255ae0 24%, #1c048a 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      .custom-line {
+        width: 80%;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.2); /* لون شفاف للخط */
+        margin: 0 auto;
+      }
+
+      .custom-text-below {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      /*=============================*/
+      /* Responsive Styles للتأكد من ظهور كل العناصر بشكل مناسب على جميع الشاشات */
+      /*=============================*/
+
+      /* لشاشات العرض المتوسطة (أقل من 992px) */
+      @media only screen and (max-width: 992px) {
+        /* تحسين الحاوية الداخلية في القسم الرئيسي */
+        .content-container {
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 0 15px;
+        }
+        /* تعديل أيقونة الثيم لتناسب الشاشات الأصغر */
+        .theme-icon {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+        /* تعديل حجم الحاوية المنسدلة للروابط التفاعلية */
+        #interactive-links {
+          width: 90%;
+          max-width: 200px;
+          padding: 15px;
+        }
+        /* تقليل حجم أزرار التسجيل */
+        .login-button,
+        .signup-button {
+          font-size: 1.3rem;
+          padding: 12px 25px;
+        }
+      }
+      /* لشاشات العرض الصغيرة والمتوسطة (أقل من 768px) */
+      @media only screen and (max-width: 768px) {
+        /* تعديل الحاوية في التصميم المعزول */
+        .custom-design-isolated .container {
+          width: 90%;
+          padding: 40px;
+          height: auto;
+          flex-direction: column;
+          align-items: center;
+        }
+        .custom-design-isolated .content {
+          margin-right: 0;
+          text-align: center;
+        }
+        .custom-design-isolated .image-box {
+          width: 200px;
+          height: 250px;
+          margin-left: 0;
+          margin-top: 20px;
+        }
+        /* تعديل قسم my-section */
+        #my-section {
+          height: auto;
+          padding: 20px;
+        }
+        #my-section .rounded-button {
+          width: 80%;
+          padding: 20px;
+          font-size: 18px;
+        }
+        /* تعديل الخلفية */
+        .background-container {
+          height: auto;
+          padding: 40px 20px;
+        }
+        .background-container .circle {
+          width: 300px;
+          height: 300px;
+        }
+        /* تعديل القسم المخصص */
+        .custom-container {
+          width: 95%;
+          height: auto;
+          flex-direction: column;
+          padding: 20px;
+        }
+        .custom-card-container {
+          flex-direction: column;
+          gap: 20px;
+        }
+        .custom-card {
+          width: 90%;
+          margin: 0 auto;
+        }
+        /* تعديل الفوتر */
+        footer {
+          height: auto;
+          padding: 20px 10px;
+        }
+        footer .footer-line {
+          width: 80%;
+        }
+        .footer-text {
+          font-size: 14px;
+        }
+      }
+      /* لشاشات العرض الصغيرة جدًا (أقل من 480px) */
+      @media only screen and (max-width: 480px) {
+        .content-container {
+          padding: 0 10px;
+        }
+        .interactive-image {
+          width: 35px;
+          height: 35px;
+        }
+        #interactive-links {
+          padding: 10px;
+        }
+        .login-button,
+        .signup-button {
+          padding: 10px 20px;
+          font-size: 1.2rem;
+        }
+        .custom-design-isolated .container {
+          padding: 30px;
+          width: 95%;
+        }
+        #my-section .rounded-button {
+          width: 90%;
+          padding: 15px;
+          font-size: 16px;
+        }
+        .custom-card {
+          width: 100%;
+        }
+        .custom-card-container {
+          gap: 15px;
+        }
+        footer .icons a {
+          font-size: 20px;
+        }
+        .footer-text {
+          font-size: 12px;
+        }
+      }
+      /*------------------------------------------------------------------------------------*/
+
+      /* الأنماط الخاصة بالسيكشن */
+      #my-section {
+        display: flex;
+        justify-content: center; /* محاذاة العناصر أفقياً للوسط */
+        align-items: center; /* محاذاة العناصر عمودياً للوسط */
+        height: 60vh; /* تقليل الارتفاع إلى 60% من ارتفاع الشاشة */
+        margin: 0;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        font-family: Arial, sans-serif;
+      }
+
+      #my-section .button-container {
+        display: flex;
+        flex-direction: column; /* ترتيب الأزرار بشكل عمودي */
+        gap: 20px; /* المسافة بين الأزرار */
+        align-items: center; /* محاذاة الأزرار في المنتصف */
+        margin-top: 80px; /* إضافة مسافة من الأعلى */
+        margin-bottom: 20px; /* إضافة مسافة من الأسفل */
+      }
+
+      #my-section .rounded-button {
+        background-color: #f56336; /* لون الخلفية البرتقالي */
+        color: white; /* لون النص */
+        padding: 25px 50px; /* تكبير المسافات الداخلية */
+        border: none; /* إزالة الحدود */
+        border-radius: 40px; /* الزوايا المستديرة */
+        font-size: 20px; /* تكبير حجم الخط */
+        font-family: Arial, sans-serif; /* نوع الخط */
+        cursor: pointer; /* شكل المؤشر */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* الظل */
+        transition: box-shadow 0.3s ease, transform 0.3s ease; /* تأثير التحويم */
+        width: 300px; /* تحديد عرض ثابت للأزرار ليكونوا بنفس الحجم */
+        text-align: center; /* محاذاة النص للوسط */
+        background-image: url("path-to-your-image.jpg"); /* صورة الخلفية */
+        background-size: cover; /* جعل صورة الخلفية تغطي الزر بالكامل */
+        background-position: center; /* وضع صورة الخلفية في المنتصف */
+      }
+
+      #my-section .rounded-button:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* تكثيف الظل عند التحويم */
+        transform: scale(1.05); /* تكبير الزر قليلاً عند التحويم */
+      }
+
+      /*-------------------------------------------------*/
+      /* إعدادات الخلفية */
+      .background-container {
+        width: 100%;
+        height: 110vh; /* زيادة الارتفاع إلى 110% من ارتفاع العرض الكامل */
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        background: linear-gradient(135deg, #b09acd, #a3b9e6);
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .background-container .circle {
+        width: 500px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.1); /* اللون الفاتح الداخلي */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: overlay; /* وضع المزج لإنشاء التأثير المطلوب */
+      }
+
+      /* قسم السنوات الدراسية */
+      .custom-section {
+        margin: 0;
+        padding: 0;
+        width: 100%; /* تعديل العرض ليصبح مثل عرض الفوتر */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(120deg, #ff7e5f, #feb47b);
+        font-family: "Arial", sans-serif;
+        overflow: hidden;
+      }
+
+      .custom-container {
+        position: relative;
+        width: 80%;
+        height: 85%; /* زيادة بسيطة في ارتفاع القسم */
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .custom-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .custom-circle1 {
+        width: 520px; /* حجم الدائرة الخلفية الأولى */
+        height: 520px;
+        top: -140px;
+        left: -140px;
+        background-color: #ff6f61;
+      }
+
+      .custom-circle2 {
+        width: 420px; /* حجم الدائرة الخلفية الثانية */
+        height: 420px;
+        bottom: -120px;
+        right: -120px;
+        background-color: #ff9f43;
+      }
+
+      .custom-card-container {
+        display: flex;
+        gap: 27px; /* المسافة بين الكروت */
+      }
+
+      .custom-card {
+        width: 340px; /* عرض الكارت */
+        height: 240px; /* ارتفاع الكارت */
+        background-color: #7d46f7;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        color: white;
+        padding: 20px;
+        cursor: pointer; /* تحويل المؤشر إلى يد */
+      }
+
+      @keyframes custom-float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .custom-card .custom-circle {
+        width: 95px; /* حجم الدائرة داخل الكارت */
+        height: 95px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: -45px; /* موقع الدائرة داخل الكارت */
+        left: 0;
+        right: 0;
+        margin: auto;
+        animation: custom-float 6s ease-in-out infinite;
+        z-index: 10;
+      }
+
+      .custom-card .custom-circle i {
+        font-size: 47px; /* حجم الأيقونة داخل الكارت */
+        color: #7d46f7;
+      }
+
+      /* الخط والنصوص في الكروت */
+      .custom-text-container {
+        position: relative;
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 50px; /* يمكنك تعديل القيمة حسب الحاجة */
+      }
+
+      .custom-text-above {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #255ae0 24%, #1c048a 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      .custom-line {
+        width: 80%;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.2); /* لون شفاف للخط */
+        margin: 0 auto;
+      }
+
+      .custom-text-below {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      /*=============================*/
+      /* Responsive Styles */
+      /*=============================*/
+      /* لشاشات العرض المتوسطة (أقل من 992px) */
+      @media only screen and (max-width: 992px) {
+        /* تحسين الحاوية الداخلية في القسم الرئيسي */
+        .content-container {
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 0 15px;
+        }
+        /* تعديل أيقونة الثيم لتناسب الشاشات الأصغر */
+        .theme-icon {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+        /* تعديل حجم الحاوية المنسدلة للروابط التفاعلية */
+        #interactive-links {
+          width: 90%;
+          max-width: 200px;
+          padding: 15px;
+        }
+        /* تقليل حجم أزرار التسجيل */
+        .login-button,
+        .signup-button {
+          font-size: 1.3rem;
+          padding: 12px 25px;
+        }
+      }
+      /* لشاشات العرض الصغيرة والمتوسطة (أقل من 768px) */
+      @media only screen and (max-width: 768px) {
+        /* تعديل الحاوية في التصميم المعزول */
+        .custom-design-isolated .container {
+          width: 90%;
+          padding: 40px;
+          height: auto;
+          flex-direction: column;
+          align-items: center;
+        }
+        .custom-design-isolated .content {
+          margin-right: 0;
+          text-align: center;
+        }
+        .custom-design-isolated .image-box {
+          width: 200px;
+          height: 250px;
+          margin-left: 0;
+          margin-top: 20px;
+        }
+        /* تعديل قسم my-section */
+        #my-section {
+          height: auto;
+          padding: 20px;
+        }
+        #my-section .rounded-button {
+          width: 80%;
+          padding: 20px;
+          font-size: 18px;
+        }
+        /* تعديل الخلفية */
+        .background-container {
+          height: auto;
+          padding: 40px 20px;
+        }
+        .background-container .circle {
+          width: 300px;
+          height: 300px;
+        }
+        /* تعديل القسم المخصص */
+        .custom-container {
+          width: 95%;
+          height: auto;
+          flex-direction: column;
+          padding: 20px;
+        }
+        .custom-card-container {
+          flex-direction: column;
+          gap: 20px;
+        }
+        .custom-card {
+          width: 90%;
+          margin: 0 auto;
+        }
+        /* تعديل الفوتر */
+        footer {
+          height: auto;
+          padding: 20px 10px;
+        }
+        footer .footer-line {
+          width: 80%;
+        }
+        .footer-text {
+          font-size: 14px;
+        }
+      }
+      /* لشاشات العرض الصغيرة جدًا (أقل من 480px) */
+      @media only screen and (max-width: 480px) {
+        .content-container {
+          padding: 0 10px;
+        }
+        .interactive-image {
+          width: 35px;
+          height: 35px;
+        }
+        #interactive-links {
+          padding: 10px;
+        }
+        .login-button,
+        .signup-button {
+          padding: 10px 20px;
+          font-size: 1.2rem;
+        }
+        .custom-design-isolated .container {
+          padding: 30px;
+          width: 95%;
+        }
+        #my-section .rounded-button {
+          width: 90%;
+          padding: 15px;
+          font-size: 16px;
+        }
+        .custom-card {
+          width: 100%;
+        }
+        .custom-card-container {
+          gap: 15px;
+        }
+        footer .icons a {
+          font-size: 20px;
+        }
+        .footer-text {
+          font-size: 12px;
+        }
+      }
+      /*------------------------------------------------------------------------------------*/
+
+      /* الأنماط الخاصة بالسيكشن */
+      #my-section {
+        display: flex;
+        justify-content: center; /* محاذاة العناصر أفقياً للوسط */
+        align-items: center; /* محاذاة العناصر عمودياً للوسط */
+        height: 60vh; /* تقليل الارتفاع إلى 60% من ارتفاع الشاشة */
+        margin: 0;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        font-family: Arial, sans-serif;
+      }
+
+      #my-section .button-container {
+        display: flex;
+        flex-direction: column; /* ترتيب الأزرار بشكل عمودي */
+        gap: 20px; /* المسافة بين الأزرار */
+        align-items: center; /* محاذاة الأزرار في المنتصف */
+        margin-top: 80px; /* إضافة مسافة من الأعلى */
+        margin-bottom: 20px; /* إضافة مسافة من الأسفل */
+      }
+
+      #my-section .rounded-button {
+        background-color: #f56336; /* لون الخلفية البرتقالي */
+        color: white; /* لون النص */
+        padding: 25px 50px; /* تكبير المسافات الداخلية */
+        border: none; /* إزالة الحدود */
+        border-radius: 40px; /* الزوايا المستديرة */
+        font-size: 20px; /* تكبير حجم الخط */
+        font-family: Arial, sans-serif; /* نوع الخط */
+        cursor: pointer; /* شكل المؤشر */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* الظل */
+        transition: box-shadow 0.3s ease, transform 0.3s ease; /* تأثير التحويم */
+        width: 300px; /* تحديد عرض ثابت للأزرار ليكونوا بنفس الحجم */
+        text-align: center; /* محاذاة النص للوسط */
+        background-image: url("path-to-your-image.jpg"); /* صورة الخلفية */
+        background-size: cover; /* جعل صورة الخلفية تغطي الزر بالكامل */
+        background-position: center; /* وضع صورة الخلفية في المنتصف */
+      }
+
+      #my-section .rounded-button:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* تكثيف الظل عند التحويم */
+        transform: scale(1.05); /* تكبير الزر قليلاً عند التحويم */
+      }
+
+      /*-------------------------------------------------*/
+      /* إعدادات الخلفية */
+      .background-container {
+        width: 100%;
+        height: 110vh; /* زيادة الارتفاع إلى 110% من ارتفاع العرض الكامل */
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        background: linear-gradient(135deg, #b09acd, #a3b9e6);
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .background-container .circle {
+        width: 500px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.1); /* اللون الفاتح الداخلي */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: overlay; /* وضع المزج لإنشاء التأثير المطلوب */
+      }
+
+      /* قسم السنوات الدراسية */
+      .custom-section {
+        margin: 0;
+        padding: 0;
+        width: 100%; /* تعديل العرض ليصبح مثل عرض الفوتر */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(120deg, #ff7e5f, #feb47b);
+        font-family: "Arial", sans-serif;
+        overflow: hidden;
+      }
+
+      .custom-container {
+        position: relative;
+        width: 80%;
+        height: 85%; /* زيادة بسيطة في ارتفاع القسم */
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .custom-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .custom-circle1 {
+        width: 520px; /* حجم الدائرة الخلفية الأولى */
+        height: 520px;
+        top: -140px;
+        left: -140px;
+        background-color: #ff6f61;
+      }
+
+      .custom-circle2 {
+        width: 420px; /* حجم الدائرة الخلفية الثانية */
+        height: 420px;
+        bottom: -120px;
+        right: -120px;
+        background-color: #ff9f43;
+      }
+
+      .custom-card-container {
+        display: flex;
+        gap: 27px; /* المسافة بين الكروت */
+      }
+
+      .custom-card {
+        width: 340px; /* عرض الكارت */
+        height: 240px; /* ارتفاع الكارت */
+        background-color: #7d46f7;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        color: white;
+        padding: 20px;
+        cursor: pointer; /* تحويل المؤشر إلى يد */
+      }
+
+      @keyframes custom-float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .custom-card .custom-circle {
+        width: 95px; /* حجم الدائرة داخل الكارت */
+        height: 95px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: -45px; /* موقع الدائرة داخل الكارت */
+        left: 0;
+        right: 0;
+        margin: auto;
+        animation: custom-float 6s ease-in-out infinite;
+        z-index: 10;
+      }
+
+      .custom-card .custom-circle i {
+        font-size: 47px; /* حجم الأيقونة داخل الكارت */
+        color: #7d46f7;
+      }
+
+      /* الخط والنصوص في الكروت */
+      .custom-text-container {
+        position: relative;
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 50px; /* يمكنك تعديل القيمة حسب الحاجة */
+      }
+
+      .custom-text-above {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #255ae0 24%, #1c048a 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      .custom-line {
+        width: 80%;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.2); /* لون شفاف للخط */
+        margin: 0 auto;
+      }
+
+      .custom-text-below {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      /*=============================*/
+      /* Responsive Styles */
+      /*=============================*/
+      /* لشاشات العرض المتوسطة (أقل من 992px) */
+      @media only screen and (max-width: 992px) {
+        /* تحسين الحاوية الداخلية في القسم الرئيسي */
+        .content-container {
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 0 15px;
+        }
+        /* تعديل أيقونة الثيم لتناسب الشاشات الأصغر */
+        .theme-icon {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+        /* تعديل حجم الحاوية المنسدلة للروابط التفاعلية */
+        #interactive-links {
+          width: 90%;
+          max-width: 200px;
+          padding: 15px;
+        }
+        /* تقليل حجم أزرار التسجيل */
+        .login-button,
+        .signup-button {
+          font-size: 1.3rem;
+          padding: 12px 25px;
+        }
+      }
+      /* لشاشات العرض الصغيرة والمتوسطة (أقل من 768px) */
+      @media only screen and (max-width: 768px) {
+        /* تعديل الحاوية في التصميم المعزول */
+        .custom-design-isolated .container {
+          width: 90%;
+          padding: 40px;
+          height: auto;
+          flex-direction: column;
+          align-items: center;
+        }
+        .custom-design-isolated .content {
+          margin-right: 0;
+          text-align: center;
+        }
+        .custom-design-isolated .image-box {
+          width: 200px;
+          height: 250px;
+          margin-left: 0;
+          margin-top: 20px;
+        }
+        /* تعديل قسم my-section */
+        #my-section {
+          height: auto;
+          padding: 20px;
+        }
+        #my-section .rounded-button {
+          width: 80%;
+          padding: 20px;
+          font-size: 18px;
+        }
+        /* تعديل الخلفية */
+        .background-container {
+          height: auto;
+          padding: 40px 20px;
+        }
+        .background-container .circle {
+          width: 300px;
+          height: 300px;
+        }
+        /* تعديل القسم المخصص */
+        .custom-container {
+          width: 95%;
+          height: auto;
+          flex-direction: column;
+          padding: 20px;
+        }
+        .custom-card-container {
+          flex-direction: column;
+          gap: 20px;
+        }
+        .custom-card {
+          width: 90%;
+          margin: 0 auto;
+        }
+        /* تعديل الفوتر */
+        footer {
+          height: auto;
+          padding: 20px 10px;
+        }
+        footer .footer-line {
+          width: 80%;
+        }
+        .footer-text {
+          font-size: 14px;
+        }
+      }
+      /* لشاشات العرض الصغيرة جدًا (أقل من 480px) */
+      @media only screen and (max-width: 480px) {
+        .content-container {
+          padding: 0 10px;
+        }
+        .interactive-image {
+          width: 35px;
+          height: 35px;
+        }
+        #interactive-links {
+          padding: 10px;
+        }
+        .login-button,
+        .signup-button {
+          padding: 10px 20px;
+          font-size: 1.2rem;
+        }
+        .custom-design-isolated .container {
+          padding: 30px;
+          width: 95%;
+        }
+        #my-section .rounded-button {
+          width: 90%;
+          padding: 15px;
+          font-size: 16px;
+        }
+        .custom-card {
+          width: 100%;
+        }
+        .custom-card-container {
+          gap: 15px;
+        }
+        footer .icons a {
+          font-size: 20px;
+        }
+        .footer-text {
+          font-size: 12px;
+        }
+      }
+      /*------------------------------------------------------------------------------------*/
+
+      /* الأنماط الخاصة بالسيكشن */
+      #my-section {
+        display: flex;
+        justify-content: center; /* محاذاة العناصر أفقياً للوسط */
+        align-items: center; /* محاذاة العناصر عمودياً للوسط */
+        height: 60vh; /* تقليل الارتفاع إلى 60% من ارتفاع الشاشة */
+        margin: 0;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        font-family: Arial, sans-serif;
+      }
+
+      #my-section .button-container {
+        display: flex;
+        flex-direction: column; /* ترتيب الأزرار بشكل عمودي */
+        gap: 20px; /* المسافة بين الأزرار */
+        align-items: center; /* محاذاة الأزرار في المنتصف */
+        margin-top: 80px; /* إضافة مسافة من الأعلى */
+        margin-bottom: 20px; /* إضافة مسافة من الأسفل */
+      }
+
+      #my-section .rounded-button {
+        background-color: #f56336; /* لون الخلفية البرتقالي */
+        color: white; /* لون النص */
+        padding: 25px 50px; /* تكبير المسافات الداخلية */
+        border: none; /* إزالة الحدود */
+        border-radius: 40px; /* الزوايا المستديرة */
+        font-size: 20px; /* تكبير حجم الخط */
+        font-family: Arial, sans-serif; /* نوع الخط */
+        cursor: pointer; /* شكل المؤشر */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* الظل */
+        transition: box-shadow 0.3s ease, transform 0.3s ease; /* تأثير التحويم */
+        width: 300px; /* تحديد عرض ثابت للأزرار ليكونوا بنفس الحجم */
+        text-align: center; /* محاذاة النص للوسط */
+        background-image: url("path-to-your-image.jpg"); /* صورة الخلفية */
+        background-size: cover; /* جعل صورة الخلفية تغطي الزر بالكامل */
+        background-position: center; /* وضع صورة الخلفية في المنتصف */
+      }
+
+      #my-section .rounded-button:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* تكثيف الظل عند التحويم */
+        transform: scale(1.05); /* تكبير الزر قليلاً عند التحويم */
+      }
+
+      /*-------------------------------------------------*/
+      /* إعدادات الخلفية */
+      .background-container {
+        width: 100%;
+        height: 110vh; /* زيادة الارتفاع إلى 110% من ارتفاع العرض الكامل */
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        background: linear-gradient(135deg, #b09acd, #a3b9e6);
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .background-container .circle {
+        width: 500px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.1); /* اللون الفاتح الداخلي */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: overlay; /* وضع المزج لإنشاء التأثير المطلوب */
+      }
+
+      /* قسم السنوات الدراسية */
+      .custom-section {
+        margin: 0;
+        padding: 0;
+        width: 100%; /* تعديل العرض ليصبح مثل عرض الفوتر */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(120deg, #ff7e5f, #feb47b);
+        font-family: "Arial", sans-serif;
+        overflow: hidden;
+      }
+
+      .custom-container {
+        position: relative;
+        width: 80%;
+        height: 85%; /* زيادة بسيطة في ارتفاع القسم */
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .custom-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .custom-circle1 {
+        width: 520px; /* حجم الدائرة الخلفية الأولى */
+        height: 520px;
+        top: -140px;
+        left: -140px;
+        background-color: #ff6f61;
+      }
+
+      .custom-circle2 {
+        width: 420px; /* حجم الدائرة الخلفية الثانية */
+        height: 420px;
+        bottom: -120px;
+        right: -120px;
+        background-color: #ff9f43;
+      }
+
+      .custom-card-container {
+        display: flex;
+        gap: 27px; /* المسافة بين الكروت */
+      }
+
+      .custom-card {
+        width: 340px; /* عرض الكارت */
+        height: 240px; /* ارتفاع الكارت */
+        background-color: #7d46f7;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        color: white;
+        padding: 20px;
+        cursor: pointer; /* تحويل المؤشر إلى يد */
+      }
+
+      @keyframes custom-float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .custom-card .custom-circle {
+        width: 95px; /* حجم الدائرة داخل الكارت */
+        height: 95px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: -45px; /* موقع الدائرة داخل الكارت */
+        left: 0;
+        right: 0;
+        margin: auto;
+        animation: custom-float 6s ease-in-out infinite;
+        z-index: 10;
+      }
+
+      .custom-card .custom-circle i {
+        font-size: 47px; /* حجم الأيقونة داخل الكارت */
+        color: #7d46f7;
+      }
+
+      /* الخط والنصوص في الكروت */
+      .custom-text-container {
+        position: relative;
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 50px; /* يمكنك تعديل القيمة حسب الحاجة */
+      }
+
+      .custom-text-above {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #255ae0 24%, #1c048a 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      .custom-line {
+        width: 80%;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.2); /* لون شفاف للخط */
+        margin: 0 auto;
+      }
+
+      .custom-text-below {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      /*=============================*/
+      /* Responsive Styles */
+      /*=============================*/
+      /* لشاشات العرض المتوسطة (أقل من 992px) */
+      @media only screen and (max-width: 992px) {
+        /* تحسين الحاوية الداخلية في القسم الرئيسي */
+        .content-container {
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 0 15px;
+        }
+        /* تعديل أيقونة الثيم لتناسب الشاشات الأصغر */
+        .theme-icon {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+        /* تعديل حجم الحاوية المنسدلة للروابط التفاعلية */
+        #interactive-links {
+          width: 90%;
+          max-width: 200px;
+          padding: 15px;
+        }
+        /* تقليل حجم أزرار التسجيل */
+        .login-button,
+        .signup-button {
+          font-size: 1.3rem;
+          padding: 12px 25px;
+        }
+      }
+      /* لشاشات العرض الصغيرة والمتوسطة (أقل من 768px) */
+      @media only screen and (max-width: 768px) {
+        /* تعديل الحاوية في التصميم المعزول */
+        .custom-design-isolated .container {
+          width: 90%;
+          padding: 40px;
+          height: auto;
+          flex-direction: column;
+          align-items: center;
+        }
+        .custom-design-isolated .content {
+          margin-right: 0;
+          text-align: center;
+        }
+        .custom-design-isolated .image-box {
+          width: 200px;
+          height: 250px;
+          margin-left: 0;
+          margin-top: 20px;
+        }
+        /* تعديل قسم my-section */
+        #my-section {
+          height: auto;
+          padding: 20px;
+        }
+        #my-section .rounded-button {
+          width: 80%;
+          padding: 20px;
+          font-size: 18px;
+        }
+        /* تعديل الخلفية */
+        .background-container {
+          height: auto;
+          padding: 40px 20px;
+        }
+        .background-container .circle {
+          width: 300px;
+          height: 300px;
+        }
+        /* تعديل القسم المخصص */
+        .custom-container {
+          width: 95%;
+          height: auto;
+          flex-direction: column;
+          padding: 20px;
+        }
+        .custom-card-container {
+          flex-direction: column;
+          gap: 20px;
+        }
+        .custom-card {
+          width: 90%;
+          margin: 0 auto;
+        }
+        /* تعديل الفوتر */
+        footer {
+          height: auto;
+          padding: 20px 10px;
+        }
+        footer .footer-line {
+          width: 80%;
+        }
+        .footer-text {
+          font-size: 14px;
+        }
+      }
+      /* لشاشات العرض الصغيرة جدًا (أقل من 480px) */
+      @media only screen and (max-width: 480px) {
+        .content-container {
+          padding: 0 10px;
+        }
+        .interactive-image {
+          width: 35px;
+          height: 35px;
+        }
+        #interactive-links {
+          padding: 10px;
+        }
+        .login-button,
+        .signup-button {
+          padding: 10px 20px;
+          font-size: 1.2rem;
+        }
+        .custom-design-isolated .container {
+          padding: 30px;
+          width: 95%;
+        }
+        #my-section .rounded-button {
+          width: 90%;
+          padding: 15px;
+          font-size: 16px;
+        }
+        .custom-card {
+          width: 100%;
+        }
+        .custom-card-container {
+          gap: 15px;
+        }
+        footer .icons a {
+          font-size: 20px;
+        }
+        .footer-text {
+          font-size: 12px;
+        }
+      }
+      /*------------------------------------------------------------------------------------*/
+
+      /* الأنماط الخاصة بالسيكشن */
+      #my-section {
+        display: flex;
+        justify-content: center; /* محاذاة العناصر أفقياً للوسط */
+        align-items: center; /* محاذاة العناصر عمودياً للوسط */
+        height: 60vh; /* تقليل الارتفاع إلى 60% من ارتفاع الشاشة */
+        margin: 0;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        font-family: Arial, sans-serif;
+      }
+
+      #my-section .button-container {
+        display: flex;
+        flex-direction: column; /* ترتيب الأزرار بشكل عمودي */
+        gap: 20px; /* المسافة بين الأزرار */
+        align-items: center; /* محاذاة الأزرار في المنتصف */
+        margin-top: 80px; /* إضافة مسافة من الأعلى */
+        margin-bottom: 20px; /* إضافة مسافة من الأسفل */
+      }
+
+      #my-section .rounded-button {
+        background-color: #f56336; /* لون الخلفية البرتقالي */
+        color: white; /* لون النص */
+        padding: 25px 50px; /* تكبير المسافات الداخلية */
+        border: none; /* إزالة الحدود */
+        border-radius: 40px; /* الزوايا المستديرة */
+        font-size: 20px; /* تكبير حجم الخط */
+        font-family: Arial, sans-serif; /* نوع الخط */
+        cursor: pointer; /* شكل المؤشر */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* الظل */
+        transition: box-shadow 0.3s ease, transform 0.3s ease; /* تأثير التحويم */
+        width: 300px; /* تحديد عرض ثابت للأزرار ليكونوا بنفس الحجم */
+        text-align: center; /* محاذاة النص للوسط */
+        background-image: url("path-to-your-image.jpg"); /* صورة الخلفية */
+        background-size: cover; /* جعل صورة الخلفية تغطي الزر بالكامل */
+        background-position: center; /* وضع صورة الخلفية في المنتصف */
+      }
+
+      #my-section .rounded-button:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* تكثيف الظل عند التحويم */
+        transform: scale(1.05); /* تكبير الزر قليلاً عند التحويم */
+      }
+
+      /*-------------------------------------------------*/
+      /* إعدادات الخلفية */
+      .background-container {
+        width: 100%;
+        height: 110vh; /* زيادة الارتفاع إلى 110% من ارتفاع العرض الكامل */
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        background: linear-gradient(135deg, #b09acd, #a3b9e6);
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .background-container .circle {
+        width: 500px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.1); /* اللون الفاتح الداخلي */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: overlay; /* وضع المزج لإنشاء التأثير المطلوب */
+      }
+
+      /* قسم السنوات الدراسية */
+      .custom-section {
+        margin: 0;
+        padding: 0;
+        width: 100%; /* تعديل العرض ليصبح مثل عرض الفوتر */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(120deg, #ff7e5f, #feb47b);
+        font-family: "Arial", sans-serif;
+        overflow: hidden;
+      }
+
+      .custom-container {
+        position: relative;
+        width: 80%;
+        height: 85%; /* زيادة بسيطة في ارتفاع القسم */
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .custom-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .custom-circle1 {
+        width: 520px; /* حجم الدائرة الخلفية الأولى */
+        height: 520px;
+        top: -140px;
+        left: -140px;
+        background-color: #ff6f61;
+      }
+
+      .custom-circle2 {
+        width: 420px; /* حجم الدائرة الخلفية الثانية */
+        height: 420px;
+        bottom: -120px;
+        right: -120px;
+        background-color: #ff9f43;
+      }
+
+      .custom-card-container {
+        display: flex;
+        gap: 27px; /* المسافة بين الكروت */
+      }
+
+      .custom-card {
+        width: 340px; /* عرض الكارت */
+        height: 240px; /* ارتفاع الكارت */
+        background-color: #7d46f7;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        color: white;
+        padding: 20px;
+        cursor: pointer; /* تحويل المؤشر إلى يد */
+      }
+
+      @keyframes custom-float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .custom-card .custom-circle {
+        width: 95px; /* حجم الدائرة داخل الكارت */
+        height: 95px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: -45px; /* موقع الدائرة داخل الكارت */
+        left: 0;
+        right: 0;
+        margin: auto;
+        animation: custom-float 6s ease-in-out infinite;
+        z-index: 10;
+      }
+
+      .custom-card .custom-circle i {
+        font-size: 47px; /* حجم الأيقونة داخل الكارت */
+        color: #7d46f7;
+      }
+
+      /* الخط والنصوص في الكروت */
+      .custom-text-container {
+        position: relative;
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 50px; /* يمكنك تعديل القيمة حسب الحاجة */
+      }
+
+      .custom-text-above {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #255ae0 24%, #1c048a 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      .custom-line {
+        width: 80%;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.2); /* لون شفاف للخط */
+        margin: 0 auto;
+      }
+
+      .custom-text-below {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      /*=============================*/
+      /* Responsive Styles */
+      /*=============================*/
+      /* لشاشات العرض المتوسطة (أقل من 992px) */
+      @media only screen and (max-width: 992px) {
+        /* تحسين الحاوية الداخلية في القسم الرئيسي */
+        .content-container {
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 0 15px;
+        }
+        /* تعديل أيقونة الثيم لتناسب الشاشات الأصغر */
+        .theme-icon {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+        /* تعديل حجم الحاوية المنسدلة للروابط التفاعلية */
+        #interactive-links {
+          width: 90%;
+          max-width: 200px;
+          padding: 15px;
+        }
+        /* تقليل حجم أزرار التسجيل */
+        .login-button,
+        .signup-button {
+          font-size: 1.3rem;
+          padding: 12px 25px;
+        }
+      }
+      /* لشاشات العرض الصغيرة والمتوسطة (أقل من 768px) */
+      @media only screen and (max-width: 768px) {
+        /* تعديل الحاوية في التصميم المعزول */
+        .theme-icon {
+          margin-right: 0; /* إعادة تعيين الهامش لتجنب تجاوز العرض */
+        }
+        .custom-design-isolated .container {
+          width: 90%;
+          padding: 40px;
+          height: auto;
+          flex-direction: column;
+          align-items: center;
+        }
+        .custom-design-isolated .content {
+          margin-right: 0;
+          text-align: center;
+        }
+        .custom-design-isolated .image-box {
+          width: 200px;
+          height: 250px;
+          margin-left: 0;
+          margin-top: 20px;
+        }
+        /* تعديل قسم my-section */
+        #my-section {
+          height: auto;
+          padding: 20px;
+        }
+        #my-section .rounded-button {
+          width: 80%;
+          padding: 20px;
+          font-size: 18px;
+        }
+        /* تعديل الخلفية */
+        .background-container {
+          height: auto;
+          padding: 40px 20px;
+        }
+        .background-container .circle {
+          width: 300px;
+          height: 300px;
+        }
+        /* تعديل القسم المخصص */
+        .custom-container {
+          width: 95%;
+          height: auto;
+          flex-direction: column;
+          padding: 20px;
+        }
+        .custom-card-container {
+          flex-direction: column;
+          gap: 20px;
+        }
+        .custom-card {
+          width: 90%;
+          margin: 0 auto;
+        }
+        /* تعديل الفوتر */
+        footer {
+          height: auto;
+          padding: 20px 10px;
+        }
+        footer .footer-line {
+          width: 80%;
+        }
+        .footer-text {
+          font-size: 14px;
+        }
+      }
+      /* لشاشات العرض الصغيرة جدًا (أقل من 480px) */
+      @media only screen and (max-width: 480px) {
+        .content-container {
+          padding: 0 10px;
+        }
+        .interactive-image {
+          width: 35px;
+          height: 35px;
+        }
+        #interactive-links {
+          padding: 10px;
+        }
+        .login-button,
+        .signup-button {
+          padding: 10px 20px;
+          font-size: 1.2rem;
+        }
+        .custom-design-isolated .container {
+          padding: 30px;
+          width: 95%;
+        }
+        #my-section .rounded-button {
+          width: 90%;
+          padding: 15px;
+          font-size: 16px;
+        }
+        .custom-card {
+          width: 100%;
+        }
+        .custom-card-container {
+          gap: 15px;
+        }
+        footer .icons a {
+          font-size: 20px;
+        }
+        .footer-text {
+          font-size: 12px;
+        }
+      }
+      /*------------------------------------------------------------------------------------*/
+
+      /*=============================*/
+      /* الأنماط الخاصة بالسيكشن */
+      /*=============================*/
+      #my-section {
+        display: flex;
+        justify-content: center; /* محاذاة العناصر أفقياً للوسط */
+        align-items: center; /* محاذاة العناصر عمودياً للوسط */
+        height: 60vh; /* تقليل الارتفاع إلى 60% من ارتفاع الشاشة */
+        margin: 0;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        font-family: Arial, sans-serif;
+      }
+
+      #my-section .button-container {
+        display: flex;
+        flex-direction: column; /* ترتيب الأزرار بشكل عمودي */
+        gap: 20px; /* المسافة بين الأزرار */
+        align-items: center; /* محاذاة الأزرار في المنتصف */
+        margin-top: 80px; /* إضافة مسافة من الأعلى */
+        margin-bottom: 20px; /* إضافة مسافة من الأسفل */
+      }
+
+      #my-section .rounded-button {
+        background-color: #f56336; /* لون الخلفية البرتقالي */
+        color: white; /* لون النص */
+        padding: 25px 50px; /* تكبير المسافات الداخلية */
+        border: none; /* إزالة الحدود */
+        border-radius: 40px; /* الزوايا المستديرة */
+        font-size: 20px; /* تكبير حجم الخط */
+        font-family: Arial, sans-serif; /* نوع الخط */
+        cursor: pointer; /* شكل المؤشر */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* الظل */
+        transition: box-shadow 0.3s ease, transform 0.3s ease; /* تأثير التحويم */
+        width: 300px; /* تحديد عرض ثابت للأزرار ليكونوا بنفس الحجم */
+        text-align: center; /* محاذاة النص للوسط */
+        background-image: url("path-to-your-image.jpg"); /* صورة الخلفية */
+        background-size: cover; /* جعل صورة الخلفية تغطي الزر بالكامل */
+        background-position: center; /* وضع صورة الخلفية في المنتصف */
+      }
+
+      #my-section .rounded-button:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* تكثيف الظل عند التحويم */
+        transform: scale(1.05); /* تكبير الزر قليلاً عند التحويم */
+      }
+
+      /*------------------------------------------------------------------------------------*/
+      /*-----------------------------*/
+      /* التنسيقات الخاصة بالفوتر */
+      /*-----------------------------*/
+      footer {
+        background: #262b4d;
+        padding: 20px 0;
+        text-align: center;
+        width: 100%;
+        height: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #b0b0b0; /* لون النص العام */
+      }
+      footer .icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 10px;
+      }
+      footer .icons a {
+        text-decoration: none;
+        color: #4ca1ff; /* لون أيقونات جديد */
+        font-size: 24px;
+      }
+      footer .footer-line {
+        width: 50%;
+        border: none;
+        border-top: 2px solid #4ca1ff;
+        margin: 20px auto;
+      }
+      .footer-text {
+        font-size: 16px;
+        margin: 10px 0; /* مسافة بين السطور */
+        color: #e0e0e0; /* لون جديد للنص العام */
+      }
+      .footer-text .dev-text {
+        color: #a8a8a8; /* لون خافت للنص العادي */
+        font-weight: normal;
+      }
+      .footer-text .highlight {
+        color: #ffffff; /* لون أبيض لكلمة "Ziad" */
+        font-weight: bold;
+        font-size: 18px;
+        text-shadow: 0 0 8px #ffffff, 0 0 12px #ffffff; /* تأثير الإضاءة */
+        animation: glow 1.5s infinite alternate;
+      }
+      @keyframes glow {
+        from {
+          text-shadow: 0 0 8px #ffffff, 0 0 12px #ffffff;
+        }
+        to {
+          text-shadow: 0 0 12px #ffffff, 0 0 18px #ffffff, 0 0 24px #ffffff;
+        }
+      }
+      /* التنسيقات المطلوبة للجملة المحددة */
+      .footer-text-nasu {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!------------------------------------------------------------------------------>
+    <div class="flexible-section">
+      <div class="content-container">
+        <!-- الأيقونة -->
+        <img
+          src="{% static 'images/1.JPG' %}"
+          alt="Theme Icon"
+          class="theme-icon"
+        />
+
+        <!-- الحاوية الجديدة للصورة التفاعلية -->
+        {% if is_registered or user.is_authenticated %}
+        <div class="interactive-image-container">
+          <img
+            src="{% static 'images/unnamed (2).png' %}"
+            alt="Interactive Image"
+            class="interactive-image"
+            onclick="toggleLinks()"
+          />
+          <div id="interactive-links" style="display: none">
+            <p>أهلاً {{ student_name }}</p>
+            <a href="{% url 'accounts:profile' %}">
+              <i class="fas fa-user-circle"></i> حسابي
+            </a>
+            <a href="{% url 'accounts:logout' %}">
+              <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+            </a>
+          </div>
+        </div>
+        {% endif %}
+
+        <script>
+          function toggleLinks() {
+            const links = document.getElementById("interactive-links");
+            links.style.display =
+              links.style.display === "none" ? "block" : "none";
+          }
+        </script>
+
+        <!-- الأزرار للتسجيل والدخول -->
+        <div class="right-buttons">
+          <button class="login-button" onclick="window.location.href='/login/'">
+            سجل دخولك
+          </button>
+          <button
+            class="signup-button"
+            onclick="window.location.href='/register/'"
+          >
+            أنشئ حسابك
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleLinks() {
+        const links = document.getElementById("interactive-links");
+        if (links.style.display === "none" || links.style.display === "") {
+          links.style.display = "block";
+        } else {
+          links.style.display = "none";
+        }
+      }
+    </script>
+
+    <!------------------------------------------------------------------------------>
+    <div class="custom-design-isolated">
+      <div class="container">
+        <div class="image-box">
+          <img src="{% static 'images/lina.png' %' %}" alt="صورة لينا" />
+        </div>
+        <div class="content">
+          <span class="highlight-text">م / علي الحفناوي</span>
+          <span class="custom-text">
+            كل ما تحتاجه للنجاح في الرياضيات في مكان <br />
+            واحد حان وقت التفوق في الرياضيات منصتك جاهزة لك
+          </span>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!------------------------------------------------------------------------------>
+    <div id="features-page">
+      <section class="features-section">
+        <div class="features-container">
+          <!--<h2 class="features-title">مميزات المنصة</h2>-->
+          <p class="features-description">
+            منصتنا تلبي احتياجات طلاب الثانوية العامة بكل تفاصيلها؛ نوفر لك
+            الوقت والمجهود ونقدم لك محتوى شامل يساعدك على التفوق.
+          </p>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <h3 class="feature-card-title">توفير الوقت</h3>
+              <p class="feature-card-text">
+                تنظيم ذكي للمحتوى الدراسي يوفر وقتك الثمين.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-cogs"></i>
+              </div>
+              <h3 class="feature-card-title">تنظيم المحتوى</h3>
+              <p class="feature-card-text">
+                تصميم سهل الاستخدام مع ترتيب دقيق للدروس والمراجعات.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <h3 class="feature-card-title">تحقيق التفوق</h3>
+              <p class="feature-card-text">
+                كل الأدوات والمواد اللازمة لدعم نجاحك الدراسي.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-hand-holding-usd"></i>
+              </div>
+              <h3 class="feature-card-title">توفير المجهود</h3>
+              <p class="feature-card-text">
+                شروحات مبسطة تقلل من الجهد المبذول في الدراسة.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!------------------------------------------------------------------------------>
+
+    <!-- الكروت مع إضافة خاصية التوجيه -->
+    <!-- الكروت مع توجيه باستخدام مسارات Django -->
+    <section class="custom-section">
+      <div class="custom-container">
+        <div class="custom-circle custom-circle1"></div>
+        <div class="custom-circle custom-circle2"></div>
+        <div class="custom-card-container">
+          <!-- الكارت الأول -->
+          <div
+            class="custom-card"
+            onclick="window.location.href='/content/third/'"
+          >
+            <div class="custom-circle">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="custom-text-container">
+              <p class="custom-text-above">كورس الصف الثالث الثانوي</p>
+              <div class="custom-line"></div>
+              <p class="custom-text-below">كل ما يخص الصف الثالث الثانوي</p>
+            </div>
+          </div>
+
+          <!-- الكارت الثاني -->
+          <div
+            class="custom-card"
+            onclick="window.location.href='/content/second/'"
+          >
+            <div class="custom-circle">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="custom-text-container">
+              <p class="custom-text-above">كورس الصف الثاني الثانوي</p>
+              <div class="custom-line"></div>
+              <p class="custom-text-below">كل ما يخص الصف الثاني الثانوي</p>
+            </div>
+          </div>
+
+          <!-- الكارت الثالث -->
+          <div
+            class="custom-card"
+            onclick="window.location.href='/content/first/'"
+          >
+            <div class="custom-circle">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="custom-text-container">
+              <p class="custom-text-above">كورس الصف الأول الثانوي</p>
+              <div class="custom-line"></div>
+              <p class="custom-text-below">كل ما يخص الصف الأول الثانوي</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- باقي محتوى الصفحة -->
+
+    <!-- باقي محتوى الصفحة -->
+
+    <!------------------------------------------------------------------------------>
+    <footer>
+      <div class="icons">
+        <a href="https://www.youtube.com" target="_blank"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        <a href="https://www.instagram.com" target="_blank"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a href="https://www.facebook.com" target="_blank"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a href="https://www.whatsapp.com" target="_blank"
+          ><i class="fab fa-whatsapp"></i
+        ></a>
+      </div>
+
+      <!-- خط أفقي تحت الأيقونات -->
+      <hr class="footer-line" />
+
+      <!-- النصوص المطلوبة -->
+      <p class="footer-text-nasu">
+        ❤️ تم صنع هذه المنصة بهدف تهيئة الطالب لكامل جوانب الثانوية العامة
+        ومابعدها ❤️
+      </p>
+      <p class="footer-text">
+        <span class="dev-text">&lt; Developed By &gt;</span>
+        <span class="highlight"> Ziad </span>
+        <span class="dev-text">&lt; All Copy Rights Reserved @2024 &gt;</span>
+      </p>
+    </footer>
+    <!------------------------------------------------------------------------------>
+  </body>
+</html>
