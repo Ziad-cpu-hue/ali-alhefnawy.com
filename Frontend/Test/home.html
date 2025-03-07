@@ -1,0 +1,1021 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>كورس الشهر الثاني</title>
+    <!-- خطوط خارجية -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap"
+      rel="stylesheet"
+    />
+    <!-- خط مميز للفوتر -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* تعريف الخطوط - دون تغيير */
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Black.otf' %}")
+          format("opentype");
+        font-weight: 900;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-BlackItalic.otf' %}")
+          format("opentype");
+        font-weight: 900;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Bold.otf' %}")
+          format("opentype");
+        font-weight: bold;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-BoldItalic.otf' %}")
+          format("opentype");
+        font-weight: bold;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraBold.otf' %}")
+          format("opentype");
+        font-weight: 800;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraBoldItalic.otf' %}")
+          format("opentype");
+        font-weight: 800;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraLight.otf' %}")
+          format("opentype");
+        font-weight: 200;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraLightItalic.otf' %}")
+          format("opentype");
+        font-weight: 200;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Light.otf' %}")
+          format("opentype");
+        font-weight: 300;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-LightItalic.otf' %}")
+          format("opentype");
+        font-weight: 300;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Medium.otf' %}")
+          format("opentype");
+        font-weight: 500;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-MediumItalic.otf' %}")
+          format("opentype");
+        font-weight: 500;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Regular.otf' %}")
+          format("opentype");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-RegularItalic.otf' %}")
+          format("opentype");
+        font-weight: 400;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-SemiBold.otf' %}")
+          format("opentype");
+        font-weight: 600;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-SemiBoldItalic.otf' %}")
+          format("opentype");
+        font-weight: 600;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Thin.otf' %}")
+          format("opentype");
+        font-weight: 100;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ThinItalic.otf' %}")
+          format("opentype");
+        font-weight: 100;
+        font-style: italic;
+      }
+      @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap");
+      /* ==================== */
+      /* إعدادات عامة (Global Settings) */
+      /* ==================== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "SomarSans", sans-serif;
+      }
+      /* بما أن الهيدر ثابت يخرج عن تدفق المحتوى، نستخدم عنصر تغليف للمحتوى الرئيسي */
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #23282f;
+        min-height: 100vh;
+        padding-top: 0;
+      }
+      /* لفصل المحتوى عن الهيدر الثابت بشكل دائم */
+      .page-content {
+        width: 100%;
+        /* هذه القيمة تحدد المسافة بين الهيدر وباقي المحتوى، ويمكن تعديلها بدقة */
+        margin-top: 150px;
+      }
+      @media screen and (max-width: 768px) {
+        .page-content {
+          margin-top: 170px;
+        }
+      }
+      @media screen and (max-width: 480px) {
+        .page-content {
+          margin-top: 220px;
+        }
+      }
+
+      /* ==================== */
+      /* تنسيقات الصفحة الأساسية (باقي المحتويات) */
+      /* ==================== */
+      .container {
+        width: 1470px;
+        height: 560px;
+        background-color: #00acc1;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: right;
+        position: relative;
+        display: flex;
+        align-items: center;
+        direction: rtl;
+      }
+      .header {
+        color: #fff;
+        text-align: right;
+      }
+      .header h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+      .header p {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .dates {
+        margin-top: 15px;
+        display: flex;
+        gap: 15px;
+      }
+      .dates span {
+        background-color: #f48fb1;
+        color: #fff;
+        padding: 7px 14px;
+        border-radius: 15px;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .card {
+        width: 470px;
+        height: 500px;
+        border-radius: 10px;
+        background: linear-gradient(to bottom, #0097a7 50%, #c1e4f6 50%);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        overflow: hidden;
+        position: absolute;
+        bottom: -250px;
+        left: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      }
+      .card img {
+        width: calc(100% - 30px);
+        height: calc(60% - 30px);
+        margin: 15px;
+        border-radius: 8px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+      .card img:hover {
+        transform: scale(1.02);
+      }
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .price-tag {
+        display: flex;
+        align-items: center;
+        background-color: #ffc107;
+        border-radius: 20px;
+        padding: 5px 15px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .price-tag .currency {
+        color: #ffffff;
+        font-size: 14px;
+        margin-right: 5px;
+      }
+      .price-tag .amount {
+        background-color: #1976d2;
+        color: #ffffff;
+        border-radius: 20px;
+        padding: 5px 10px;
+        font-size: 14px;
+        margin-left: 5px;
+      }
+      .subscribe-button {
+        width: 300px;
+        background-color: #1e88e5;
+        color: #ffffff;
+        border: none;
+        padding: 10px 30px;
+        border-radius: 8px;
+        font-size: 20px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        margin-top: 20px;
+      }
+      .subscribe-button:hover {
+        background-color: #1565c0;
+        transform: scale(1.05);
+      }
+      .extra-image {
+        margin-top: 20px;
+        margin-right: 25px;
+        margin-left: auto;
+        z-index: 2;
+        width: auto;
+      }
+      .extra-image img {
+        width: 952px;
+        max-width: 952px;
+        height: auto;
+        border-radius: 15px;
+        transition: opacity 0.3s ease;
+      }
+      .extra-image img:hover {
+        opacity: 0.95;
+      }
+      .new-container {
+        width: 950px;
+        background-color: #ddd;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+        text-align: right;
+        margin-right: 0px;
+        margin-left: auto;
+        height: 270px;
+      }
+      .new-container h2 {
+        font-size: 24px;
+        color: rgb(97, 75, 244);
+        margin-bottom: 10px;
+      }
+      .new-container p {
+        font-size: 16px;
+        color: #666;
+      }
+      .course-container {
+        width: 97%;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 40px auto;
+        margin-right: 0px;
+        padding: 40px;
+      }
+      .course-container > * {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+      }
+      .course-container > *:hover {
+        background-color: #f0f0f0;
+      }
+      .course-title {
+        padding: 20px;
+        font-size: 24px;
+        color: #d81b60;
+        text-align: right;
+        border-bottom: 2px solid #f4f4f4;
+        background-color: transparent;
+      }
+      .accordion-item {
+        margin-bottom: 10px;
+        border-radius: 6px;
+        background-color: #ffe6e6;
+        padding: 20px;
+      }
+      .accordion-header {
+        background-color: #ffe6e6;
+        padding: 15px;
+        font-size: 20px;
+        color: #333;
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 6px 6px 0 0;
+        transition: background-color 0.3s ease;
+      }
+      .accordion-header:hover {
+        background-color: #ffd6d6;
+      }
+      .accordion-header .material-symbols-outlined {
+        font-size: 18px;
+        transition: transform 0.3s;
+      }
+      .accordion-header.active .material-symbols-outlined {
+        transform: rotate(180deg);
+      }
+      .accordion-content {
+        background-color: white;
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.3s ease;
+        padding: 0 15px;
+        border-radius: 10px;
+      }
+      .accordion-content-inner {
+        color: #333;
+      }
+      .lecture-item {
+        margin: 15px;
+        background-color: #f3f4f7;
+        padding: 20px;
+        border-radius: 12px;
+      }
+      .lecture-header {
+        background-color: #e8ecf2;
+        padding: 10px;
+        font-size: 18px;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 12px 12px 0 0;
+        transition: background-color 0.3s ease;
+      }
+      .lecture-header:hover {
+        background-color: #dfe7ed;
+      }
+      .lecture-header .material-symbols-outlined {
+        font-size: 18px;
+        transition: transform 0.3s;
+      }
+      .lecture-header.active .material-symbols-outlined {
+        transform: rotate(180deg);
+      }
+      .lecture-content {
+        background-color: #f9f9f9;
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.3s ease;
+        padding: 0 15px;
+        border-radius: 0 0 12px 12px;
+      }
+      .lecture-content.active {
+        max-height: 500px;
+      }
+      .lecture-details {
+        padding: 10px 0;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+        position: relative;
+      }
+      .lecture-details i {
+        color: #d81b60;
+        margin-left: 5px;
+      }
+      .accordion-header .material-symbols-outlined,
+      .lecture-header .material-symbols-outlined {
+        color: #d81b60;
+      }
+      .watch-button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        transition: background-color 0.3s ease;
+      }
+      .watch-button:hover {
+        background-color: #45a049;
+      }
+
+      /* ==================== */
+      /* Responsive Styles */
+      /* ==================== */
+      @media only screen and (max-width: 1470px) {
+        .container {
+          width: 95%;
+          height: auto;
+          padding: 20px;
+          position: relative;
+          flex-direction: column;
+        }
+        .card {
+          width: 90%;
+          height: auto;
+          position: relative;
+          bottom: auto;
+          left: auto;
+          transform: none;
+          margin: 20px auto;
+        }
+      }
+      @media only screen and (max-width: 992px) {
+        .container {
+          padding: 15px;
+        }
+        .card {
+          width: 95%;
+          margin: 20px auto;
+        }
+        .extra-image {
+          position: relative;
+          top: auto;
+          right: auto;
+          margin: 20px auto;
+        }
+        .extra-image img {
+          width: 100%;
+          max-width: 950px;
+        }
+        .new-container {
+          width: 90%;
+          margin: 20px auto;
+          height: auto;
+        }
+      }
+      @media only screen and (max-width: 768px) {
+        .container {
+          width: 100%;
+          padding: 10px;
+        }
+        .header h1 {
+          font-size: 24px;
+        }
+        .header p {
+          font-size: 16px;
+        }
+        .card {
+          width: 95%;
+        }
+        .subscribe-button {
+          width: 90%;
+          font-size: 18px;
+          padding: 8px 20px;
+        }
+        .dates {
+          flex-direction: column;
+          gap: 10px;
+        }
+        .dates span {
+          font-size: 14px;
+          padding: 5px 10px;
+        }
+      }
+      @media only screen and (max-width: 480px) {
+        .container {
+          padding: 5px;
+        }
+        .header h1 {
+          font-size: 20px;
+        }
+        .header p {
+          font-size: 14px;
+        }
+        .subscribe-button {
+          font-size: 16px;
+        }
+      }
+
+      /* ==================== */
+      /* تصميم الهيدر الثابت (Header Section) */
+      /* ==================== */
+      .flexible-section {
+        width: 100%;
+        background-color: #262b4d;
+        padding: 10px 0;
+        box-sizing: border-box;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+      /* عزل تنسيق الهيدر وعدم تأثره بإعدادات الصفحة العامة */
+      .content-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        direction: ltr;
+      }
+      .theme-icon {
+        width: 80px;
+        height: 80px;
+        margin-right: 0;
+        border-radius: 20px 5px 20px 5px;
+      }
+      .interactive-image-container {
+        display: inline-block;
+        position: relative;
+        margin-left: 0;
+      }
+      .interactive-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      #interactive-links {
+        display: none;
+        position: absolute;
+        top: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+        width: 200px;
+        height: auto;
+        text-align: right;
+        direction: rtl;
+      }
+      #interactive-links a {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        color: #262b4d;
+        text-decoration: none;
+        margin-bottom: 10px;
+        padding: 10px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        border-radius: 8px;
+      }
+      #interactive-links a:hover {
+        background-color: #f5f5f5;
+        color: #0bce83;
+      }
+      #interactive-links a i {
+        margin-right: 2px;
+        color: #0bce83;
+        font-size: 1.2rem;
+        margin-left: 10px;
+      }
+      .right-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .login-button,
+      .signup-button {
+        font-family: "SomarSans", sans-serif;
+        padding: 15px 30px;
+        background-color: #0bce83;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: color 0.4s ease, box-shadow 0.4s ease;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+      .login-button::before,
+      .signup-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.2);
+        transition: left 0.4s ease;
+      }
+      .login-button:hover::before,
+      .signup-button:hover::before {
+        left: 100%;
+      }
+      .login-button:hover,
+      .signup-button:hover {
+        color: #262b4d;
+        box-shadow: 0 0 20px rgba(11, 206, 131, 0.7);
+      }
+      @media screen and (max-width: 768px) {
+        .content-container {
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+        .theme-icon {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+        .right-buttons {
+          margin-top: 10px;
+        }
+      }
+      @media screen and (max-width: 480px) {
+        .login-button,
+        .signup-button {
+          padding: 10px 20px;
+          font-size: 1.2rem;
+        }
+        #interactive-links {
+          width: 90%;
+        }
+      }
+      html,
+      body {
+        overflow-x: hidden;
+      }
+
+      /* ==================== */
+      /* قسم الفوتر (Footer) بتصميم عصري وجذاب */
+      /* ==================== */
+      footer {
+        background: #262b4d;
+        padding: 20px 0;
+        text-align: center;
+        width: 100%;
+        height: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #b0b0b0; /* لون النص العام */
+      }
+      footer .icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 10px;
+      }
+      footer .icons a {
+        text-decoration: none;
+        color: #4ca1ff; /* لون أيقونات جديد */
+        font-size: 24px;
+      }
+      footer .footer-line {
+        width: 50%;
+        border: none;
+        border-top: 2px solid #4ca1ff;
+        margin: 20px auto;
+      }
+      .footer-text {
+        font-size: 16px;
+        margin: 10px 0; /* مسافة بين السطور */
+        color: #e0e0e0; /* لون جديد للنص العام */
+      }
+      .footer-text .dev-text {
+        color: #a8a8a8; /* لون خافت للنص العادي */
+        font-weight: normal;
+      }
+      .footer-text .highlight {
+        color: #ffffff; /* لون أبيض لكلمة "Ziad" */
+        font-weight: bold;
+        font-size: 18px;
+        text-shadow: 0 0 8px #ffffff, 0 0 12px #ffffff; /* تأثير الإضاءة */
+        animation: glow 1.5s infinite alternate;
+      }
+      @keyframes glow {
+        from {
+          text-shadow: 0 0 8px #ffffff, 0 0 12px #ffffff;
+        }
+        to {
+          text-shadow: 0 0 12px #ffffff, 0 0 18px #ffffff, 0 0 24px #ffffff;
+        }
+      }
+      /* التنسيقات المطلوبة للجملة المحددة */
+      .footer-text-nasu {
+        font-family: "SomarSans", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-------------------------->
+    <!-- قسم الهيدر الثابت -->
+    <div class="flexible-section">
+      <div class="content-container">
+        <!-- الأيقونة -->
+        <img
+          src="{% static 'images/1.JPG' %}"
+          alt="Theme Icon"
+          class="theme-icon"
+        />
+        <!-- الحاوية الجديدة للصورة التفاعلية -->
+        {% if is_registered or user.is_authenticated %}
+        <div class="interactive-image-container">
+          <img
+            src="{% static 'images/unnamed (2).png' %}"
+            alt="Interactive Image"
+            class="interactive-image"
+            onclick="toggleLinks()"
+          />
+          <div id="interactive-links">
+            <p>أهلاً {{ student_name }}</p>
+            <a href="{% url 'accounts:profile' %}">
+              <i class="fas fa-user-circle"></i> حسابي
+            </a>
+            <a href="{% url 'accounts:logout' %}">
+              <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+            </a>
+          </div>
+        </div>
+        {% endif %}
+        <script>
+          function toggleLinks() {
+            const links = document.getElementById("interactive-links");
+            if (links.style.display === "none" || links.style.display === "") {
+              links.style.display = "block";
+            } else {
+              links.style.display = "none";
+            }
+          }
+        </script>
+        <!-- الأزرار للتسجيل والدخول -->
+        <div class="right-buttons">
+          <button class="login-button" onclick="window.location.href='/login/'">
+            سجل دخولك
+          </button>
+          <button
+            class="signup-button"
+            onclick="window.location.href='/register/'"
+          >
+            أنشئ حسابك
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-------------------------->
+    <!-- باقي محتويات الصفحة مُغلّفة داخل صفحة المحتوى -->
+    <div class="page-content">
+      <div class="container">
+        <div class="header">
+          <h1>{{ course.title }}</h1>
+          <p>{{ course.description }}</p>
+          <div class="dates">
+            <span>
+              <i class="material-symbols-outlined">create_new_folder</i>
+              تاريخ إنشاء الكورس: {{ course.created_at|date:"l, d F Y" }}
+            </span>
+            <span>
+              <i class="material-symbols-outlined">change_circle</i>
+              آخر تحديث للكورس: {{ course.updated_at|date:"l, d F Y" }}
+            </span>
+          </div>
+        </div>
+        <!-- الكارت مع الصورة والأزرار -->
+        <div class="card">
+          <img src="{{ course.image.url }}" alt="صورة الكورس" />
+          <div class="buttons">
+            <div class="price-tag">
+              <span class="currency">جنيهًا</span>
+              <span class="amount">{{ course.price }}</span>
+            </div>
+            <button class="subscribe-button">اشترك الآن!</button>
+          </div>
+        </div>
+      </div>
+      <!-- الصورة أسفل التصميم في أقصى الجانب الأيمن -->
+      <div class="extra-image">
+        <img src="{{ course.image.url }}" alt="صورة إضافية" />
+      </div>
+      <!-- الحاوية الجديدة أسفل الصورة وفوق النصوص -->
+      <div class="new-container">
+        <h2>{{ course.title }}</h2>
+        <p>{{ course.description }}</p>
+      </div>
+      <!-- محتوى الكورس -->
+      <div class="course-container">
+        <div class="course-title">محتوى الكورس</div>
+        {% for week_label, week_lectures, week_exams in weeks_content %}
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📅 {{ week_label }}</span>
+            <span class="material-symbols-outlined">stat_minus_1</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">
+              {% for lecture in week_lectures %}
+              <div class="lecture-item">
+                <div class="lecture-header" onclick="toggleLecture(this)">
+                  <span>📖 {{ lecture.title }}</span>
+                  <span class="material-symbols-outlined">stat_minus_1</span>
+                </div>
+                <div class="lecture-content">
+                  <div class="lecture-details">
+                    <p><i>الوصف:</i> {{ lecture.description }}</p>
+                    <p><i>مدة الفيديو:</i> 155 دقيقة</p>
+                    <p><i>عدد المشاهدات:</i> 0 مشاهدة</p>
+                    <p><i>إجمالي وقت المشاهدة:</i> 0 دقيقة</p>
+                    {% if is_registered %}
+                    <a href="{% url 'lecture_detail' lecture.id %}">
+                      <button class="watch-button">🎥 مشاهدة الآن</button>
+                    </a>
+                    {% else %}
+                    <button
+                      class="watch-button"
+                      onclick="alert('يجب عليك تسجيل الدخول لمشاهدة المحاضرة!')"
+                    >
+                      🎥 مشاهدة الآن
+                    </button>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <p>لا توجد محاضرات متاحة لهذا الأسبوع.</p>
+              {% endfor %} {% for exam in week_exams %}
+              <div class="lecture-item">
+                <div class="lecture-header" onclick="toggleLecture(this)">
+                  <span>📝 {{ exam.title }}</span>
+                  <span class="material-symbols-outlined">stat_minus_1</span>
+                </div>
+                <div class="lecture-content">
+                  <div class="lecture-details">
+                    <p><i>الوصف:</i> {{ exam.description }}</p>
+                    <p><i>عدد الأسئلة:</i> 40 سؤال</p>
+                    <p><i>مدة الامتحان:</i> 500 دقيقة</p>
+                    <p><i>أقل نتيجة لك:</i> 0%</p>
+                    <p><i>متوسط نتائجك:</i> 0%</p>
+                    <p><i>أعلى نتيجة لك:</i> 0%</p>
+                    <p><i>عدد مرات دخولك:</i> 0 مرة</p>
+                    <p><i>عدد مرات إنهائك:</i> 0 مرة</p>
+                    {% if is_registered %}
+                    <a href="{% url 'exam_detail' exam.id %}">
+                      <button class="watch-button">🚀 ابدأ الامتحان</button>
+                    </a>
+                    {% else %}
+                    <button
+                      class="watch-button"
+                      onclick="alert('يجب عليك تسجيل الدخول لبدء الامتحان!')"
+                    >
+                      🚀 ابدأ الامتحان
+                    </button>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <p>لا توجد امتحانات متاحة لهذا الأسبوع.</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <!---------------قسم الفوتر ------------------->
+      <footer>
+        <div class="icons">
+          <a href="https://www.youtube.com" target="_blank"
+            ><i class="fab fa-youtube"></i
+          ></a>
+          <a href="https://www.instagram.com" target="_blank"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a href="https://www.facebook.com" target="_blank"
+            ><i class="fab fa-facebook"></i
+          ></a>
+          <a href="https://www.whatsapp.com" target="_blank"
+            ><i class="fab fa-whatsapp"></i
+          ></a>
+        </div>
+
+        <!-- خط أفقي تحت الأيقونات -->
+        <hr class="footer-line" />
+
+        <!-- النصوص المطلوبة -->
+        <p class="footer-text-nasu">
+          ❤️ تم صنع هذه المنصة بهدف تهيئة الطالب لكامل جوانب الثانوية العامة
+          ومابعدها ❤️
+        </p>
+        <p class="footer-text">
+          <span class="dev-text">&lt; Developed By &gt;</span>
+          <span class="highlight"> Ziad </span>
+          <span class="dev-text">&lt; All Copy Rights Reserved @2024 &gt;</span>
+        </p>
+      </footer>
+    </div>
+    <!---------------قسم الفوتر ------------------->
+
+    <script>
+      function toggleAccordion(element) {
+        const content = element.nextElementSibling;
+        element.classList.toggle("active");
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      }
+      function toggleLecture(element) {
+        const content = element.nextElementSibling;
+        element.classList.toggle("active");
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+        const parentContent = element.closest(".accordion-content");
+        if (parentContent) {
+          parentContent.style.maxHeight =
+            parentContent.scrollHeight + content.scrollHeight + "px";
+        }
+      }
+    </script>
+    <script>
+      function adjustPageMargin() {
+        var header = document.querySelector(".flexible-section");
+        var pageContent = document.querySelector(".page-content");
+        if (header && pageContent) {
+          pageContent.style.marginTop = header.offsetHeight + "px";
+        }
+      }
+      window.addEventListener("DOMContentLoaded", adjustPageMargin);
+      window.addEventListener("resize", adjustPageMargin);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stunning Design</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500&display=swap");
+
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background: linear-gradient(120deg, #ff7e5f, #feb47b);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Tajawal", sans-serif;
+        overflow: hidden;
+      }
+
+      .container {
+        position: relative;
+        width: 80%;
+        height: 80%;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+      }
+
+      .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .circle1 {
+        width: 450px;
+        height: 450px;
+        top: -120px;
+        left: -120px;
+        background-color: #ff6f61;
+      }
+
+      .circle2 {
+        width: 350px;
+        height: 350px;
+        bottom: -100px;
+        right: -100px;
+        background-color: #ff9f43;
+      }
+
+      .content {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        color: white;
+        padding: 20px;
+      }
+
+      .content h1 {
+        font-size: 2rem; /* تكبير حجم الخط */
+        margin-bottom: 20px;
+        color: #ffffff;
+      }
+
+      .form-group {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px; /* زيادة المسافة بين الحقول */
+        flex-wrap: wrap;
+      }
+
+      .form-group label {
+        font-size: 1rem;
+        color: white;
+        margin-bottom: 5px;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 48%;
+        padding: 10px;
+        border: 1px solid #fff;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.8);
+        font-size: 1rem;
+        margin-bottom: 20px; /* زيادة المسافة قليلاً بين الحقول */
+      }
+
+      .button {
+        width: 50%;
+        padding: 10px;
+        background-color: #ff6f61;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .button:hover {
+        background-color: #ff3e2d;
+        transform: scale(1.03);
+      }
+
+      .login-link {
+        margin-top: 20px;
+        font-size: 1rem;
+        color: #ffd700;
+      }
+
+      .login-link a {
+        color: #ffd700;
+        text-decoration: none;
+        margin-right: 5px; /* زيادة المسافة بين الجملة وعلامة التعجب */
+      }
+
+      /* لون مختلف للجملة الثانية */
+      .secondary-text {
+        margin-top: 10px;
+        color: #ff3e2d; /* لون مختلف */
+      }
+      #success-popup button:hover {
+        background: #388e3c;
+      }
+
+      /*=============================*/
+      /* Responsive Styles */
+      /*=============================*/
+
+      /* لشاشات العرض المتوسطة (أقل من 992px) */
+      @media only screen and (max-width: 992px) {
+        .container {
+          width: 90%;
+          height: auto;
+          padding: 20px;
+        }
+        .content {
+          padding: 15px;
+        }
+        .content h1 {
+          font-size: 1.8rem;
+          margin-bottom: 15px;
+        }
+        .form-group input,
+        .form-group select {
+          width: 100%;
+          margin-bottom: 15px;
+        }
+        .button {
+          width: 70%;
+          font-size: 1rem;
+          padding: 8px;
+        }
+        .login-link,
+        .secondary-text {
+          font-size: 0.9rem;
+        }
+      }
+
+      /* لشاشات العرض الصغيرة (أقل من 768px) */
+      @media only screen and (max-width: 768px) {
+        .container {
+          width: 95%;
+          padding: 15px;
+        }
+        .content h1 {
+          font-size: 1.6rem;
+        }
+        .form-group {
+          flex-direction: column;
+          align-items: center;
+        }
+        .form-group input,
+        .form-group select {
+          width: 100%;
+        }
+        .button {
+          width: 80%;
+          font-size: 0.95rem;
+          padding: 8px;
+        }
+        .login-link,
+        .secondary-text {
+          font-size: 0.85rem;
+        }
+      }
+
+      /* لشاشات العرض الصغيرة جدًا (أقل من 480px) */
+      @media only screen and (max-width: 480px) {
+        .container {
+          width: 98%;
+          padding: 10px;
+        }
+        .content h1 {
+          font-size: 1.4rem;
+        }
+        .form-group input,
+        .form-group select {
+          font-size: 0.9rem;
+          padding: 8px;
+        }
+        .button {
+          width: 90%;
+          font-size: 0.9rem;
+          padding: 6px;
+        }
+        .login-link,
+        .secondary-text {
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="circle circle1"></div>
+      <div class="circle circle2"></div>
+      <div class="content">
+        <h1>أنشئ حسابك الآن</h1>
+        <p>ادخل بياناتك بشكل صحيح للحصول على أفضل تجربة داخل الموقع</p>
+
+        <form
+          id="register-form"
+          action="{% url 'accounts:register_student' %}"
+          method="POST"
+        >
+          {% csrf_token %}
+          <div class="form-group">
+            <input
+              type="text"
+              name="first_name"
+              placeholder="الاسم الأول"
+              required
+            />
+            <input
+              type="text"
+              name="last_name"
+              placeholder="الاسم الأخير"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <input
+              type="text"
+              name="phone_number"
+              placeholder="رقم الهاتف"
+              required
+            />
+            <input
+              type="text"
+              name="parent_phone_number"
+              placeholder="رقم هاتف ولي الأمر"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <input
+              list="governorates"
+              name="governorate"
+              placeholder="اختر المحافظة"
+              required
+              style="
+                width: 48%;
+                padding: 10px;
+                margin-bottom: 20px;
+                box-sizing: border-box;
+              "
+            />
+            <datalist id="governorates">
+              <option value="القاهرة"></option>
+              <option value="السويس"></option>
+              <option value="الجيزة"></option>
+              <option value="الإسكندرية"></option>
+              <option value="أسوان"></option>
+              <option value="الأقصر"></option>
+            </datalist>
+
+            <select
+              name="grade"
+              required
+              style="
+                width: 48%;
+                padding: 10px;
+                margin-bottom: 20px;
+                box-sizing: border-box;
+              "
+            >
+              <option value="" disabled selected>اختار الصف الدراسي</option>
+              <option value="1">الصف الدراسي الأول</option>
+              <option value="2">الصف الدراسي الثاني</option>
+              <option value="3">الصف الدراسي الثالث</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <input
+              type="password"
+              name="password"
+              placeholder="كلمة السر"
+              required
+            />
+            <input
+              type="password"
+              name="confirm_password"
+              placeholder="تأكيد كلمة السر"
+              required
+            />
+          </div>
+
+          <button class="button" type="submit">إنشئ الحساب!</button>
+        </form>
+        <div
+          id="success-popup"
+          style="
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+          "
+        >
+          <p style="color: #4caf50; font-size: 18px; margin: 0">
+            تم إنشاء حسابك بنجاح!
+          </p>
+          <button
+            id="close-popup"
+            style="
+              margin-top: 10px;
+              padding: 5px 10px;
+              background: #4caf50;
+              color: #fff;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+            "
+          >
+            إغلاق
+          </button>
+        </div>
+
+        <p class="login-link" style="color: #ff6f61">
+          <span style="margin-left: 5px">!</span>
+          <span style="margin-right: 5px">يوجد لديك حساب بالفعل</span>
+          <span style="margin-left: 5px; margin-right: 5px">!</span>
+          <a href="#" style="color: #ffd700; margin-left: 5px"
+            >ادخل إلى حسابك الآن!</a
+          >
+        </p>
+
+        <p class="secondary-text">تجربة جديدة في انتظارك! اكتشف الآن!</p>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("register-form");
+      const popup = document.getElementById("success-popup");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault(); // منع الإرسال الافتراضي
+        const formData = new FormData(form);
+
+        const response = await fetch("{% url 'accounts:register_student' %}", {
+          method: "POST",
+          body: formData,
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}", // تأكد من تضمين CSRF Token
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json(); // تحليل JSON هنا
+          if (data.success) {
+            popup.style.display = "block"; // عرض النافذة المنبثقة
+            window.location.href = "{% url 'accounts:home' %}";
+          } else {
+            alert("حدث خطأ: " + data.message); // عرض رسالة الخطأ
+          }
+        } else {
+          console.error("فشل الاتصال بالخادم، لم يتم استلام استجابة صالحة.");
+          alert("حدث خطأ في الاتصال بالخادم.");
+        }
+      });
+    </script>
+  </body>
+</html>
