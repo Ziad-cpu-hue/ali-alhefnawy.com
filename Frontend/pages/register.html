@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- هذا السطر ضروري لضمان عرض الصفحة بشكل صحيح على كل الشاشات -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إنشاء الحساب</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .reg-root {
+        font-family: "Poppins", sans-serif;
+        background: #060097;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .reg-wrapper {
+        width: 95%;
+        max-width: 1200px;
+        text-align: center;
+        color: #fff;
+        margin: 0 auto;
+      }
+      .reg-header {
+        margin-bottom: 30px;
+      }
+      .reg-header h1 {
+        font-size: 3rem;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        margin-bottom: 10px;
+      }
+      .reg-header p {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      }
+      .reg-promo {
+        margin: 20px 0;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #eefafd;
+      }
+      .reg-promo a {
+        color: #ddebf1;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+      .reg-form-box {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 30px 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin-bottom: 30px;
+      }
+      .reg-form-box h2 {
+        margin-bottom: 20px;
+        font-size: 2rem;
+        color: #e8f0f1;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      }
+      .reg-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .reg-group {
+        width: calc(50% - 20px);
+        position: relative;
+      }
+      .reg-group.full {
+        width: 100%;
+        margin-top: 20px;
+      }
+      .reg-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #dcebf1;
+      }
+      .reg-group input,
+      .reg-group select {
+        width: 100%;
+        padding: 14px 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+      }
+      .reg-group input::placeholder,
+      .reg-group select::placeholder {
+        color: #aaa;
+      }
+      .reg-group input:hover,
+      .reg-group select:hover {
+        border-color: #66a6ff;
+      }
+      .reg-group input:focus,
+      .reg-group select:focus {
+        border-color: #66a6ff;
+        box-shadow: 0 2px 8px rgba(102, 166, 255, 0.4);
+      }
+      .reg-error {
+        color: #ff8080;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: none;
+        text-align: right;
+      }
+      .reg-btn-submit {
+        background: linear-gradient(135deg, #2b2ee9, #230375);
+        color: #f7fbfc;
+        border: none;
+        padding: 15px;
+        width: 20%;
+        min-width: 150px;
+        font-size: 1.1rem;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-top: 25px;
+        font-weight: 700;
+        align-self: flex-end;
+      }
+      .reg-btn-submit:hover {
+        transform: scale(1.03);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      /* المودال */
+      .reg-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+        z-index: 1000;
+      }
+      .reg-modal-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .reg-modal-content {
+        background: linear-gradient(135deg, #ffffff, #f0f4ff);
+        color: #060097;
+        padding: 30px 40px;
+        border-radius: 20px;
+        text-align: center;
+        transform: translateY(-40px) scale(0.9);
+        opacity: 0;
+        transition: transform 0.4s ease, opacity 0.4s ease;
+        max-width: 90%;
+        width: 380px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        position: relative;
+      }
+      .reg-modal-overlay.active .reg-modal-content {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      .reg-modal-content::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        background: linear-gradient(45deg, #032295, #2c0492);
+        z-index: -1;
+        border-radius: 25px;
+        filter: blur(14px);
+        opacity: 0.6;
+      }
+      .reg-modal-content .reg-icon {
+        font-size: 4rem;
+        margin-bottom: 15px;
+      }
+      .reg-modal-content h3 {
+        margin-bottom: 15px;
+        font-size: 2.2rem;
+        font-weight: 700;
+      }
+      .reg-modal-content p {
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+        line-height: 1.4;
+      }
+      .reg-modal-content button {
+        background: linear-gradient(135deg, #2b2ee9, #230375);
+        color: #f7fbfc;
+        border: none;
+        padding: 12px 30px;
+        font-size: 1rem;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .reg-modal-content button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      /* responsive */
+      @media (max-width: 1024px) {
+        .reg-header h1 {
+          font-size: 2.5rem;
+        }
+        .reg-header p {
+          font-size: 1.1rem;
+        }
+        .reg-form-box {
+          padding: 25px 30px;
+        }
+        .reg-form-box h2 {
+          font-size: 1.8rem;
+        }
+        .reg-row {
+          gap: 15px;
+        }
+        .reg-group {
+          width: calc(50% - 15px);
+        }
+        .reg-btn-submit {
+          width: 30%;
+        }
+      }
+      @media (max-width: 768px) {
+        .reg-row {
+          flex-direction: column;
+          gap: 10px;
+        }
+        .reg-group {
+          width: 100%;
+        }
+        .reg-btn-submit {
+          width: 100%;
+          margin-top: 15px;
+        }
+        .reg-form-box {
+          padding: 20px;
+        }
+        .reg-form-box h2 {
+          font-size: 1.6rem;
+        }
+        .reg-header h1 {
+          font-size: 2rem;
+        }
+        .reg-header p {
+          font-size: 1rem;
+        }
+        .reg-modal-content {
+          width: 90%;
+          padding: 25px 30px;
+        }
+        .reg-modal-content h3 {
+          font-size: 1.9rem;
+        }
+        .reg-modal-content p {
+          font-size: 1rem;
+        }
+      }
+      @media (max-width: 480px) {
+        .reg-form-box {
+          padding: 15px;
+        }
+        .reg-form-box h2 {
+          font-size: 1.4rem;
+        }
+        .reg-header h1 {
+          font-size: 1.6rem;
+        }
+        .reg-header p {
+          font-size: 0.9rem;
+        }
+        .reg-group input,
+        .reg-group select {
+          padding: 12px 15px;
+          font-size: 0.95rem;
+        }
+        .reg-btn-submit {
+          padding: 12px;
+          font-size: 1rem;
+        }
+        .reg-modal-content {
+          width: 95%;
+          padding: 20px 25px;
+        }
+        .reg-modal-content h3 {
+          font-size: 1.6rem;
+        }
+        .reg-modal-content p {
+          font-size: 0.95rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reg-root">
+      <div class="reg-wrapper">
+        <div class="reg-header">
+          <h1>انضم لعالمنا</h1>
+          <p>تجربة جديدة في انتظارك! اكتشف الآن!</p>
+          <p class="reg-promo">
+            هل لديك حساب بالفعل؟ <a href="#">ادخل إلى حسابك الآن!</a>
+          </p>
+        </div>
+        <div class="reg-form-box">
+          <h2>إنشاء الحساب</h2>
+          <form
+            id="regForm"
+            action="{% url 'accounts:register_student' %}"
+            method="POST"
+          >
+            {% csrf_token %}
+            <div class="reg-row">
+              <div class="reg-group">
+                <label for="regFirstName">الاسم الأول</label>
+                <input
+                  type="text"
+                  id="regFirstName"
+                  name="first_name"
+                  placeholder="أدخل الاسم الأول"
+                  required
+                />
+                <div class="reg-error" id="regFirstNameError">
+                  الرجاء إدخال الاسم الأول.
+                </div>
+              </div>
+              <div class="reg-group">
+                <label for="regLastName">الاسم الأخير</label>
+                <input
+                  type="text"
+                  id="regLastName"
+                  name="last_name"
+                  placeholder="أدخل الاسم الأخير"
+                  required
+                />
+                <div class="reg-error" id="regLastNameError">
+                  الرجاء إدخال الاسم الأخير.
+                </div>
+              </div>
+              <div class="reg-group">
+                <label for="regPhone">رقم الهاتف</label>
+                <input
+                  type="tel"
+                  id="regPhone"
+                  name="phone_number"
+                  placeholder="أدخل رقم الهاتف"
+                  required
+                />
+                <div class="reg-error" id="regPhoneError">
+                  الرجاء إدخال رقم هاتف صحيح.
+                </div>
+              </div>
+              <div class="reg-group">
+                <label for="regParentPhone">رقم هاتف ولي الأمر</label>
+                <input
+                  type="tel"
+                  id="regParentPhone"
+                  name="parent_phone_number"
+                  placeholder="أدخل رقم هاتف ولي الأمر"
+                  required
+                />
+                <div class="reg-error" id="regParentPhoneError">
+                  الرجاء إدخال رقم هاتف ولي أمر صحيح.
+                </div>
+              </div>
+              <div class="reg-group">
+                <label for="regGovernorate">المحافظة</label>
+                <input
+                  type="text"
+                  id="regGovernorate"
+                  name="governorate"
+                  placeholder="اختر أو اكتب المحافظة"
+                  list="regGovernorateList"
+                  required
+                />
+                <datalist id="regGovernorateList">
+                  <option value="القاهرة"></option>
+                  <option value="الإسكندرية"></option>
+                  <option value="الجيزة"></option>
+                </datalist>
+                <div class="reg-error" id="regGovernorateError">
+                  الرجاء اختيار أو كتابة المحافظة.
+                </div>
+              </div>
+              <div class="reg-group">
+                <label for="regGrade">الصف الدراسي</label>
+                <select id="regGrade" name="grade" required>
+                  <option value="">اختر الصف الدراسي</option>
+                  <option value="1">الصف الدراسي الأول</option>
+                  <option value="2">الصف الدراسي الثاني</option>
+                  <option value="3">الصف الدراسي الثالث</option>
+                </select>
+                <div class="reg-error" id="regGradeError">
+                  الرجاء اختيار الصف الدراسي.
+                </div>
+              </div>
+              <div class="reg-group">
+                <label for="regPassword">كلمة المرور</label>
+                <input
+                  type="password"
+                  id="regPassword"
+                  name="password"
+                  placeholder="أدخل كلمة المرور"
+                  required
+                />
+                <div class="reg-error" id="regPasswordError">
+                  الرجاء إدخال كلمة المرور (6 أحرف على الأقل).
+                </div>
+              </div>
+              <div class="reg-group">
+                <label for="regConfirmPassword">تأكيد كلمة المرور</label>
+                <input
+                  type="password"
+                  id="regConfirmPassword"
+                  name="confirm_password"
+                  placeholder="أعد إدخال كلمة المرور"
+                  required
+                />
+                <div class="reg-error" id="regConfirmPasswordError">
+                  كلمة المرور غير متطابقة.
+                </div>
+              </div>
+            </div>
+            <div class="reg-group full">
+              <!-- غيرنا type إلى button وأضفنا id -->
+              <button type="button" id="regSubmitBtn" class="reg-btn-submit">
+                إنشاء الحساب
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- النافذة المنبثقة جاهزة من قبلكم -->
+      <div id="regSuccessModal" class="reg-modal-overlay">
+        <div class="reg-modal-content">
+          <div class="reg-icon">🎉</div>
+          <h3 id="modalTitle">تم إنشاء حسابك بنجاح!</h3>
+          <p id="modalMessage">✨ أهلاً وسهلاً بك في عائلتنا التعليمية 😊</p>
+          <button id="modalConfirmBtn">حسناً</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showModal({ icon, title, message, redirect }) {
+        const overlay = document.getElementById("regSuccessModal");
+        overlay.querySelector(".reg-icon").textContent = icon;
+        overlay.querySelector("#modalTitle").textContent = title;
+        overlay.querySelector("#modalMessage").textContent = message;
+        const btn = document.getElementById("modalConfirmBtn");
+        btn.onclick = () => {
+          overlay.classList.remove("active");
+          if (redirect) {
+            window.location.href = "{% url 'accounts:home' %}";
+          }
+        };
+        overlay.classList.add("active");
+      }
+
+      document
+        .getElementById("regSubmitBtn")
+        .addEventListener("click", async function (e) {
+          e.preventDefault();
+          let isValid = true;
+
+          function validateField(condition, errorId) {
+            if (condition) {
+              document.getElementById(errorId).style.display = "block";
+              isValid = false;
+            } else {
+              document.getElementById(errorId).style.display = "none";
+            }
+          }
+
+          validateField(
+            document.getElementById("regFirstName").value.trim() === "",
+            "regFirstNameError"
+          );
+          validateField(
+            document.getElementById("regLastName").value.trim() === "",
+            "regLastNameError"
+          );
+          const phonePattern = /^[0-9]{10,15}$/;
+          validateField(
+            !phonePattern.test(
+              document.getElementById("regPhone").value.trim()
+            ),
+            "regPhoneError"
+          );
+          validateField(
+            !phonePattern.test(
+              document.getElementById("regParentPhone").value.trim()
+            ),
+            "regParentPhoneError"
+          );
+          validateField(
+            document.getElementById("regGovernorate").value.trim() === "",
+            "regGovernorateError"
+          );
+          validateField(
+            document.getElementById("regGrade").value === "",
+            "regGradeError"
+          );
+          validateField(
+            document.getElementById("regPassword").value.length < 6,
+            "regPasswordError"
+          );
+          validateField(
+            document.getElementById("regConfirmPassword").value.trim() === "" ||
+              document.getElementById("regConfirmPassword").value !==
+                document.getElementById("regPassword").value,
+            "regConfirmPasswordError"
+          );
+
+          if (!isValid) {
+            showModal({
+              icon: "⚠️",
+              title: "هناك خطأ بالإدخالات!",
+              message: document
+                .querySelector(".reg-error[style*='block']")
+                .textContent.trim(),
+              redirect: false,
+            });
+            return;
+          }
+
+          // عرض مودال التحميل فوراً
+          showModal({
+            icon: "⏳",
+            title: "جاري إنشاء الحساب...",
+            message: "يرجى الانتظار قليلاً",
+            redirect: false,
+          });
+
+          const form = document.getElementById("regForm");
+          const formData = new FormData(form);
+          const csrfToken = form.querySelector(
+            "input[name='csrfmiddlewaretoken']"
+          ).value;
+
+          try {
+            const response = await fetch(form.action, {
+              method: "POST",
+              body: formData,
+              headers: { "X-CSRFToken": csrfToken },
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              if (data.success) {
+                showModal({
+                  icon: "🎉",
+                  title: "تم إنشاء حسابك بنجاح!",
+                  message: "✨ أهلاً وسهلاً بك في عائلتنا التعليمية 😊",
+                  redirect: true,
+                });
+              } else {
+                showModal({
+                  icon: "⚠️",
+                  title: "فشل التسجيل",
+                  message: data.message || "حدث خطأ غير متوقع.",
+                  redirect: false,
+                });
+              }
+            } else {
+              showModal({
+                icon: "⚠️",
+                title: "خطأ بالخادم",
+                message: "لم نتمكن من التواصل مع الخادم، حاول لاحقًا.",
+                redirect: false,
+              });
+            }
+          } catch (error) {
+            showModal({
+              icon: "⚠️",
+              title: "خطأ في الاتصال",
+              message: "حدث خطأ أثناء الاتصال، حاول مجددًا.",
+              redirect: false,
+            });
+          }
+        });
+    </script>
+  </body>
+</html>

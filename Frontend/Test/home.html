@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>كورس الشهر الثاني</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* إعدادات عامة */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #23282f;
+        min-height: 100vh;
+        padding-top: 70px;
+        flex-direction: column;
+      }
+
+      .container {
+        width: 1470px;
+        height: 560px;
+        background-color: #00acc1;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: right;
+        position: relative;
+        display: flex;
+        align-items: center;
+        direction: rtl;
+      }
+
+      .header {
+        color: #fff;
+        text-align: right;
+      }
+
+      .header h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .dates {
+        margin-top: 15px;
+        display: flex;
+        gap: 15px;
+      }
+
+      .dates span {
+        background-color: #f48fb1;
+        color: #fff;
+        padding: 7px 14px;
+        border-radius: 15px;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* إعدادات الكارت */
+      .card {
+        width: 470px;
+        height: 500px;
+        position: absolute;
+        bottom: -250px;
+        left: 20px;
+        border-radius: 10px;
+        background: linear-gradient(to bottom, #0097a7 50%, #c1e4f6 50%);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .card img {
+        width: calc(100% - 30px);
+        height: calc(60% - 30px);
+        margin: 15px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      /* إعدادات الأزرار */
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      .price-tag {
+        display: flex;
+        align-items: center;
+        background-color: #ffc107;
+        border-radius: 20px;
+        padding: 5px 15px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .price-tag .currency {
+        color: #ffffff;
+        font-size: 14px;
+        margin-right: 5px;
+      }
+
+      .price-tag .amount {
+        background-color: #1976d2;
+        color: #ffffff;
+        border-radius: 20px;
+        padding: 5px 10px;
+        font-size: 14px;
+        margin-left: 5px;
+      }
+
+      .subscribe-button {
+        width: 300px; /* تكبير عرض الزر */
+        background-color: #1e88e5;
+        color: #ffffff;
+        border: none;
+        padding: 10px 30px; /* تقليل ارتفاع الزر */
+        border-radius: 8px;
+        font-size: 20px; /* تكبير حجم الخط */
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
+        margin-top: 20px; /* زيادة المسافة بين الزرين */
+      }
+
+      .subscribe-button:hover {
+        background-color: #1565c0;
+      }
+
+      /* إضافة النصوص أسفل التصميم */
+      .extra-text {
+        margin-top: 1500px;
+        text-align: right;
+        color: #333;
+      }
+
+      .extra-text p {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      /* إعدادات الصورة أسفل التصميم */
+      .extra-image {
+        margin-top: 20px;
+        position: absolute;
+        top: 650px;
+        right: 25px;
+        z-index: 2;
+      }
+
+      .extra-image img {
+        width: 950px;
+        height: auto;
+        border-radius: 15px;
+      }
+
+      /* إعدادات الحاوية الجديدة أسفل الصورة */
+      .new-container {
+        width: 950px;
+        background-color: #ddd;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 640px; /* زيادة المسافة عن الصورة */
+        text-align: right;
+        margin-right: 25px; /* إضافة هامش 25 بكسل من الحافة اليمنى */
+        margin-left: auto; /* نقل الحاوية إلى أقصى اليمين */
+        height: 270px; /* تعديل ارتفاع الحاوية حسب الحاجة */
+      }
+
+      .new-container h2 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .new-container p {
+        font-size: 16px;
+        color: #666;
+      }
+      /*_______________________________*/
+      /* CSS معزول */
+      .course-container {
+        width: 97%;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 40px auto;
+        margin-right: 25px;
+        padding: 40px;
+      }
+
+      .course-container > * {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+      }
+
+      .course-title {
+        padding: 20px;
+        font-size: 24px;
+        color: #faf7f9;
+        text-align: right;
+        border-bottom: 2px solid #f4f4f4;
+        background-color: transparent;
+        background-color: #4a9def;
+      }
+
+      .accordion-item {
+        margin-bottom: 10px;
+        border-radius: 6px;
+        background-color: #ffe6e6; /* هذا اللون للخلفية داخل الحاوية */
+        padding: 20px; /* التباعد بين المحتوى وحدود الحاوية */
+      }
+
+      .accordion-header {
+        background-color: #ffe6e6;
+        padding: 15px;
+        font-size: 20px;
+        color: #333;
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 6px 6px 0 0;
+      }
+
+      .accordion-header .material-symbols-outlined {
+        font-size: 18px;
+        transition: transform 0.3s;
+      }
+
+      .accordion-header.active .material-symbols-outlined {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        background-color: white;
+        /*background-color: #e8ecf2;*/
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.3s ease;
+        padding: 0 15px;
+        border-radius: 10px 10px 10px 10px;
+      }
+
+      .accordion-content-inner {
+        color: #333;
+      }
+
+      .lecture-item {
+        margin: 15px;
+        background-color: #f3f4f7;
+        padding: 20px; /* تساوي الهوامش من جميع الجوانب */
+        border-radius: 12px; /* زوايا دائرية للحاوية بالكامل */
+      }
+
+      .lecture-header {
+        background-color: #e8ecf2;
+        padding: 10px;
+        font-size: 18px;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 12px 12px 0 0;
+      }
+
+      .lecture-header .material-symbols-outlined {
+        font-size: 18px;
+        transition: transform 0.3s;
+      }
+
+      .lecture-header.active .material-symbols-outlined {
+        transform: rotate(180deg);
+      }
+
+      .lecture-content {
+        background-color: #f9f9f9;
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.3s ease;
+        padding: 0 15px;
+        border-radius: 0 0 12px 12px;
+      }
+
+      .lecture-content.active {
+        max-height: 500px;
+      }
+
+      .lecture-details {
+        padding: 10px 0;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .lecture-details i {
+        color: #d81b60;
+        margin-left: 5px;
+      }
+
+      /* تحسين المظهر لأيقونات الجداول */
+      .accordion-header .material-symbols-outlined,
+      .lecture-header .material-symbols-outlined {
+        color: #d81b60;
+      }
+      /*_______________________________*/
+      .lecture-details {
+        position: relative; /* لجعل الزر مرتبطًا بالحاوية */
+      }
+
+      .watch-button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute; /* لتحريك الزر داخل الحاوية */
+        top: 50%; /* جعله في منتصف الحاوية عموديًا */
+        left: 10px; /* المسافة من الحافة اليمنى */
+        transform: translateY(-50%); /* محاذاة الزر بشكل دقيق في المنتصف */
+      }
+
+      .watch-button:hover {
+        background-color: #45a049;
+      }
+      /*----------------------------------------------*/
+      /* جعل التصميم متجاوب مع الشاشات الصغيرة */
+      @media (max-width: 1200px) {
+        .container {
+          width: 95%;
+          height: auto;
+          flex-direction: column;
+          padding: 20px;
+        }
+
+        .card {
+          position: static;
+          width: 100%;
+          height: auto;
+          margin-top: 20px;
+        }
+
+        .card img {
+          width: 90%;
+          height: auto;
+        }
+
+        .extra-image img {
+          width: 100%;
+          height: auto;
+        }
+
+        .new-container {
+          width: 90%;
+          margin: 40px auto;
+          height: auto;
+        }
+
+        .course-container {
+          width: 95%;
+          padding: 20px;
+          margin: 20px auto;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .dates {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .subscribe-button {
+          width: 90%;
+          font-size: 18px;
+          padding: 10px;
+        }
+
+        .price-tag {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .extra-image {
+          position: static;
+          margin-top: 20px;
+          text-align: center;
+        }
+
+        .watch-button {
+          position: static;
+          transform: none;
+          margin-top: 10px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header h1 {
+          font-size: 22px;
+        }
+
+        .header p,
+        .dates span {
+          font-size: 14px;
+        }
+
+        .new-container h2 {
+          font-size: 20px;
+        }
+
+        .new-container p,
+        .lecture-details {
+          font-size: 14px;
+        }
+
+        .subscribe-button {
+          font-size: 16px;
+        }
+
+        .course-title {
+          font-size: 20px;
+        }
+
+        .accordion-header,
+        .lecture-header {
+          font-size: 16px;
+        }
+      }
+      /* تحسين المظهر لأيقونات الجداول */
+      .accordion-header .material-symbols-outlined,
+      .lecture-header .material-symbols-outlined {
+        color: #f3eef0;
+      }
+
+      /* ----------------- تحديث خلفية وتموضع الأيقونة ----------------- */
+      /* ----------------- تحديث خلفية وتموضع الأيقونة مع تكبير حجمها ----------------- */
+      .accordion-header .material-symbols-outlined,
+      .lecture-header .material-symbols-outlined {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #7782fa;
+        border-radius: 10px;
+        padding: 4px;
+        font-size: 24px; /* حجم الأيقونة بعد التكبير */
+      }
+      /* --- إضافة تنسيقات المودال --- */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+      }
+      .modal-box {
+        background: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.3s ease-out;
+      }
+      .modal-box h3 {
+        margin-bottom: 15px;
+        color: #333;
+        font-size: 20px;
+      }
+      .modal-box p {
+        margin-bottom: 20px;
+        color: #555;
+        font-size: 16px;
+      }
+      .modal-box button {
+        padding: 10px 20px;
+        border: none;
+        background: #00796b;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .modal-box button:hover {
+        background: #00695c;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% load static %}
+    <div class="container">
+      <div class="header">
+        <h1>{{ course.title }}</h1>
+        <p>{{ course.description }}</p>
+        <div class="dates">
+          <span>
+            <i class="material-symbols-outlined">create_new_folder</i>
+            تاريخ إنشاء الكورس: {{ course.created_at|date:"l، j F Y" }}
+          </span>
+          <span>
+            <i class="material-symbols-outlined">change_circle</i>
+            آخر تحديث للكورس: {{ course.updated_at|date:"l، j F Y" }}
+          </span>
+        </div>
+      </div>
+      <!-- الكارت المعدل مع الصورة والأزرار -->
+      <div class="card">
+        <img src="{{ course.image.url }}" alt="صورة الكورس" />
+        <div class="buttons">
+          <div class="price-tag">
+            <span class="currency">جنيهًا</span>
+            <span class="amount">{{ course.price }}</span>
+          </div>
+          {% if is_registered %}
+          <form
+            action="{% url 'subscriptions' %}"
+            method="post"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <input type="hidden" name="course_id" value="{{ course.id }}" />
+            <button type="submit" class="subscribe-button">اشترك الآن!</button>
+          </form>
+          {% else %}
+          <button
+            class="subscribe-button"
+            onclick="alert('يجب عليك تسجيل الدخول للاشتراك!')"
+          >
+            اشترك الآن!
+          </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- الصورة أسفل التصميم في أقصى الجانب الأيمن -->
+    <div class="extra-image">
+      <img src="{{ course.image.url }}" alt="صورة إضافية" />
+    </div>
+
+    <!-- الحاوية الجديدة أسفل الصورة وفوق النصوص -->
+    <div class="new-container">
+      <h2>{{ course.title }}</h2>
+      <p>{{ course.description }}</p>
+    </div>
+
+    <!-- إضافة تصميم الكورس -->
+    <div class="course-container">
+      <div class="course-title">محتوى الكورس</div>
+
+      {% for week_label, lectures, exams in weeks_content %}
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span>📅 {{ week_label }}</span>
+          <span class="material-symbols-outlined">stat_minus_1</span>
+        </div>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            {% for lecture in lectures %}
+            <div class="lecture-item">
+              <div class="lecture-header" onclick="toggleLecture(this)">
+                <span>📖 {{ lecture.title }}</span>
+                <span class="material-symbols-outlined">stat_minus_1</span>
+              </div>
+              <div class="lecture-content">
+                <div class="lecture-details">
+                  <p><i>الوصف:</i> {{ lecture.description }}</p>
+                  <p><i>مدة الفيديو:</i> {{ lecture.duration }} دقيقة</p>
+                  <p><i>عدد المشاهدات:</i> {{ lecture.views }} مشاهدة</p>
+                  {% if is_registered %}
+                  <a href="{% url 'lecture_detail' lecture.id %}">
+                    <button class="watch-button">🎥 مشاهدة الآن</button>
+                  </a>
+                  {% else %}
+                  <button
+                    class="watch-button"
+                    onclick="alert('يجب عليك تسجيل الدخول لمشاهدة المحاضرة!')"
+                  >
+                    🎥 مشاهدة الآن
+                  </button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <p>لا توجد محاضرات لهذا الأسبوع.</p>
+            {% endfor %} {% for exam in exams %}
+            <div class="lecture-item">
+              <div class="lecture-header" onclick="toggleLecture(this)">
+                <span>📝 {{ exam.title }}</span>
+                <span class="material-symbols-outlined">stat_minus_1</span>
+              </div>
+              <div class="lecture-content">
+                <div class="lecture-details">
+                  <p><i>الوصف:</i> {{ exam.description }}</p>
+                  <p><i>عدد الأسئلة:</i> {{ exam.questions_count }} سؤال</p>
+                  <p><i>مدة الامتحان:</i> {{ exam.duration }} دقيقة</p>
+                  {% if is_registered %}
+                  <a href="{% url 'exam_detail' exam.id %}">
+                    <button class="watch-button">🚀 ابدأ الامتحان</button>
+                  </a>
+                  {% else %}
+                  <button
+                    class="watch-button"
+                    onclick="alert('يجب عليك تسجيل الدخول لبدء الامتحان!')"
+                  >
+                    🚀 ابدأ الامتحان
+                  </button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <p>لا توجد امتحانات لهذا الأسبوع.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <script>
+      // JavaScript معزول
+      function toggleAccordion(element) {
+        const content = element.nextElementSibling;
+        element.classList.toggle("active");
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      }
+
+      function toggleLecture(element) {
+        const content = element.nextElementSibling;
+        element.classList.toggle("active");
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+        const parentContent = element.closest(".accordion-content");
+        if (parentContent) {
+          parentContent.style.maxHeight =
+            parentContent.scrollHeight + content.scrollHeight + "px";
+        }
+      }
+    </script>
+    <!-- إضافة التصميم الجديد في نهاية الصفحة -->
+  </body>
+</html>

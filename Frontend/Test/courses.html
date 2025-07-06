@@ -1,0 +1,467 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="CSS/style (1).css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+
+    <title>كارت</title>
+    <style>
+      /* تعريف الخطوط - دون تغيير */
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Black.otf' %}")
+          format("opentype");
+        font-weight: 900;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-BlackItalic.otf' %}")
+          format("opentype");
+        font-weight: 900;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Bold.otf' %}")
+          format("opentype");
+        font-weight: bold;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-BoldItalic.otf' %}")
+          format("opentype");
+        font-weight: bold;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraBold.otf' %}")
+          format("opentype");
+        font-weight: 800;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraBoldItalic.otf' %}")
+          format("opentype");
+        font-weight: 800;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraLight.otf' %}")
+          format("opentype");
+        font-weight: 200;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraLightItalic.otf' %}")
+          format("opentype");
+        font-weight: 200;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Light.otf' %}")
+          format("opentype");
+        font-weight: 300;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-LightItalic.otf' %}")
+          format("opentype");
+        font-weight: 300;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Medium.otf' %}")
+          format("opentype");
+        font-weight: 500;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-MediumItalic.otf' %}")
+          format("opentype");
+        font-weight: 500;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Regular.otf' %}")
+          format("opentype");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-RegularItalic.otf' %}")
+          format("opentype");
+        font-weight: 400;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-SemiBold.otf' %}")
+          format("opentype");
+        font-weight: 600;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-SemiBoldItalic.otf' %}")
+          format("opentype");
+        font-weight: 600;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Thin.otf' %}")
+          format("opentype");
+        font-weight: 100;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ThinItalic.otf' %}")
+          format("opentype");
+        font-weight: 100;
+        font-style: italic;
+      }
+      @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap");
+
+      /* تضمين بقية الخطوط كما في الكود الأصلي */
+      /* 1) إعادة ضبط الهوامش والحشوات الافتراضية */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* 2) ضمان أن الـhtml والـbody يملآن كامل النافذة */
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* 3) تعديل حاوية الكروت لتملأ كامل العرض */
+      .card-container {
+        display: flex;
+        gap: 2rem; /* الحفاظ على المسافة بين الكروت */
+        justify-content: center;
+        flex-wrap: wrap;
+        background-color: #5c46ff;
+        width: 100%;
+        min-height: 100%; /* لتملأ كامل ارتفاع الشاشة عند الحاجة */
+        padding: 2rem; /* إذا احتجت بعض التهوية الداخلية؛ يمكنك زيادتها أو إلغاؤها */
+      }
+
+      body {
+        font-family: "SomarSans", sans-serif;
+      }
+      .card-container {
+        display: flex;
+        gap: 2rem; /* زيادة المسافة بين الكروت */
+        justify-content: center;
+        flex-wrap: wrap;
+        background-color: #4a3bf3;
+      }
+
+      .card {
+        width: 28rem;
+        height: 45rem;
+        border: 0.125rem solid #ddd;
+        border-radius: 0.625rem;
+        overflow: hidden;
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* إضافة تأثير الانتقال */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        background-color: #fff;
+      }
+      .card:hover {
+        transform: scale(1.05); /* تكبير الكارت عند التحويم */
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3); /* زيادة الظل لتوضيح الكارت */
+      }
+      /* بدّل هذا التعريف بقائمة .card .top-image القديمة */
+      .card .top-image {
+        height: 16rem; /* ارتفاع ثابت للصورة */
+        flex-shrink: 0; /* لا يسمح لها بالانكماش مهما طالت النصوص */
+        background: url("Images/lina.png") center/cover no-repeat;
+      }
+
+      /* أضف/حدّث هذا التعريف ليُملأ المحتوى المتبقي ويُخفي الزوائد */
+      .card-content {
+        flex: 1; /* يملأ المساحة الباقية في الكارت */
+        display: flex;
+        align-items: flex-start;
+        padding: 1rem;
+        gap: 1rem;
+        overflow: hidden; /* يمنع النص من الخروج خارج حدود الكارت */
+      }
+
+      /*
+      .card .top-image {
+        height: 40%;
+        background: url("Images/lina.png") center/cover no-repeat;
+      }
+      .card-content {
+        display: flex;
+        align-items: flex-start;
+        padding: 1rem;
+        gap: 1rem;
+      }
+        */
+      .buttons-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 7rem;
+      }
+      .button-small {
+        display: flex; /* استخدام flexbox */
+        justify-content: center; /* محاذاة المحتوى أفقياً في المنتصف */
+        align-items: center; /* محاذاة المحتوى عمودياً في المنتصف */
+        font-size: 1.5rem; /* حجم الخط */
+        font-weight: 400; /* سمك الخط مثل الفقرات */
+        background-color: #0d9488; /* تغيير اللون */
+        color: #fff;
+        padding: 0.5rem 1rem; /* ضبط الحشوة لجعل الزر أكبر */
+        height: auto; /* ارتفاع تلقائي */
+        border: none;
+        border-radius: 1.5rem; /* حواف دائرية */
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-family: "SomarSans", sans-serif; /* تطبيق الخط */
+        text-align: center; /* محاذاة النص في المنتصف */
+        line-height: normal; /* التأكد من عدم وجود ارتفاع بين الأسطر */
+        text-decoration: none !important;
+        display: inline-block; /* يضمن تطبيق الـtext-decoration عليها */
+      }
+
+      .button-small:hover {
+        background-color: #0056b3; /* لون الزر عند التمرير */
+      }
+
+      .button-small:hover {
+        background-color: #0056b3;
+      }
+
+      .info {
+        background-color: #f0fdfa;
+        color: #333;
+        padding: 0; /* إزالة الحشو حول النصوص تمامًا */
+        width: 60%; /* زيادة عرض الحاوية */
+        height: auto; /* استخدام الارتفاع التلقائي */
+        border-radius: 0.5rem; /* زوايا مستديرة */
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+        overflow-y: auto;
+        margin-left: auto;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+        text-align: right;
+        min-height: 250px; /* ارتفاع أدنى للحاوية */
+        letter-spacing: -0.05em; /* تقليل المسافة بين الحروف */
+      }
+
+      .info .main-heading {
+        font-size: 2rem;
+        font-weight: 700;
+        background-image: linear-gradient(123deg, #333 24%, #007bff 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
+      }
+
+      .sub-text {
+        color: var(--gray-500);
+        margin: 0.5rem; /* الهوامش حول النص */
+        font-family: SomarSans, sans-serif;
+        font-size: 1.5rem;
+        line-height: 1.2; /* زيادة المسافة بين الأسطر */
+        padding: 0; /* إزالة أي حشو */
+      }
+
+      .card .divider {
+        width: 90%;
+        margin: 0 auto;
+        border: none;
+        height: 0.129rem;
+        background-color: #ddd;
+        margin-bottom: 1rem;
+      }
+
+      .card .button-container {
+        height: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        padding: 1.25rem;
+        position: relative;
+      }
+      .button .price {
+        background-color: #ffd700;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.3rem;
+      }
+
+      .card .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: 400;
+        background-color: #0d9488;
+        color: #fff;
+        padding: 0.4rem 1rem; /* تقليل الحشوة الرأسية قليلاً */
+        height: auto;
+        border: none;
+        border-radius: 1.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-family: "SomarSans", sans-serif;
+        text-align: center;
+        line-height: normal;
+      }
+
+      .card .button:hover {
+        background-color: #0056b3;
+      }
+
+      .card .text-container {
+        display: flex;
+        flex-direction: column;
+        margin-right: 10px;
+        text-align: right;
+      }
+      .card .text {
+        font-family: "SomarSans", sans-serif;
+        font-size: 1.2rem; /* تكبير حجم الخط */
+        color: #333;
+        margin: 0;
+      }
+      .text i {
+        color: #ff6347; /* لون جذاب */
+        font-size: 1.2rem; /* تكبير حجم الأيقونة قليلاً */
+        margin-right: 0.5rem; /* إضافة مسافة بين الأيقونة والنص */
+      }
+      /* === استجابة الكارتات لأحجام الشاشات المختلفة === */
+
+      /* للأجهزة اللوحية والشاشات المتوسطة */
+      @media (max-width: 1024px) {
+        .card {
+          width: 22rem; /* تقليل العرض قليلاً */
+          height: auto; /* السماح بارتفاع تلقائي حسب المحتوى */
+        }
+        .card .top-image {
+          height: 14rem; /* تقليل ارتفاع الصورة العلوية */
+        }
+      }
+
+      /* للهواتف الكبيرة (فابلت) والشاشات الصغيرة */
+      @media (max-width: 768px) {
+        .card-container {
+          gap: 1rem; /* تقليل الفراغ بين الكارتات */
+          padding: 1rem; /* تقليل الحشوة الخارجية */
+        }
+        .card {
+          width: 45%; /* كارتين في الصف الواحد */
+          margin-bottom: 1rem;
+        }
+        .buttons-container {
+          margin-top: 5rem; /* ضبط الموضع عمودياً */
+        }
+      }
+
+      /* للهواتف الذكية الصغيرة */
+      @media (max-width: 480px) {
+        .card {
+          width: 100%; /* كارت واحد كامل العرض */
+        }
+        .card .top-image {
+          height: 12rem; /* ارتفاع مناسب للشاشة الضيقة */
+        }
+        .card-content {
+          flex-direction: column; /* ترتيب عمودي للمحتوى داخل الكارت */
+          gap: 0.5rem; /* تقليل الفجوة بين العناصر */
+        }
+        .buttons-container {
+          flex-direction: row; /* صف بدلاً من عمود */
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-top: 3rem;
+        }
+        .button-small {
+          flex: 1 1 calc(50% - 0.5rem); /* زرين في الصف */
+          font-size: 1.25rem; /* حجم خط أصغر قليلاً */
+        }
+        .info {
+          width: 100%; /* المحتوى يأخذ العرض كله */
+          min-height: 200px; /* ارتفاع أدنى مناسب */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- أحدث الكورسات مع المنطق البرمجي الخاص بالباك-إند -->
+    <div class="latest-courses-container">
+      <div class="card-container">
+        {% for course in courses %}
+        <div class="card">
+          <div
+            class="top-image"
+            style="background-image: url('{{ course.image.url }}');"
+          ></div>
+          <div class="card-content">
+            <div class="buttons-container">
+              <a
+                href="{% url 'home_filtered' grade=course.grade course_id=course.id %}"
+              >
+                <button class="button-small">الدخول للكورس</button>
+              </a>
+              <a href="{% url 'accounts:submit_payment' course.id %}">
+                <button class="button-small">اشترك الآن!</button>
+              </a>
+            </div>
+            <div class="info">
+              <h1 class="main-heading">{{ course.title }}</h1>
+              <p class="sub-text">{{ course.description|linebreaksbr }}</p>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="button-container">
+            <div class="text-container">
+              <p class="text">
+                <i class="material-symbols-outlined">create_new_folder</i>
+                {{ course.start_date|date:"l، j F Y" }}
+              </p>
+              <p class="text">
+                <i class="material-symbols-outlined">change_circle</i>
+                {{ course.end_date|date:"l، j F Y" }}
+              </p>
+            </div>
+            <button class="button">
+              جنيهاً <span class="price">{{ course.price }}</span>
+            </button>
+          </div>
+        </div>
+        {% empty %}
+        <p style="text-align: center; width: 100%">لا يوجد كورسات متاحة.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>
