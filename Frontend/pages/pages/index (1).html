@@ -1,0 +1,971 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>قائمة همبرغر بسلاسة أعلى</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --main-bg: linear-gradient(
+          35deg,
+          rgb(6, 0, 151) 0%,
+          rgb(130, 4, 255) 73%,
+          rgb(193, 15, 255) 100%
+        );
+        --ast-global-color-0: #ffffff;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: sans-serif;
+        color: #fff;
+        background: var(--main-bg) fixed no-repeat center/cover;
+      }
+
+      /* Header */
+      header {
+        position: sticky;
+        top: 0;
+        left: 0; /* لضمان الامتداد الأفقي بالكامل */
+        right: 0; /* لضمان الامتداد الأفقي بالكامل */
+        width: 100%;
+        overflow: visible; /* يسمح لوهج الصورة بأن يكون مرئيًا كاملًا */
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        /* زدنا الحشوة السفلية قليلاً لاستيعاب وهج الصورة */
+        padding: 30px 80px 45px;
+        z-index: 1000;
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+      }
+      header.scrolled {
+        background: var(--main-bg);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        overflow: visible; /* ثبّت أيضاً لتغطية الوَهَج */
+      }
+
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: #fff;
+        cursor: pointer;
+      }
+      header h2 {
+        font-family: "Inter", sans-serif;
+        color: #060097;
+        font-weight: bold;
+        font-size: 40px;
+      }
+      .nav-buttons {
+        display: flex;
+        gap: 15px;
+      }
+      .nav-buttons button {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 1.1rem;
+        transition: background 0.2s ease;
+      }
+      .nav-buttons button:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+      .nav-buttons .border-btn {
+        border: 2px solid #fff;
+      }
+
+      /* صورة الهيدر: إطار مضيء */
+      .header-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 20px;
+        border: 2px solid #fff;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.8),
+          0 0 12px rgba(255, 255, 255, 0.6);
+      }
+      /* حاوية القائمة المرتبطة بالـ avatar */
+      .avatar-menu {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      /* يجعل السهم يتحول ليد عند المرور فوق صورة الهيدر */
+      .header-avatar,
+      .avatar-menu img {
+        cursor: pointer;
+      }
+
+      /* القائمة المنسدلة (مخفية افتراضياً) */
+      .avatar-dropdown {
+        position: absolute;
+        top: 110%; /* تحت الصورة مباشرةً */
+        right: 0;
+        background: var(--main-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        list-style: none;
+        padding: 8px 0;
+        min-width: 160px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        z-index: 1002;
+      }
+
+      /* إظهار القائمة */
+      .avatar-dropdown.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      /* عناصر القائمة */
+      .avatar-dropdown li {
+        margin: 0;
+      }
+      .avatar-dropdown li a {
+        display: block;
+        padding: 10px 16px;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 1rem;
+        color: #fff;
+        text-decoration: none;
+        transition: background 0.2s ease;
+      }
+      .avatar-dropdown li a:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      /* Wrapper */
+      .wrapper {
+        margin-top: 90px;
+        padding: 0 80px;
+      }
+
+      /* Split Section */
+      .split {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        padding-top: 60px;
+        padding-bottom: 60px; /* زيادة طفيفة في الارتفاع */
+      }
+
+      .split .text {
+        flex: 1;
+        position: relative;
+        top: -10px;
+        text-align: left;
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+
+      .split .text h1 {
+        font-size: 64px;
+        margin-bottom: 24px;
+      }
+      /* الفقرة المعدّلة */
+      .split
+        .text
+        p.has-white-color.has-text-color.has-ast-global-color-3-color.has-link-color.has-large-font-size.wp-elements-3c4e3c6537416146440e7c032dd2d334.custom-text {
+        color: #67768e !important;
+        margin-bottom: 1.6em;
+        font-size: 36px;
+        font-weight: 600;
+        line-height: 1.8;
+      }
+      /* زر الإنضمام الجديد */
+      .split .text .cta-btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 15px 35px;
+        background: #ffd24f;
+        color: #000000 !important;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 1.6rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 35px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .split .text .cta-btn:hover {
+        background: #e6be44;
+      }
+      .split .image {
+        flex: 1;
+        text-align: center;
+      }
+      .split .image img {
+        width: 90%;
+        height: auto;
+        display: inline-block;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: block;
+        }
+        .nav-buttons {
+          position: absolute;
+          top: 100%;
+          right: 30px;
+          background: var(--main-bg);
+          flex-direction: column;
+          gap: 10px;
+          padding: 10px;
+          border-radius: 12px;
+          max-height: 0;
+          opacity: 0;
+          transform: translateY(-10px);
+          overflow: hidden;
+          transition: max-height 0.3s ease, opacity 0.3s ease,
+            transform 0.3s ease;
+        }
+        .nav-buttons.open {
+          max-height: 300px;
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .wrapper {
+          margin-top: 20px;
+          padding: 0 15px;
+        }
+        .split {
+          flex-direction: column;
+          gap: 20px;
+        }
+        .split .text {
+          top: 0;
+          text-align: center;
+        }
+        .split .text h1 {
+          font-size: 36px;
+        }
+        .split .text p.custom-text {
+          font-size: 18px;
+          line-height: 1.6;
+        }
+        .split .text .cta-btn {
+          margin-top: 20px;
+        }
+        .split .image img {
+          width: 100%;
+        }
+      }
+      /* باقي الكود كما هو دون أي تعديل */
+      /************************************/
+      /* عزل التنسيقات داخل القسم فقط */
+      #mathSection {
+        background: #1f1346;
+        color: #f0f0f0;
+        font-family: "Cairo", sans-serif;
+        padding: 20px;
+      }
+      #mathSection .section-wrapper {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 50px 0;
+      }
+      #mathSection .header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+      #mathSection .header h1 {
+        font-size: 3em;
+        margin-bottom: 10px;
+        color: #a29bfe;
+      }
+      #mathSection .header p {
+        font-size: 1.2em;
+        color: #d1d1d1;
+      }
+      #mathSection .features {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+      #mathSection .feature {
+        background: linear-gradient(135deg, #2f1c6a, #3a1f7d);
+        border-radius: 15px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+        margin: 20px;
+        flex: 1 1 300px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        position: relative;
+      }
+      #mathSection .feature:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+      }
+      #mathSection .feature i {
+        font-size: 3em;
+        margin-bottom: 15px;
+        color: #a29bfe;
+      }
+      #mathSection .feature h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: #a29bfe;
+      }
+      #mathSection .feature p {
+        font-size: 1em;
+        color: #d1d1d1;
+        line-height: 1.6;
+      }
+      #mathSection .more-info {
+        display: none;
+        margin-top: 15px;
+        font-size: 0.9em;
+        color: #f0f0f0;
+        background: rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border-radius: 8px;
+      }
+      /***********************************************/
+      /* تنسيق الحاوية المحاوِطة بدلاً من body */
+      .cards-container {
+        background-color: #060097;
+        font-family: "SomarSans", sans-serif;
+      }
+      /* إعادة ضبط الهوامش والحشوات */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      /* حاوية الكروت */
+      .galactic-wrapper-quantum {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+      }
+      /* تصميم الكارت */
+      .cosmic-vault-card {
+        position: relative;
+        flex: 1 1 300px;
+        max-width: 450px;
+        width: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+      }
+      .cosmic-vault-card:hover {
+        transform: scale(1.08);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+      }
+      /* شريط الرأس والنص الملون بالأسود */
+      .header-bar {
+        position: relative;
+        z-index: 1;
+        background: rgba(192, 0, 0, 0.85);
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-size: 1.6rem;
+        font-weight: bold;
+        text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+        color: #000; /* نص أسود قاتم */
+      }
+      .header-bar img {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+      }
+      /* الفقاعة */
+      .bubble {
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.9);
+        margin: 16px;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s ease;
+      }
+      .bubble:hover {
+        transform: translateY(-10px);
+      }
+      .bubble-title {
+        font-size: 1.8rem;
+        color: #ff005e;
+        margin-bottom: 12px;
+        text-shadow: 0 0 5px rgba(255, 0, 94, 0.9);
+      }
+      .bubble img {
+        width: 100%;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        transition: transform 0.3s ease;
+      }
+      .bubble img:hover {
+        transform: scale(1.05);
+      }
+      .bubble-text {
+        font-size: 1.6rem;
+        color: #333;
+        margin-bottom: 12px;
+      }
+      /* شريط التذييل والنص الملون بالأسود */
+      .footer-bar {
+        position: relative;
+        z-index: 1;
+        background: rgba(242, 242, 242, 0.9);
+        padding: 16px;
+        text-align: center;
+        font-size: 1.6rem;
+        font-weight: 500;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.4);
+        color: #000; /* نص أسود قاتم */
+      }
+      /***********************************/
+      :root {
+        --main-bg: linear-gradient(
+          35deg,
+          rgb(6, 0, 151) 0%,
+          rgb(130, 4, 255) 73%,
+          rgb(193, 15, 255) 100%
+        );
+        --btn-bg: #ffcd57; /* لون الخلفية الجديد للزر */
+        --btn-color: #111; /* لون النص داخل الزر */
+        --text-color: #fff;
+        --font-family-ar: "Arial", sans-serif;
+        --font-family-en: "Plus Jakarta Sans", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-family-ar);
+        line-height: 1.4;
+      }
+
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        /* زدنا الـ padding لرفع الارتفاع قليلاً */
+        padding: 5rem 1rem;
+        /* أضفنا حد أدنى للارتفاع كنسبة من الـ viewport */
+        min-height: 55vh;
+        background: var(--main-bg);
+        color: var(--text-color);
+      }
+
+      .hero h1 {
+        font-family: var(--font-family-en);
+        font-size: 48px;
+        font-size: 3rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+      }
+
+      .hero .btn {
+        display: inline-block;
+        background-color: var(--btn-bg);
+        color: var(--btn-color);
+        /* padding أكبر قليلاً */
+        padding-top: 18px;
+        padding-right: 32px;
+        padding-bottom: 18px;
+        padding-left: 32px;
+        /* حجم خط أكبر قليلاً */
+        font-size: 22px;
+        font-size: 1.375rem;
+        font-weight: 600;
+        line-height: 1em;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .hero .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      }
+      /***************************************/
+      /* --- Footer Styles --- */
+      .main-wrapper {
+        margin: 0;
+        padding: 0;
+        background: #111;
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .site-footer {
+        background: #000;
+        color: #7b8faf;
+        text-align: center;
+        padding: 20px 20px 10px;
+        position: relative;
+      }
+      .footer-divider {
+        display: block;
+        width: 100%;
+        height: 1px;
+        background-color: yellow;
+        border: none;
+        margin: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .footer-inner {
+        max-width: 800px;
+        margin: 2px auto 0;
+        padding-top: 10px;
+      }
+      .footer-title {
+        font-size: 1.25rem;
+        margin: 0 0 15px;
+        color: #7b8faf;
+        direction: ltr;
+        font-weight: normal;
+      }
+      .footer-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+      }
+      .footer-icon {
+        width: 300px;
+        height: auto;
+      }
+      .footer-text {
+        font-size: 1rem;
+        line-height: 1.4;
+        direction: rtl;
+        margin: 0;
+      }
+      .footer-dev {
+        margin: 15px 0 8px;
+        font-size: 1.2rem;
+        color: #7b8faf;
+        direction: ltr;
+        font-weight: normal;
+      }
+      .footer-copy {
+        font-size: 1.1rem;
+        color: #7b8faf;
+        direction: rtl;
+        margin: 0;
+        opacity: 0.8;
+      }
+      /* لضمان استمرار ظهور وهج الصورة بالكامل حتى بعد السكروول */
+      header.scrolled {
+        overflow: visible; /* يظهر الظل/الوهج خارج حدود الهيدر */
+        padding-bottom: 45px; /* نفس الارتفاع الإضافي للهيدر الأصلي */
+      }
+
+      /* اجعل الصورة فوق باقي العناصر حتى لا تُقصّ */
+      .header-avatar {
+        position: relative;
+        z-index: 1001;
+      }
+      /* 1. لا تدع الهيدر يضغط أو يقص الوَهَج */
+      header {
+        flex-wrap: nowrap; /* يمنع التفاف العناصر وخفض الارتفاع */
+        min-height: 80px; /* يضمن مساحة كافية للصورة + الظل */
+        overflow: visible; /* يسمح للظل بالخروج من حدود الهيدر */
+      }
+
+      /* 2. حجز مساحة ثابتة لاسم MR. Mohamed وعدم التفافه */
+      header h2 {
+        flex-shrink: 0; /* يمنع تقليص عرض العنصر */
+        white-space: nowrap; /* يمنع الالتفاف على سطرين */
+      }
+
+      /* 3. تعديلات خاصة بالشاشات الصغيرة */
+      @media (max-width: 768px) {
+        header {
+          padding: 20px 15px; /* يقلل الحشو الأفقي ويثبت الرأسي */
+          min-height: 80px; /* يؤكد المساحة العمودية على الصغيرة */
+        }
+        header.scrolled {
+          padding: 20px 15px; /* يطابق حالة السكروول */
+        }
+        header h2 {
+          font-size: 24px; /* يصغر النص ليناسب الشاشات الصغيرة */
+        }
+      }
+      /* === زر القائمة بخلفية دائرية ملونة وأشرطة رأسية === */
+      .menu-toggle {
+        display: none; /* يبقى كما هو في الوضع الافتراضي */
+        width: 50px;
+        height: 50px;
+        padding: 0;
+        background: rgba(255, 255, 255, 0.2); /* لون الخلفية الدائري */
+        border: none; /* بدون أي إطار */
+        border-radius: 50%; /* يخلي الخلفية دائرية */
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: background 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      /* === زر القائمة بخلفية دائرية وأشرطة رأسية متساوية === */
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: flex;
+          flex-direction: column; /* صُف الأشرطة عموديًا */
+          align-items: center;
+          justify-content: center;
+          width: 50px; /* عرض الزر */
+          height: 50px; /* ارتفاع الزر */
+          padding: 0;
+          background: rgba(255, 255, 255, 0.2);
+          border: none;
+          border-radius: 50%; /* دائرة كاملة */
+          cursor: pointer;
+          transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .menu-toggle .bar {
+          width: 30px; /* تأكد من توحيد العرض */
+          height: 4px; /* تأكد من توحيد الارتفاع (سمك الشريط) */
+          margin: 3px 0; /* مسافة رأس-تحت ثابتة بين الأشرطة */
+          background: #fff;
+          border-radius: 2px; /* حواف ناعمة للأشرطة */
+          transition: background 0.2s ease;
+        }
+
+        .menu-toggle:hover {
+          background: rgba(255, 255, 255, 0.3);
+          box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ====== هيدر الكائن المعزول (isolated component) مع إضافة البلوك القديم للـ interactive menu ====== -->
+    <div id="isolated-component">
+      <header id="mainHeader">
+        <!-- دمج الكود القديم هنا -->
+        {% if is_registered or user.is_authenticated %}
+        <div class="avatar-menu">
+          <img
+            src="{% static 'images/male.webp' %}"
+            alt="Avatar"
+            class="header-avatar"
+            id="avatarToggle"
+          />
+          <ul class="avatar-dropdown" id="avatarDropdown">
+            <li><span>أهلاً {{ student_name }}</span></li>
+            <li><a href="{% url 'accounts:profile' %}">حسابي</a></li>
+            <li><a href="{% url 'accounts:logout' %}">تسجيل خروج</a></li>
+          </ul>
+        </div>
+        {% else %}
+        <div class="nav-buttons" id="navButtons">
+          <a href="{% url 'accounts:register_student' %}">
+            <button class="border-btn">انشئ حسابك الآن</button>
+          </a>
+          <a href="{% url 'accounts:login' %}">
+            <button class="border-btn">سجل دخولك</button>
+          </a>
+        </div>
+        {% endif %}
+
+        <!-- زرّ القائمة الأصلي -->
+        <button class="menu-toggle" id="menuToggle">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+
+        <h2>El-Afendi</h2>
+      </header>
+
+      <!-- بقية كود الهيدر والـ wrapper كما في الصفحة الجديدة تماماً -->
+      <div class="wrapper">
+        <div class="split">
+          <div class="text">
+            <h1>Mr.Mohamed Mostafa</h1>
+            <p
+              class="has-white-color has-text-color has-ast-global-color-3-color has-link-color has-large-font-size wp-elements-3c4e3c6537416146440e7c032dd2d334 custom-text"
+            >
+              Everything you need to succeed in English in one place. It’s time
+              to excel in English. Your platform is ready for you
+            </p>
+            <!-- الزر الجديد -->
+            <a
+              href="{% url 'accounts:register_student' %}"
+              style="text-decoration: none"
+            >
+              <button class="cta-btn">! إنضم إلينا الآن</button>
+            </a>
+          </div>
+          <div class="image">
+            <img src="{% static 'images/hero-img.svg' %}" alt="صورة توضيحية" />
+          </div>
+        </div>
+      </div>
+
+      <script>
+        const header = document.getElementById("mainHeader");
+        window.addEventListener("scroll", () => {
+          header.classList.toggle("scrolled", window.pageYOffset > 0);
+        });
+        const menuToggle = document.getElementById("menuToggle");
+        const navButtons = document.getElementById("navButtons");
+        menuToggle.addEventListener("click", () => {
+          navButtons.classList.toggle("open");
+        });
+      </script>
+    </div>
+    <!-- نهاية الكومبوننت المعزول -->
+
+    <!------------------------------------------->
+    <!-- هنا يبدأ المحتوى الأصلي مباشرة -->
+    <div id="mathSection">
+      <div class="section-wrapper">
+        <div class="header">
+          <h1>منصة الإنجليزية المتكاملة</h1>
+          <p>
+            حل مثالي لدراسة مادة الإنجليزي للصفوف الثانوية العامة بثلاثة أعوام
+          </p>
+        </div>
+        <div class="features">
+          <div class="feature">
+            <i class="fas fa-clock"></i>
+            <h3>توفير الوقت</h3>
+            <p>
+              استمتع بدروس مركزة وحلول ذكية تساعدك على اختصار الوقت وتسهيل
+              المذاكرة دون الحاجة للذهاب إلى السنتر.
+            </p>
+            <p class="more-info">
+              تفاصيل إضافية: يوفر النظام تقنيات حديثة لتنظيم الوقت وتحسين كفاءة
+              الدراسة.
+            </p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-headset"></i>
+            <h3>دعم متواصل</h3>
+            <p>
+              فريق دعم فني وتعليمي جاهز للإجابة عن استفساراتك وتقديم الإرشادات
+              في كل خطوة من خطوات دراستك.
+            </p>
+            <p class="more-info">
+              تفاصيل إضافية: الدعم متاح عبر الدردشة والبريد الإلكتروني لتوفير
+              تجربة تعليمية سلسة.
+            </p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-lock"></i>
+            <h3>أمان وثقة</h3>
+            <p>
+              بيئة تعليمية آمنة تضمن خصوصية بياناتك وتوفر لك الثقة التي تحتاجها
+              لتجربة تعليمية متكاملة.
+            </p>
+            <p class="more-info">
+              تفاصيل إضافية: نظام حماية متطور يحافظ على بيانات المستخدمين
+              باستخدام تقنيات التشفير.
+            </p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-book-open"></i>
+            <h3>شمولية المحتوى</h3>
+            <p>
+              دروس مفصلة وشاملة تغطي جميع محاور مادة الرياضيات مع أساليب شرح
+              مبسطة تجعل التعلم أسهل وأكثر متعة.
+            </p>
+            <p class="more-info">
+              تفاصيل إضافية: المحتوى يشمل جميع المناهج الدراسية مع اختبارات
+              تقييمية مستمرة.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // سكربت معزول داخل القسم لتبديل عرض التفاصيل الإضافية عند النقر
+        (function () {
+          const features = document.querySelectorAll("#mathSection .feature");
+          features.forEach((feature) => {
+            feature.addEventListener("click", function (e) {
+              if (!e.target.classList.contains("more-info")) {
+                const moreInfo = this.querySelector(".more-info");
+                moreInfo.style.display =
+                  moreInfo.style.display === "block" ? "none" : "block";
+              }
+            });
+          });
+        })();
+      </script>
+    </div>
+    <!-- هنا ينتهي المحتوى الأصلي -->
+    <!-- هنا ينتهي المحتوى الأصلي -->
+    <div class="cards-container">
+      <div class="galactic-wrapper-quantum">
+        <!-- الكارت الأول -->
+        <div
+          id="star-card"
+          class="cosmic-vault-card"
+          onclick="window.location.href='/content/first/'"
+          style="cursor: pointer"
+        >
+          <div class="header-bar">
+            <img
+              src="{% static 'images/scholarship_18125026.png' %}"
+              alt="Icon"
+            />
+            للصف الأول الثانوي
+          </div>
+          <div class="bubble">
+            <div class="bubble-title">هنا</div>
+            <img src="{% static 'images/laptop-2562211.jpg' %}" alt="صورة" />
+            <div class="bubble-text">ذاكر</div>
+          </div>
+          <div class="footer-bar">جميع كورسات ✔️ الصف الاول الثانوي 🚀</div>
+        </div>
+
+        <!-- الكارت الثاني -->
+        <div
+          id="mind-card"
+          class="cosmic-vault-card"
+          onclick="window.location.href='/content/second/'"
+          style="cursor: pointer"
+        >
+          <div class="header-bar">
+            <img
+              src="{% static 'images/scholarship_18125026.png' %}"
+              alt="Icon"
+            />
+            للصف الثاني الثانوي
+          </div>
+          <div class="bubble">
+            <div class="bubble-title">هنا</div>
+            <img src="{% static 'images/laptop-2562211.jpg' %}" alt="صورة" />
+            <div class="bubble-text">ذاكر</div>
+          </div>
+          <div class="footer-bar">جميع كورسات ✔️ الصف الثاني الثانوي 🚀</div>
+        </div>
+
+        <!-- الكارت الثالث -->
+        <div
+          id="peak-card"
+          class="cosmic-vault-card"
+          onclick="window.location.href='/content/third/'"
+          style="cursor: pointer"
+        >
+          <div class="header-bar">
+            <img
+              src="{% static 'images/scholarship_18125026.png' %}"
+              alt="Icon"
+            />
+            للصف الثالث الثانوي
+          </div>
+          <div class="bubble">
+            <div class="bubble-title">هنا</div>
+            <img src="{% static 'images/laptop-2562211.jpg' %}" alt="صورة" />
+            <div class="bubble-text">ذاكر</div>
+          </div>
+          <div class="footer-bar">جميع كورسات ✔️ الصف الثالث الثانوي 🚀</div>
+        </div>
+      </div>
+    </div>
+
+    <!--------------------------------------------->
+    <section class="hero">
+      <h1>!. We are here to help anytime</h1>
+      <a href="https://booxtore.net/" class="btn">تصفح المذكرات</a>
+    </section>
+    <!--------------------------------------------->
+    <div class="main-wrapper">
+      <!-- الفوتر -->
+      <footer class="site-footer">
+        <hr class="footer-divider" />
+        <div class="footer-inner">
+          <h2 class="footer-title">Mr. Mohamed Mostafa</h2>
+          <div class="footer-content">
+            <img
+              src="{% static 'images/scholarship_18125026.png' %}"
+              alt="Education Icon"
+              class="footer-icon"
+            />
+            <p class="footer-text">
+              ❤️ تم إنشاء هذه المنصة لدعم الطلاب في مسيرتهم التعليمية ❤️
+            </p>
+          </div>
+          <p class="footer-dev">Developed by programmer Ziad</p>
+          <p class="footer-copy">
+            جميع الحقوق محفوظة © 2025 منصة تعليم اللغة الإنجليزية الثانوية
+            العامة
+          </p>
+        </div>
+      </footer>
+    </div>
+    <!--------------------------------------------->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const avatar = document.getElementById("avatarToggle");
+        const dropdown = document.getElementById("avatarDropdown");
+
+        // عند النقر على الصورة: إظهار/إخفاء القائمة
+        avatar.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dropdown.classList.toggle("show");
+        });
+
+        // إخفاء القائمة عند النقر في أي مكان آخر
+        document.addEventListener("click", () => {
+          dropdown.classList.remove("show");
+        });
+      });
+    </script>
+  </body>
+</html>
