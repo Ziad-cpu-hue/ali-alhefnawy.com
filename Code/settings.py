@@ -37,9 +37,15 @@ SECRET_KEY = 'django-insecure-gdg5v*9qhism6wfj^2#920oh6^rhuf0#fpeqv&_86+ubo^b$g1
 DEBUG = True
 
 # تم إضافة النطاق الخاص بـ ngrok بالإضافة إلى النطاقات المحلية
-ALLOWED_HOSTS = ['.ngrok-free.app', 'localhost', '127.0.0.1'     'adminnnjeuei2l2.pythonanywhere.com',
-    'ali-alhefnawy.com',        # إذا ربطت دومينك الخاص
-    'www.ali-alhefnawy.com', ] 
+ALLOWED_HOSTS = [
+    '.ngrok-free.app',
+    'localhost',
+    '127.0.0.1',
+    'adminnnjeuei2l2.pythonanywhere.com',
+    'ali-alhefnawy.com',
+    'www.ali-alhefnawy.com',
+]
+
 CSRF_TRUSTED_ORIGINS = ['https://*.ngrok-free.app']  # Added CSRF_TRUSTED_ORIGINS for ngrok integration
 
 
