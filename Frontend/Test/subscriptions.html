@@ -1,150 +1,136 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>تنشيط الاشتراك</title>
     <style>
-      /* تحسين الخطوط والتصميم العام */
+      @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap");
+
       body {
-        font-family: "Tajawal", Arial, sans-serif;
-        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        font-family: "Tajawal", sans-serif;
         margin: 0;
         padding: 0;
-        text-align: center;
-        color: white;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
+        background-size: 300% 300%;
+        animation: gradientMove 10s ease infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
       }
-      .container {
-        max-width: 700px;
-        margin: 50px auto;
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        color: black;
+
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
       }
-      h1 {
-        color: #2575fc;
+
+      .box {
+        background-color: #ffffffee;
+        border-radius: 16px;
+        padding: 30px 25px;
+        max-width: 600px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .box h1 {
         font-size: 28px;
-        margin-bottom: 20px;
+        color: #ff4081;
+        margin-bottom: 15px;
       }
-      p {
-        font-size: 18px;
-        line-height: 1.6;
-        margin-bottom: 20px;
-      }
-      .button {
-        padding: 12px 20px;
-        border: none;
-        background: linear-gradient(90deg, #ff6a00, #ee0979);
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: 0.3s;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      }
-      .button:hover {
-        background: linear-gradient(90deg, #ee0979, #ff6a00);
-        transform: scale(1.05);
-      }
-      .contact-info {
-        margin-top: 20px;
+
+      .box p {
         font-size: 18px;
         color: #333;
+        margin: 10px 0;
+        line-height: 1.6;
       }
-      .contact-info span {
-        margin: 0 10px;
+
+      .contact {
+        margin-top: 15px;
         font-weight: bold;
-      }
-      .icon {
-        font-size: 20px;
-        vertical-align: middle;
-        margin-left: 5px;
+        color: #444;
       }
 
-      /*=============================*/
-      /* Responsive Styles */
-      /*=============================*/
+      .contact span {
+        display: inline-block;
+        margin: 5px 10px;
+        font-size: 17px;
+        color: #2196f3;
+      }
 
-      /* للشاشات الأقل من 768px */
-      @media only screen and (max-width: 768px) {
-        .container {
-          width: 90%;
-          padding: 20px;
-          margin: 30px auto;
+      .whatsapp-button {
+        margin-top: 25px;
+        background: linear-gradient(90deg, #00c853, #64dd17);
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .whatsapp-button:hover {
+        background: linear-gradient(90deg, #64dd17, #00c853);
+        transform: scale(1.05);
+      }
+
+      .note {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #777;
+      }
+
+      @media (max-width: 480px) {
+        .box {
+          padding: 20px 15px;
         }
-        h1 {
+
+        .box h1 {
           font-size: 24px;
-          margin-bottom: 18px;
         }
-        p {
-          font-size: 16px;
-          margin-bottom: 18px;
-        }
-        .button {
-          font-size: 14px;
-          padding: 10px 18px;
-        }
-        .contact-info {
-          font-size: 16px;
-        }
-        .icon {
-          font-size: 18px;
-        }
-      }
 
-      /* للشاشات الأقل من 480px */
-      @media only screen and (max-width: 480px) {
-        .container {
-          width: 95%;
-          padding: 15px;
-          margin: 20px auto;
-        }
-        h1 {
-          font-size: 22px;
-          margin-bottom: 16px;
-        }
-        p {
+        .box p,
+        .contact span,
+        .note {
           font-size: 15px;
-          margin-bottom: 16px;
         }
-        .button {
-          font-size: 13px;
-          padding: 8px 16px;
-        }
-        .contact-info {
+
+        .whatsapp-button {
           font-size: 14px;
-        }
-        .icon {
-          font-size: 16px;
+          padding: 10px 20px;
         }
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>تنشيط الاشتراك <span class="icon">🔑🛡️</span></h1>
-      <p>عفواً، لا يوجد اشتراك نشط <span class="icon">❌</span></p>
-      <p>
-        للتواصل مع إدارة المنصة وتفعيل اشتراكك <span class="icon">💡</span>،
-        يرجى الاتصال بالأرقام التالية:
-      </p>
-      <p class="contact-info">
-        <span>📞 01012345678</span> | <span>📞 01087654321</span>
-      </p>
-      <p>أو تواصل معنا عبر الواتساب <span class="icon">✅</span></p>
+    <div class="box">
+      <h1>🔐 تنشيط الاشتراك</h1>
+      <p>عفوًا، لا يوجد اشتراك نشط حالياً في حسابك.</p>
+      <p>للحصول على صلاحية الدخول، يرجى التواصل مع إدارة المنصة.</p>
+      <div class="contact">
+        <span>📞 01012345678</span>
+        <span>📞 01087654321</span>
+      </div>
+      <p>أو يمكنك التواصل عبر واتساب مباشرة:</p>
       <button
-        class="button"
+        class="whatsapp-button"
         onclick="window.location.href='https://wa.me/201012345678'"
-        title="تواصل عبر الواتساب"
       >
-        🚀 تواصل عبر الواتساب <span class="icon">💵</span>
+        تواصل عبر واتساب 💬
       </button>
-      <p style="margin-top: 30px; font-weight: 600; color: #2575fc">
-        🎯 للمساعدة، تواصل مع إدارة المنصة.
-      </p>
+      <p class="note">🎯 الدعم متاح يوميًا من 10 صباحًا إلى 10 مساءً</p>
     </div>
   </body>
 </html>

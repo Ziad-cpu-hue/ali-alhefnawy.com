@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="CSS/style (1).css" />
 
     <link
       rel="stylesheet"
@@ -15,7 +16,7 @@
       rel="stylesheet"
     />
 
-    <title>كورسات</title>
+    <title>كارت</title>
     <style>
       /* تعريف الخطوط - دون تغيير */
       @font-face {
@@ -137,284 +138,187 @@
       }
       @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap");
 
-      /* أنماط الصفحة داخل نطاق myComponent */
-      #myComponent .flexible-section {
-        width: 100%;
-        background-color: #262b4d;
-        padding: 10px 0;
-        box-sizing: border-box;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-      }
-      #myComponent .content-container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+      /* تضمين بقية الخطوط كما في الكود الأصلي */
+      /* 1) إعادة ضبط الهوامش والحشوات الافتراضية */
+      * {
+        margin: 0;
+        padding: 0;
         box-sizing: border-box;
       }
-      #myComponent .theme-icon {
-        width: 80px;
-        height: 80px;
-        margin-right: -570px;
-        border-radius: 20px 5px 20px 5px;
-      }
-      #myComponent .interactive-image-container {
-        display: inline-block;
-        position: relative;
-        margin-left: 0;
-      }
-      #myComponent .interactive-image {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-      }
-      #myComponent #interactive-links {
-        display: none;
-        position: absolute;
-        top: 120%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-        z-index: 10;
-        width: 200px;
-        height: auto;
-        text-align: right;
-        direction: rtl;
-      }
-      #myComponent #interactive-links a {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        color: #262b4d;
-        text-decoration: none;
-        margin-bottom: 10px;
-        padding: 10px;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        border-radius: 8px;
-      }
-      #myComponent #interactive-links a:hover {
-        background-color: #f5f5f5;
-        color: #0bce83;
-      }
-      #myComponent #interactive-links a i {
-        margin-right: 2px;
-        color: #0bce83;
-        font-size: 1.2rem;
-        margin-left: 10px;
-      }
-      #myComponent .right-buttons {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
 
-      #myComponent .login-button,
-      #myComponent .signup-button {
-        font-family: "SomarSans", sans-serif;
-        padding: 15px 30px;
-        background-color: #0bce83;
-        color: white;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        transition: color 0.4s ease, box-shadow 0.4s ease;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        font-size: 1.5rem;
-        font-weight: 700;
-      }
-
-      #myComponent .login-button::before,
-      #myComponent .signup-button::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
+      /* 2) ضمان أن الـhtml والـbody يملآن كامل النافذة */
+      html,
+      body {
         width: 100%;
         height: 100%;
-        background-color: rgba(255, 255, 255, 0.2);
-        transition: left 0.4s ease;
-      }
-      #myComponent .login-button:hover::before,
-      #myComponent .signup-button:hover::before {
-        left: 100%;
-      }
-      #myComponent .login-button:hover,
-      #myComponent .signup-button:hover {
-        color: #262b4d;
-        box-shadow: 0 0 20px rgba(11, 206, 131, 0.7);
       }
 
-      @media screen and (max-width: 768px) {
-        #myComponent .content-container {
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        #myComponent .theme-icon {
-          margin-right: 0;
-          margin-bottom: 10px;
-        }
-        #myComponent .right-buttons {
-          margin-top: 10px;
-        }
-      }
-
-      @media screen and (max-width: 480px) {
-        #myComponent .login-button,
-        #myComponent .signup-button {
-          padding: 10px 20px;
-          font-size: 1.2rem;
-        }
-        #myComponent #interactive-links {
-          width: 90%;
-        }
-      }
-
-      /* تأثيرات خاصة بنطاق myComponent بدلاً من body */
-      #myComponent {
-        padding-top: 100px;
-        font-family: "SomarSans", sans-serif;
-      }
-      @media screen and (max-width: 768px) {
-        #myComponent {
-          padding-top: 150px;
-        }
-      }
-      @media screen and (max-width: 480px) {
-        #myComponent {
-          padding-top: 180px;
-        }
-      }
-
-      #myComponent .card-container {
+      /* 3) تعديل حاوية الكروت لتملأ كامل العرض */
+      .card-container {
         display: flex;
-        gap: 2rem;
+        gap: 2rem; /* الحفاظ على المسافة بين الكروت */
         justify-content: center;
         flex-wrap: wrap;
-        padding: 1rem;
-        margin-top: 150px;
+        background-color: #5c46ff;
+        width: 100%;
+        min-height: 100%; /* لتملأ كامل ارتفاع الشاشة عند الحاجة */
+        padding: 2rem; /* إذا احتجت بعض التهوية الداخلية؛ يمكنك زيادتها أو إلغاؤها */
       }
 
-      #myComponent .card {
+      body {
+        font-family: "SomarSans", sans-serif;
+      }
+      .card-container {
+        display: flex;
+        gap: 2rem; /* زيادة المسافة بين الكروت */
+        justify-content: center;
+        flex-wrap: wrap;
+        background-color: #4a3bf3;
+      }
+
+      .card {
         width: 28rem;
-        min-height: 45rem;
+        height: 45rem;
         border: 0.125rem solid #ddd;
         border-radius: 0.625rem;
         overflow: hidden;
         box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* إضافة تأثير الانتقال */
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+        background-color: #fff;
       }
-      #myComponent .card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+      .card:hover {
+        transform: scale(1.05); /* تكبير الكارت عند التحويم */
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3); /* زيادة الظل لتوضيح الكارت */
+      }
+      /* بدّل هذا التعريف بقائمة .card .top-image القديمة */
+      .card .top-image {
+        height: 16rem; /* ارتفاع ثابت للصورة */
+        flex-shrink: 0; /* لا يسمح لها بالانكماش مهما طالت النصوص */
+        background: url("Images/lina.png") center/cover no-repeat;
       }
 
-      #myComponent .card .top-image {
-        height: 46%;
-        background-size: cover;
-        background-position: center;
+      /* أضف/حدّث هذا التعريف ليُملأ المحتوى المتبقي ويُخفي الزوائد */
+      .card-content {
+        flex: 1; /* يملأ المساحة الباقية في الكارت */
+        display: flex;
+        align-items: flex-start;
+        padding: 1rem;
+        gap: 1rem;
+        overflow: hidden; /* يمنع النص من الخروج خارج حدود الكارت */
       }
-      #myComponent .card-content {
+
+      /*
+      .card .top-image {
+        height: 40%;
+        background: url("Images/lina.png") center/cover no-repeat;
+      }
+      .card-content {
         display: flex;
         align-items: flex-start;
         padding: 1rem;
         gap: 1rem;
       }
-      #myComponent .buttons-container {
+        */
+      .buttons-container {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
         margin-top: 7rem;
       }
-      #myComponent .button-small {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5rem;
-        font-weight: 400;
-        background-color: #0d9488;
+      .button-small {
+        display: flex; /* استخدام flexbox */
+        justify-content: center; /* محاذاة المحتوى أفقياً في المنتصف */
+        align-items: center; /* محاذاة المحتوى عمودياً في المنتصف */
+        font-size: 1.5rem; /* حجم الخط */
+        font-weight: 400; /* سمك الخط مثل الفقرات */
+        background-color: #0d9488; /* تغيير اللون */
         color: #fff;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 1rem; /* ضبط الحشوة لجعل الزر أكبر */
+        height: auto; /* ارتفاع تلقائي */
         border: none;
-        border-radius: 1.5rem;
+        border-radius: 1.5rem; /* حواف دائرية */
         cursor: pointer;
         transition: background-color 0.3s;
-        font-family: "SomarSans", sans-serif;
+        font-family: "SomarSans", sans-serif; /* تطبيق الخط */
+        text-align: center; /* محاذاة النص في المنتصف */
+        line-height: normal; /* التأكد من عدم وجود ارتفاع بين الأسطر */
+        text-decoration: none !important;
+        display: inline-block; /* يضمن تطبيق الـtext-decoration عليها */
       }
-      #myComponent .button-small:hover {
+
+      .button-small:hover {
+        background-color: #0056b3; /* لون الزر عند التمرير */
+      }
+
+      .button-small:hover {
         background-color: #0056b3;
       }
-      #myComponent .info {
+
+      .info {
         background-color: #f0fdfa;
         color: #333;
-        width: 60%;
-        border-radius: 0.5rem;
+        padding: 0; /* إزالة الحشو حول النصوص تمامًا */
+        width: 60%; /* زيادة عرض الحاوية */
+        height: auto; /* استخدام الارتفاع التلقائي */
+        border-radius: 0.5rem; /* زوايا مستديرة */
         box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
         overflow-y: auto;
         margin-left: auto;
         margin-right: 0.5rem;
+        flex-shrink: 0;
         text-align: right;
-        min-height: 250px;
-        letter-spacing: -0.05em;
+        min-height: 250px; /* ارتفاع أدنى للحاوية */
+        letter-spacing: -0.05em; /* تقليل المسافة بين الحروف */
       }
-      #myComponent .info .main-heading {
+
+      .info .main-heading {
         font-size: 2rem;
         font-weight: 700;
         background-image: linear-gradient(123deg, #333 24%, #007bff 65%);
         -webkit-text-fill-color: transparent;
         -webkit-background-clip: text;
         background-clip: text;
-        margin: 0.5rem;
+        margin: 0.5rem; /* نفس الهامش مثل النصوص الأخرى */
+        padding: 0; /* إزالة أي حشو إضافي */
       }
-      #myComponent .sub-text {
+
+      .sub-text {
         color: var(--gray-500);
-        margin: 0.5rem;
+        margin: 0.5rem; /* الهوامش حول النص */
+        font-family: SomarSans, sans-serif;
         font-size: 1.5rem;
-        line-height: 1.2;
-        display: -webkit-box;
-        -webkit-line-clamp: 6;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-height: calc(1.5rem * 1.2 * 6);
+        line-height: 1.2; /* زيادة المسافة بين الأسطر */
+        padding: 0; /* إزالة أي حشو */
       }
-      #myComponent .card .divider {
+
+      .card .divider {
         width: 90%;
         margin: 0 auto;
         border: none;
-        height: 0.125rem;
+        height: 0.129rem;
         background-color: #ddd;
         margin-bottom: 1rem;
       }
-      #myComponent .card .button-container {
+
+      .card .button-container {
         height: auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
         background-color: #fff;
         padding: 1.25rem;
+        position: relative;
       }
-      #myComponent .button .price {
+      .button .price {
         background-color: #ffd700;
         padding: 0.2rem 0.4rem;
         border-radius: 0.3rem;
       }
-      #myComponent .card .button {
+
+      .card .button {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -422,252 +326,142 @@
         font-weight: 400;
         background-color: #0d9488;
         color: #fff;
-        padding: 0.4rem 1rem;
+        padding: 0.4rem 1rem; /* تقليل الحشوة الرأسية قليلاً */
+        height: auto;
         border: none;
         border-radius: 1.5rem;
         cursor: pointer;
         transition: background-color 0.3s;
+        font-family: "SomarSans", sans-serif;
+        text-align: center;
+        line-height: normal;
       }
-      #myComponent .card .button:hover {
+
+      .card .button:hover {
         background-color: #0056b3;
       }
-      #myComponent .card .text-container {
+
+      .card .text-container {
         display: flex;
         flex-direction: column;
         margin-right: 10px;
         text-align: right;
       }
-      #myComponent .card .text {
-        font-size: 1.2rem;
-        color: #f77fa7;
+      .card .text {
+        font-family: "SomarSans", sans-serif;
+        font-size: 1.2rem; /* تكبير حجم الخط */
+        color: #333;
         margin: 0;
       }
+      .text i {
+        color: #ff6347; /* لون جذاب */
+        font-size: 1.2rem; /* تكبير حجم الأيقونة قليلاً */
+        margin-right: 0.5rem; /* إضافة مسافة بين الأيقونة والنص */
+      }
+      /* === استجابة الكارتات لأحجام الشاشات المختلفة === */
 
-      /* ==================== */
-      /* أنماط الفوتر - ضمن نطاق myComponent فقط */
-      #myComponent footer {
-        background: #262b4d;
-        padding: 20px 0;
-        text-align: center;
-        width: 100%;
-        height: 350px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        color: #b0b0b0;
-      }
-      #myComponent footer .icons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        margin-bottom: 10px;
-      }
-      #myComponent footer .icons a {
-        text-decoration: none;
-        color: #4ca1ff;
-        font-size: 24px;
-      }
-      #myComponent footer .footer-line {
-        width: 50%;
-        border: none;
-        border-top: 2px solid #4ca1ff;
-        margin: 20px auto;
-      }
-      #myComponent .footer-text {
-        font-size: 16px;
-        margin: 10px 0;
-        color: #e0e0e0;
-      }
-      #myComponent .footer-text .dev-text {
-        color: #a8a8a8;
-        font-weight: normal;
-      }
-      #myComponent .footer-text .highlight {
-        color: #ffffff;
-        font-weight: bold;
-        font-size: 18px;
-        text-shadow: 0 0 8px #ffffff, 0 0 12px #ffffff;
-        animation: glow 1.5s infinite alternate;
-      }
-      @keyframes glow {
-        from {
-          text-shadow: 0 0 8px #ffffff, 0 0 12px #ffffff;
+      /* للأجهزة اللوحية والشاشات المتوسطة */
+      @media (max-width: 1024px) {
+        .card {
+          width: 22rem; /* تقليل العرض قليلاً */
+          height: auto; /* السماح بارتفاع تلقائي حسب المحتوى */
         }
-        to {
-          text-shadow: 0 0 12px #ffffff, 0 0 18px #ffffff, 0 0 24px #ffffff;
+        .card .top-image {
+          height: 14rem; /* تقليل ارتفاع الصورة العلوية */
         }
       }
-      #myComponent .footer-text-nasu {
-        font-family: "SomarSans", sans-serif;
-        font-size: 2rem;
-        font-weight: 700;
-        background-image: linear-gradient(123deg, #2552e8 24%, white 65%);
-        -webkit-text-fill-color: transparent;
-        -webkit-background-clip: text;
-        background-clip: text;
-        margin: 0.5rem;
-        padding: 0;
+
+      /* للهواتف الكبيرة (فابلت) والشاشات الصغيرة */
+      @media (max-width: 768px) {
+        .card-container {
+          gap: 1rem; /* تقليل الفراغ بين الكارتات */
+          padding: 1rem; /* تقليل الحشوة الخارجية */
+        }
+        .card {
+          width: 45%; /* كارتين في الصف الواحد */
+          margin-bottom: 1rem;
+        }
+        .buttons-container {
+          margin-top: 5rem; /* ضبط الموضع عمودياً */
+        }
       }
 
-      /* ============================= */
-      /* حاوية الكورسات الحديثة – تقليل الحجم وإضافة ظل أنيق */
-      #myComponent .latest-courses-container {
-        background-color: #fff;
-        padding: 0.5rem;
-        margin: 0.5rem 0;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-      }
-      /* تحديث تنسيق العنوان وفقاً للتنسيقات المطلوبة */
-      #myComponent .latest-courses-title {
-        font-size: 3rem;
-        font-weight: 700;
-        background-image: linear-gradient(123deg, #333 24%, #007bff 65%);
-        -webkit-text-fill-color: transparent;
-        -webkit-background-clip: text;
-        background-clip: text;
-        margin: 0.5rem;
-        text-align: center;
+      /* للهواتف الذكية الصغيرة */
+      @media (max-width: 480px) {
+        .card {
+          width: 100%; /* كارت واحد كامل العرض */
+        }
+        .card .top-image {
+          height: 12rem; /* ارتفاع مناسب للشاشة الضيقة */
+        }
+        .card-content {
+          flex-direction: column; /* ترتيب عمودي للمحتوى داخل الكارت */
+          gap: 0.5rem; /* تقليل الفجوة بين العناصر */
+        }
+        .buttons-container {
+          flex-direction: row; /* صف بدلاً من عمود */
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-top: 3rem;
+        }
+        .button-small {
+          flex: 1 1 calc(50% - 0.5rem); /* زرين في الصف */
+          font-size: 1.25rem; /* حجم خط أصغر قليلاً */
+        }
+        .info {
+          width: 100%; /* المحتوى يأخذ العرض كله */
+          min-height: 200px; /* ارتفاع أدنى مناسب */
+        }
       }
     </style>
   </head>
   <body>
-    <!-- تغليف كامل المحتوى داخل myComponent -->
-    <div id="myComponent">
-      <div class="flexible-section">
-        <div class="content-container">
-          <!-- الأيقونة -->
-          <img
-            src="{% static 'images/1.JPG' %}"
-            alt="Theme Icon"
-            class="theme-icon"
-          />
-          <!-- الصورة التفاعلية للمستخدمين المسجلين -->
-          {% if is_registered or user.is_authenticated %}
-          <div class="interactive-image-container">
-            <img
-              src="{% static 'images/unnamed (2).png' %}"
-              alt="Interactive Image"
-              class="interactive-image"
-              onclick="toggleLinks()"
-            />
-            <div id="interactive-links" style="display: none">
-              <p>أهلاً {{ student_name }}</p>
-              <a href="{% url 'accounts:profile' %}">
-                <i class="fas fa-user-circle"></i> حسابي
+    <!-- أحدث الكورسات مع المنطق البرمجي الخاص بالباك-إند -->
+    <div class="latest-courses-container">
+      <div class="card-container">
+        {% for course in courses %}
+        <div class="card">
+          <div
+            class="top-image"
+            style="background-image: url('{{ course.image.url }}');"
+          ></div>
+          <div class="card-content">
+            <div class="buttons-container">
+              <a
+                href="{% url 'home_filtered' grade=course.grade course_id=course.id %}"
+              >
+                <button class="button-small">الدخول للكورس</button>
               </a>
-              <a href="{% url 'accounts:logout' %}">
-                <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+              <a href="{% url 'accounts:submit_payment' course.id %}">
+                <button class="button-small">اشترك الآن!</button>
               </a>
             </div>
+            <div class="info">
+              <h1 class="main-heading">{{ course.title }}</h1>
+              <p class="sub-text">{{ course.description|linebreaksbr }}</p>
+            </div>
           </div>
-          {% endif %}
-          <script>
-            // تعديل وظيفة toggleLinks لتحديد البحث داخل myComponent فقط
-            function toggleLinks() {
-              const container = document.getElementById("myComponent");
-              const links = container.querySelector("#interactive-links");
-              if (
-                links.style.display === "none" ||
-                links.style.display === ""
-              ) {
-                links.style.display = "block";
-              } else {
-                links.style.display = "none";
-              }
-            }
-          </script>
-          <!-- أزرار الدخول والتسجيل -->
-          <div class="right-buttons">
-            <button
-              class="login-button"
-              onclick="window.location.href='/login/'"
-            >
-              سجل دخولك
-            </button>
-            <button
-              class="signup-button"
-              onclick="window.location.href='/register/'"
-            >
-              أنشئ حسابك
+          <div class="divider"></div>
+          <div class="button-container">
+            <div class="text-container">
+              <p class="text">
+                <i class="material-symbols-outlined">create_new_folder</i>
+                {{ course.start_date|date:"l، j F Y" }}
+              </p>
+              <p class="text">
+                <i class="material-symbols-outlined">change_circle</i>
+                {{ course.end_date|date:"l، j F Y" }}
+              </p>
+            </div>
+            <button class="button">
+              جنيهاً <span class="price">{{ course.price }}</span>
             </button>
           </div>
         </div>
+        {% empty %}
+        <p style="text-align: center; width: 100%">لا يوجد كورسات متاحة.</p>
+        {% endfor %}
       </div>
-      <!-- الحاوية الجديدة لكورسات الحديثة بحجم أقل وظل أنيق -->
-      <div class="latest-courses-container">
-        <h2 class="latest-courses-title">أحدث الكورسات هنا علشانك</h2>
-        <div class="card-container">
-          {% for course in courses %}
-          <div class="card">
-            <div
-              class="top-image"
-              style="background-image: url('{{ course.image.url }}');"
-            ></div>
-            <div class="card-content">
-              <div class="buttons-container">
-                <a
-                  href="{% url 'home_filtered' grade=course.grade course_id=course.id %}"
-                >
-                  <button class="button-small">الدخول للكورس</button>
-                </a>
-                <button class="button-small">اشترك الآن !</button>
-              </div>
-              <div class="info">
-                <h1 class="main-heading">{{ course.title }}</h1>
-                <p class="sub-text">{{ course.description|linebreaksbr }}</p>
-              </div>
-            </div>
-            <div class="divider"></div>
-            <div class="button-container">
-              <div class="text-container">
-                <p class="text">
-                  <i class="material-symbols-outlined">create_new_folder</i>
-                  الاثنين، ٢١ أكتوبر ٢٠٢٤
-                </p>
-                <p class="text">
-                  <i class="material-symbols-outlined">change_circle</i>
-                  الاثنين، ٥ أغسطس ٢٠٢٤
-                </p>
-              </div>
-              <button class="button">
-                جنيهاً <span class="price">{{ course.price }}</span>
-              </button>
-            </div>
-          </div>
-          {% empty %}
-          <p style="text-align: center; width: 100%">لا يوجد كورسات متاحة.</p>
-          {% endfor %}
-        </div>
-      </div>
-      <!-- كود الفوتر المُضاف دون تغيير لعناصره الأساسية -->
-      <footer>
-        <div class="icons">
-          <a href="https://www.youtube.com" target="_blank"
-            ><i class="fab fa-youtube"></i
-          ></a>
-          <a href="https://www.instagram.com" target="_blank"
-            ><i class="fab fa-instagram"></i
-          ></a>
-          <a href="https://www.facebook.com" target="_blank"
-            ><i class="fab fa-facebook"></i
-          ></a>
-          <a href="https://www.whatsapp.com" target="_blank"
-            ><i class="fab fa-whatsapp"></i
-          ></a>
-        </div>
-        <hr class="footer-line" />
-        <p class="footer-text-nasu">
-          ❤️ تم صنع هذه المنصة بهدف تهيئة الطالب لكامل جوانب الثانوية العامة
-          ومابعدها ❤️
-        </p>
-        <p class="footer-text">
-          <span class="dev-text">&lt; Developed By &gt;</span>
-          <span class="highlight"> Ziad </span>
-          <span class="dev-text">&lt; All Copy Rights Reserved @2024 &gt;</span>
-        </p>
-      </footer>
     </div>
   </body>
 </html>
