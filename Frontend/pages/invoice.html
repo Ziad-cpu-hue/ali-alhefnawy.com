@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <title>الفاتورة</title>
+    <style>
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-Black.otf") format("opentype");
+        font-weight: 900;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-BlackItalic.otf")
+          format("opentype");
+        font-weight: 900;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-Bold.otf") format("opentype");
+        font-weight: bold;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-BoldItalic.otf")
+          format("opentype");
+        font-weight: bold;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-ExtraBold.otf")
+          format("opentype");
+        font-weight: 800;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-ExtraBoldItalic.otf")
+          format("opentype");
+        font-weight: 800;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-ExtraLight.otf")
+          format("opentype");
+        font-weight: 200;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-ExtraLightItalic.otf")
+          format("opentype");
+        font-weight: 200;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-Light.otf") format("opentype");
+        font-weight: 300;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-LightItalic.otf")
+          format("opentype");
+        font-weight: 300;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-Medium.otf") format("opentype");
+        font-weight: 500;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-MediumItalic.otf")
+          format("opentype");
+        font-weight: 500;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-Regular.otf") format("opentype");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-RegularItalic.otf")
+          format("opentype");
+        font-weight: 400;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-SemiBold.otf")
+          format("opentype");
+        font-weight: 600;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-SemiBoldItalic.otf")
+          format("opentype");
+        font-weight: 600;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-Thin.otf") format("opentype");
+        font-weight: 100;
+      }
+      @font-face {
+        font-family: "SomarSans";
+        src: url("Fonts/Font_(2)/ArbFONTS-Somar-ThinItalic.otf")
+          format("opentype");
+        font-weight: 100;
+        font-style: italic;
+      }
+      /* تضمين بقية الخطوط كما في الكود الأصلي */
+      * {
+        font-family: "SomarSans", sans-serif;
+      }
+      /* عزل التنسيقات داخل الحاوية */
+      .invoice-container {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+
+      .invoice-container .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .invoice-container .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .invoice-container .header a {
+        text-decoration: none;
+        color: #007bff;
+        font-size: 18px;
+      }
+
+      .invoice-container .header a .fa-arrow-right {
+        margin-left: 5px;
+        transform: rotate(180deg);
+      }
+
+      .invoice-container h1 {
+        text-align: center;
+        background-image: linear-gradient(123deg, #1e293b 24%, #0d9488 65%);
+        font-size: 3.2rem;
+        font-weight: 600; /* لإبقاء السماكة معتدلة */
+        letter-spacing: -2px; /* تباعد بين الأحرف */
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 30px 0;
+      }
+
+      .invoice-container table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+      }
+
+      .invoice-container table th,
+      .invoice-container table td {
+        border: 1px solid #ddd;
+        padding: 20px;
+        font-size: 18px;
+        text-align: center;
+      }
+
+      .invoice-container table th {
+        background: #e9ecef;
+        font-size: 20px;
+      }
+
+      .invoice-container table th:nth-child(1),
+      .invoice-container table th:nth-child(3),
+      .invoice-container table td:nth-child(1),
+      .invoice-container table td:nth-child(3) {
+        width: 35%;
+      }
+
+      .invoice-container table th:nth-child(2),
+      .invoice-container table td:nth-child(2) {
+        width: 30%;
+      }
+
+      .invoice-container .btn {
+        display: block;
+        width: 40%;
+        text-align: center;
+        padding: 15px;
+        background: #00b2ff;
+        color: #fff;
+        font-size: 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin: 30px auto;
+      }
+
+      .invoice-container .btn:hover {
+        background: #009ae6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-container">
+      <div class="container">
+        <!-- Header with back button -->
+        <div class="header">
+          <a href="#"><i class="fa fa-arrow-right"></i> العودة للوراء</a>
+        </div>
+
+        <!-- Invoice title -->
+        <h1>الفاتورة</h1>
+
+        <!-- Invoice table -->
+        <table>
+          <thead>
+            <tr>
+              <th>سعر الكورس</th>
+              <th>الخصم</th>
+              <th>إجمالي سعر الفاتورة النهائي</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>350.00 جنيهًا</td>
+              <td>0 جنيهًا</td>
+              <td>350 جنيهًا</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Payment button -->
+        <a href="#" class="btn">الذهاب للدفع</a>
+      </div>
+    </div>
+  </body>
+</html>
