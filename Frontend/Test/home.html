@@ -168,8 +168,9 @@
       }
 
       .extra-image img {
-        width: 950px;
-        height: auto;
+        width: 950px; /* عرض ثابت */
+        height: 560px; /* ارتفاع أكبر */
+        object-fit: cover; /* قص الزائد مع الحفاظ على التناسق */
         border-radius: 15px;
       }
 
@@ -522,31 +523,6 @@
           transform: scale(1);
         }
       }
-      /*******************************************/
-      .pdf-btn {
-        display: inline-block;
-        background: #6c5ce7;
-        color: #fff;
-        text-decoration: none;
-        padding: 8px 16px; /* تقليل الحجم */
-        border-radius: 20px; /* زيادة الانحناء */
-        font-size: 0.9rem; /* تصغير الخط قليلًا */
-        font-weight: 500;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
-          background 0.15s ease-in-out;
-      }
-
-      .pdf-btn:hover {
-        background: #5a4dcf;
-        transform: translateY(-1px); /* رفع أخف */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      }
-
-      .pdf-btn:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
     </style>
   </head>
   <body>
@@ -642,18 +618,6 @@
                     🎥 مشاهدة الآن
                   </button>
                   {% endif %}
-                  <!--------------------------------------->
-                  {% if lecture.pdf %}
-                  <a
-                    href="{{ lecture.pdf.url }}"
-                    target="_blank"
-                    class="pdf-btn"
-                  >
-                    📄 فتح الملف (PDF)
-                  </a>
-                  {% endif %}
-
-                  <!--------------------------------------->
                 </div>
               </div>
             </div>
@@ -723,3 +687,5 @@
     <!-- إضافة التصميم الجديد في نهاية الصفحة -->
   </body>
 </html>
+
+
