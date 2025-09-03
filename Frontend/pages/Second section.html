@@ -1,0 +1,539 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>منصة الرياضيات المتكاملة — تصميم مُحسّن (SomarSans)</title>
+    <!-- Font Awesome (للايقونات) — لاحظت أن integrity كان وهمي فحذفته -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!-- خط SomarSans -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Somar+Sans:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ----------------- SomarSans @font-face (مرتب وعملي) ----------------- ينصح بوضع نسخ woff2/woff في ./fonts/ لسرعة أفضل، لكن إن كانت OTF محفوظة فقط فالـ fallback يلتقطها من Fonts/Font_(2)/ كما وضعت. --------------------------------------------------------------------- */ /* Helper: حاول المسار ./fonts/ أولاً ثم fallback إلى Fonts/Font_(2)/ */
+      /* ----------------- SomarSans @font-face (جاهزة لبيئة Django) ----------------- */
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Thin.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Thin.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Thin.otf' %}")
+            format("opentype");
+        font-weight: 100;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-ExtraLight.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-ExtraLight.woff' %}")
+            format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraLight.otf' %}")
+            format("opentype");
+        font-weight: 200;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Light.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Light.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Light.otf' %}")
+            format("opentype");
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Regular.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Regular.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Regular.otf' %}")
+            format("opentype");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Medium.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Medium.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Medium.otf' %}")
+            format("opentype");
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-SemiBold.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-SemiBold.woff' %}")
+            format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-SemiBold.otf' %}")
+            format("opentype");
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Bold.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Bold.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Bold.otf' %}")
+            format("opentype");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-ExtraBold.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-ExtraBold.woff' %}")
+            format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraBold.otf' %}")
+            format("opentype");
+        font-weight: 800;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Black.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Black.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Black.otf' %}")
+            format("opentype");
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+      }
+      /* ---------- الآن بقية الستايلات (كما طورتها سابقًا) ---------- */
+      #mathSection {
+        box-sizing: border-box;
+        padding: 40px 16px;
+        background-color: #113c3d; /*color: #f5f6fb;*/ /* استخدم SomarSans كخط أساسي */
+        font-family: "SomarSans", "Cairo", system-ui, -apple-system, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial;
+        direction: rtl;
+      } /* Wrapper */
+      #mathSection .section-wrapper {
+        width: 95%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 36px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(4px);
+      } /* زخرفة SVG بسيطة في الخلفية */
+      #mathSection .bg-decor {
+        position: absolute;
+        inset: -20% -10% auto auto;
+        width: 420px;
+        height: 420px;
+        opacity: 0.06;
+        transform: rotate(-15deg);
+        pointer-events: none;
+      } /* Header */
+      #mathSection .header {
+        text-align: center;
+        margin-bottom: 28px;
+      }
+      #mathSection .header h1 {
+        background-color: #566572;
+        font-size: 3.2rem;
+        font-weight: 600;
+        font-family: "SomarSans", sans-serif;
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem;
+        padding: 0;
+      }
+      #mathSection .header p {
+        font-size: 1.8rem;
+        font-family: "SomarSans", sans-serif;
+        margin-bottom: 40px;
+        background-image: linear-gradient(123deg, #81aed3 24%, #81aed3 65%);
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        line-height: 1.6;
+      } /* Features grid */
+      #mathSection .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        margin-top: 28px;
+      } /* كل Feature */
+      #mathSection .feature {
+        background-color: #58616600;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 14px;
+        padding: 22px;
+        position: relative;
+        overflow: visible;
+        transition: transform 320ms cubic-bezier(0.2, 0.9, 0.2, 1),
+          box-shadow 320ms;
+        cursor: pointer;
+        min-height: 170px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      #mathSection .feature:focus,
+      #mathSection .feature:hover {
+        transform: translateY(-10px) scale(1.01);
+        box-shadow: 0 18px 40px rgba(12, 8, 30, 0.6);
+        outline: none;
+      }
+      #mathSection .feature .icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        display: inline-grid;
+        place-items: center;
+        font-size: 1.4rem;
+        background-color: #f3752b;
+        color: #fff;
+        box-shadow: 0 6px 18px rgba(124, 95, 255, 0.18),
+          inset 0 -6px 14px rgba(255, 255, 255, 0.03);
+        margin-inline-start: auto;
+      }
+      #mathSection .feature h3 {
+        font-size: 3.2rem;
+        font-weight: 600;
+        font-family: "SomarSans", sans-serif;
+        background-color: #566572;
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem;
+        padding: 0;
+      }
+      #mathSection .feature p.lead {
+        font-size: 1.8rem;
+        font-family: "SomarSans", sans-serif;
+        margin-bottom: 40px;
+        background-color: #717d87;
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        line-height: 1.6;
+      } /* more-info: انيميشن الطي */
+      #mathSection .more-info {
+        color: #eef0ff;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        font-size: 0.95rem;
+        margin-top: 12px;
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 360ms ease, opacity 300ms ease,
+          transform 300ms ease;
+        opacity: 0;
+        transform-origin: top;
+        font-weight: 400;
+      }
+      #mathSection .more-info.open {
+        max-height: 400px; /* كفاية لعرض المحتوى */
+        opacity: 1;
+        transform: translateY(0);
+      } /* CTA بسيط أسفل */
+      #mathSection .cta-row {
+        margin-top: 26px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        align-items: center;
+      }
+      #mathSection .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 18px;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(90deg, #7e6bff, #a29bfe);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 10px 24px rgba(124, 95, 255, 0.14);
+        transition: transform 200ms, box-shadow 200ms;
+        text-decoration: none; /*****************************/
+        font-size: 2.1rem;
+        font-family: "SomarSans", sans-serif;
+      }
+      #mathSection .btn.secondary {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: #63636b;
+        font-weight: 500;
+        box-shadow: none;
+      }
+      #mathSection .btn:active {
+        transform: translateY(2px);
+      } /* Responsive tweaks */
+      @media (max-width: 720px) {
+        #mathSection .section-wrapper {
+          padding: 20px;
+        }
+        #mathSection .feature {
+          min-height: 150px;
+        }
+      } /* respects reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        #mathSection .feature,
+        #mathSection .btn {
+          transition: none;
+        }
+        #mathSection .more-info {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section id="mathSection" aria-labelledby="math-title" role="region">
+      <div class="section-wrapper">
+        <!-- زخرفة svg خلفي -->
+        <svg
+          class="bg-decor"
+          viewBox="0 0 200 200"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1">
+              <stop offset="0" stop-color="#a29bfe" stop-opacity="1" />
+              <stop offset="1" stop-color="#7e6bff" stop-opacity="1" />
+            </linearGradient>
+          </defs>
+          <circle cx="80" cy="40" r="80" fill="url(#g1)"></circle>
+        </svg>
+        <header class="header">
+          <h1 id="math-title">
+            منصتنا تلبي احتياجات طلاب الثانوية العامة بكل تفاصيلها؛ نوفر لك
+            الوقت والمجهود ونقدم لك محتوى شامل يساعدك على التفوق.
+          </h1>
+          <p>
+            حل مثالي لدراسة مادة اللغة الانجليزية للثانوية العامة — شرح مبسّط،
+            اختبارات، ودعم فني متواصل.
+          </p>
+        </header>
+        <div class="features" role="list">
+          <article
+            class="feature"
+            tabindex="0"
+            role="listitem"
+            aria-expanded="false"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                justify-content: flex-end;
+              "
+            >
+              <div class="icon" aria-hidden="true">
+                <i class="fa-regular fa-clock"></i>
+              </div>
+            </div>
+            <h3>توفير الوقت</h3>
+            <p class="lead">
+              دروس مركزة وتمارين محلولة تساعدك تُختصر وقت المذاكرة وتزيد من
+              الفاعلية.
+            </p>
+            <div class="more-info" aria-hidden="true">
+              يوفر النظام تقنيات لتنظيم مواعيد المذاكرة، جداول مراجعة ذكية،
+              ونماذج إجابات جاهزة لتسريع الفهم.
+            </div>
+          </article>
+          <article
+            class="feature"
+            tabindex="0"
+            role="listitem"
+            aria-expanded="false"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                justify-content: flex-end;
+              "
+            >
+              <div class="icon" aria-hidden="true">
+                <i class="fa-solid fa-headset"></i>
+              </div>
+            </div>
+            <h3>دعم متواصل</h3>
+            <p class="lead">
+              فريق تعليمي يقدّم إرشاد فردي عبر الدردشة والمسارات التعليمية
+              المصممة لكل طالب.
+            </p>
+            <div class="more-info" aria-hidden="true">
+              الدعم متاح عبر قنوات متعددة مع توجيه لمواد مرجعية واختبارات تقييم
+              دورية.
+            </div>
+          </article>
+          <article
+            class="feature"
+            tabindex="0"
+            role="listitem"
+            aria-expanded="false"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                justify-content: flex-end;
+              "
+            >
+              <div class="icon" aria-hidden="true">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+            </div>
+            <h3>تحقيق التفوق</h3>
+            <p class="lead">
+              مع كل محاضرة ستقترب خطوة من هدفك الكبير ستجد الدعم والمساعدة في كل
+              خطوة تخطوها.
+            </p>
+            <div class="more-info" aria-hidden="true">
+              الاعتماد على تشفير ونُهج إدارة وصول دقيقة للحسابات والمواد
+              التعليمية.
+            </div>
+          </article>
+          <article
+            class="feature"
+            tabindex="0"
+            role="listitem"
+            aria-expanded="false"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                justify-content: flex-end;
+              "
+            >
+              <div class="icon" aria-hidden="true">
+                <i class="fa-solid fa-book-open"></i>
+              </div>
+            </div>
+            <h3>شمولية المحتوى</h3>
+            <p class="lead">
+              تغطية كاملة للمناهج مع شروحات خطوة-بخطوة وتمارين تدريبية مع نماذج
+              أمثلة.
+            </p>
+            <div class="more-info" aria-hidden="true">
+              المحتوى مُنظّم حسب الفصول والأسابيع، ويشمل اختبارات تقييمية
+              وتقارير تقدم للطالب.
+            </div>
+          </article>
+        </div>
+        <div class="cta-row" aria-hidden="false">
+          <a href="#signup" class="btn" role="button"
+            ><i class="fa-regular fa-circle-play" aria-hidden="true"></i> جرب
+            درسًا مجانيًا</a
+          >
+          <a href="#contact" class="btn secondary" role="button"
+            ><i class="fa-solid fa-message" aria-hidden="true"></i> تواصل
+            معنا</a
+          >
+        </div>
+      </div>
+    </section>
+    <script>
+      (function () {
+        const features = document.querySelectorAll("#mathSection .feature");
+        function toggleFeature(feature, open) {
+          const more = feature.querySelector(".more-info");
+          const isOpen = more.classList.contains("open");
+          if (open === undefined) open = !isOpen;
+          if (open) {
+            more.classList.add("open");
+            more.setAttribute("aria-hidden", "false");
+            feature.setAttribute("aria-expanded", "true");
+          } else {
+            more.classList.remove("open");
+            more.setAttribute("aria-hidden", "true");
+            feature.setAttribute("aria-expanded", "false");
+          }
+        }
+        features.forEach((feature) => {
+          feature.addEventListener("click", function (e) {
+            if (e.target.closest("a")) return;
+            toggleFeature(this);
+          });
+          feature.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              toggleFeature(this);
+            } else if (e.key === "Escape") {
+              toggleFeature(this, false);
+            }
+          });
+          const more = feature.querySelector(".more-info");
+          more.addEventListener("click", function (e) {
+            e.stopPropagation();
+          });
+        });
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest("#mathSection .feature")) {
+            features.forEach((f) => {
+              const more = f.querySelector(".more-info");
+              more.classList.remove("open");
+              more.setAttribute("aria-hidden", "true");
+              f.setAttribute("aria-expanded", "false");
+            });
+          }
+        });
+        window.addEventListener("load", function () {
+          const first = features[0];
+          if (first) first.setAttribute("tabindex", "0");
+        });
+      })();
+    </script>
+  </body>
+</html>

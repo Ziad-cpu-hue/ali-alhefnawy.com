@@ -1,0 +1,260 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>هيدر المنصة</title>
+
+    <!-- استيراد خط ExpoArabic -->
+    <link
+      href="https://db.onlinewebfonts.com/c/9004b72f96afb1e5f13389f489791113?family=ExpoArabic-Book"
+      rel="stylesheet"
+    />
+    <link
+      href="https://db.onlinewebfonts.com/c/5a46b722115434b86e5e9719ff7f6f23?family=ExpoArabic-Bold"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      .scoped-root {
+        margin: 0;
+        font-family: "ExpoArabic-Book", "ExpoArabic-Bold", sans-serif;
+        background: #f5fdfb;
+      }
+
+      .scoped-root header {
+        background-color: #113c3d;
+        padding: 25px clamp(16px, 4vw, 30px);
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: clamp(10px, 2.4vw, 20px);
+        padding-right: clamp(30px, 10vw, 140px);
+        padding-left: clamp(16px, 2vw, 30px);
+        flex-wrap: wrap;
+        position: relative;
+      }
+
+      .scoped-root .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: clamp(8px, 1.6vw, 12px) clamp(12px, 3vw, 18px);
+        border-radius: 15px;
+        border: 2px solid transparent;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: clamp(13px, 1.6vw, 15px);
+        font-family: "ExpoArabic-Book", "ExpoArabic-Bold", sans-serif;
+        text-decoration: none;
+        transition: 0.3s;
+        white-space: nowrap;
+      }
+
+      .scoped-root .btn-login {
+        background-color: #d6f3ec;
+        color: #407f74;
+        border-color: #407f74;
+      }
+      .scoped-root .btn-login:hover {
+        background-color: #c2ebe3;
+        transform: translateY(-5px);
+      }
+
+      .scoped-root .btn-signup {
+        background-color: #407f74;
+        color: #ffffff;
+      }
+      .scoped-root .btn-signup:hover {
+        background-color: #32675c;
+        transform: scale(1.05);
+      }
+
+      .scoped-root .btn img {
+        width: clamp(18px, 3.2vw, 25px);
+        height: auto;
+        transition: transform 0.4s;
+        display: block;
+        flex-shrink: 0;
+      }
+
+      .scoped-root .btn:hover img {
+        transform: rotate(20deg) scale(1.12);
+      }
+
+      .scoped-root .btn:active {
+        transform: scale(0.95);
+      }
+
+      /* 🟢 صورة الأفاتار */
+      .avatar-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 3px solid #ffffff;
+        cursor: pointer;
+        object-fit: cover;
+        transition: transform 0.3s;
+      }
+
+      .avatar:hover {
+        transform: scale(1.08);
+      }
+
+      /* القائمة المنسدلة */
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        min-width: 200px;
+        z-index: 999;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .dropdown-menu.active {
+        display: block;
+      }
+
+      .dropdown-header {
+        background: #f0f7f6;
+        padding: 14px;
+        font-weight: bold;
+        color: #113c3d;
+        text-align: center;
+        border-bottom: 1px solid #e6e6e6;
+      }
+
+      .dropdown-menu a {
+        display: block;
+        padding: 14px 18px;
+        color: #113c3d;
+        text-decoration: none;
+        font-size: 15px;
+        transition: 0.3s;
+      }
+
+      .dropdown-menu a:hover {
+        background-color: #f0f7f6;
+        color: #407f74;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 420px) {
+        .dropdown-menu {
+          right: 50%;
+          transform: translateX(50%);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="scoped-root">
+      <header>
+        {% if is_registered or user.is_authenticated %}
+        <!-- 🟢 حالة الطالب مسجل دخول -->
+        <div class="avatar-container">
+          <img
+            src="{% static 'images/male.webp' %}"
+            alt="الصورة الشخصية"
+            class="avatar"
+            id="avatarBtn"
+          />
+          <div class="dropdown-menu" id="dropdownMenu">
+            <div class="dropdown-header">أهلاً {{ student_name }}</div>
+            <a href="{% url 'accounts:profile' %}">حسابي</a>
+            <a href="{% url 'accounts:logout' %}">تسجيل الخروج</a>
+          </div>
+        </div>
+        {% else %}
+        <!-- 🔵 حالة الطالب مش مسجل -->
+        <a href="{% url 'accounts:register_student' %}" class="btn btn-signup">
+          <span>انشئ حسابك</span>
+          <img
+            src="{% static 'images/register.7d6fa28f6ac768b063f15d9d21c583a8.svg' %}"
+            alt="يوزر +"
+          />
+        </a>
+        <a href="{% url 'accounts:login' %}" class="btn btn-login">
+          <span>سجل دخولك</span>
+          <img
+            src="{% static 'images/loginIcon.8695b06979ef92d86996b897ec226f0e.svg' %}"
+            alt="كتاب"
+          />
+        </a>
+        {% endif %}
+      </header>
+    </div>
+
+    <script>
+      const avatarBtn = document.getElementById("avatarBtn");
+      const form = document.querySelector("form");
+
+      if (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const formData = new FormData(form);
+
+          fetch(form.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+              "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]")
+                .value,
+            },
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success) {
+                // ✅ إعادة التوجيه للصفحة الرئيسية
+                window.location.href = "/";
+              } else {
+                alert(data.message || "حدث خطأ أثناء العملية");
+              }
+            })
+            .catch((err) => console.error("Error:", err));
+        });
+      }
+      const dropdownMenu = document.getElementById("dropdownMenu");
+      if (avatarBtn) {
+        avatarBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle("active");
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !dropdownMenu.contains(e.target) &&
+            !avatarBtn.contains(e.target)
+          ) {
+            dropdownMenu.classList.remove("active");
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

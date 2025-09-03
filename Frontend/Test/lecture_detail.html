@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>المحاضرة</title>
+    <style>
+      /* تصميم عام للصفحة */
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #121212;
+      }
+
+      /* حاوية الفيديو */
+      .video-container {
+        width: 90%;
+        max-width: 900px;
+        position: relative;
+        border-radius: 25px;
+        overflow: hidden;
+        padding: 7px; /* مسافة حول الفيديو */
+        background: linear-gradient(
+          97deg,
+          #0096ff,
+          #bb64ff 42%,
+          #f2416b 74%,
+          #eb7500
+        );
+        box-shadow: 0 0 20px rgba(0, 150, 255, 0.6),
+          0 0 40px rgba(187, 100, 255, 0.5), 0 0 60px rgba(242, 65, 107, 0.4),
+          0 0 80px rgba(235, 117, 0, 0.3);
+      }
+
+      /* تنسيق عنصر الفيديو المحلي */
+      .video-container video {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 20px;
+      }
+
+      /* تنسيق عنصر الـ iframe لفيديو YouTube */
+      .video-container iframe {
+        width: 100%;
+        height: 500px;
+        border: none;
+        border-radius: 20px;
+        display: block;
+      }
+
+      /* Responsive Styles */
+      @media only screen and (max-width: 768px) {
+        .video-container {
+          width: 95%;
+        }
+        .video-container iframe {
+          height: 300px;
+        }
+      }
+
+      @media only screen and (max-width: 480px) {
+        .video-container {
+          width: 100%;
+          padding: 5px;
+        }
+        .video-container iframe {
+          height: 250px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="video-container">
+      {% if lecture.youtube_iframe %}
+      <!-- عرض كود تضمين YouTube كما هو مُدخل في لوحة الإدارة -->
+      {{ lecture.youtube_iframe|safe }} {% elif lecture.video %}
+      <!-- عرض ملف الفيديو المحلي -->
+      <video
+        id="lecture-video"
+        controls
+        controlsList="nodownload"
+        disablePictureInPicture
+      >
+        <source src="{{ lecture.video.url }}" type="video/mp4" />
+        المتصفح لا يدعم تشغيل الفيديو.
+      </video>
+      {% else %}
+      <p style="color: #fff">لا يوجد فيديو متاح حالياً.</p>
+      {% endif %}
+    </div>
+
+    <!-- سكربت تتبع تقدم المشاهدة وإرسالها إلى الخادم -->
+    <script>
+      (function () {
+        const video = document.getElementById("lecture-video");
+        if (!video) return;
+
+        let intervalId;
+        const csrfToken = "{{ csrf_token }}";
+        const url = "{% url 'update_watch_progress' lecture.id %}";
+
+        // احسب طول الفيديو بالثواني
+        let totalDuration = 0;
+        video.addEventListener("loadedmetadata", () => {
+          totalDuration = Math.floor(video.duration);
+        });
+
+        video.addEventListener("play", () => {
+          intervalId = setInterval(() => {
+            fetch(url, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                watched_seconds: 10,
+                lecture_duration: totalDuration,
+              }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(
+                  `Progress: ${data.watched_seconds}/${data.lecture_duration} → ${data.status}`
+                );
+              })
+              .catch((err) => console.error("Error updating progress:", err));
+          }, 10000);
+        });
+
+        video.addEventListener("pause", () => clearInterval(intervalId));
+        video.addEventListener("ended", () => clearInterval(intervalId));
+      })();
+    </script>
+  </body>
+</html>

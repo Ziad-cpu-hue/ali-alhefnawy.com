@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>كروت المرحلة</title>
+
+    <!-- خط SomarSans -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Somar+Sans:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ----------------- SomarSans @font-face (مرتب وعملي) ----------------- ينصح بوضع نسخ woff2/woff في ./fonts/ لسرعة أفضل، لكن إن كانت OTF محفوظة فقط فالـ fallback يلتقطها من Fonts/Font_(2)/ كما وضعت. --------------------------------------------------------------------- */ /* Helper: حاول المسار ./fonts/ أولاً ثم fallback إلى Fonts/Font_(2)/ */
+      /* ----------------- SomarSans @font-face (جاهزة لبيئة Django) ----------------- */
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Thin.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Thin.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Thin.otf' %}")
+            format("opentype");
+        font-weight: 100;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-ExtraLight.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-ExtraLight.woff' %}")
+            format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraLight.otf' %}")
+            format("opentype");
+        font-weight: 200;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Light.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Light.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Light.otf' %}")
+            format("opentype");
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Regular.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Regular.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Regular.otf' %}")
+            format("opentype");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Medium.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Medium.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Medium.otf' %}")
+            format("opentype");
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-SemiBold.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-SemiBold.woff' %}")
+            format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-SemiBold.otf' %}")
+            format("opentype");
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Bold.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Bold.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Bold.otf' %}")
+            format("opentype");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-ExtraBold.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-ExtraBold.woff' %}")
+            format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraBold.otf' %}")
+            format("opentype");
+        font-weight: 800;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Black.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Black.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Black.otf' %}")
+            format("opentype");
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+      }
+      /* ---------- الآن بقية الستايلات (كما طورتها سابقًا) ---------- */
+      :root {
+        --bg: #113c3d;
+        --primary: #6ddcff;
+        --secondary: #7f60ff;
+        --text: #ffffff;
+        --radius: 28px;
+        --shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      }
+
+      .wrapper {
+        background: var(--bg);
+        font-family: "SomarSans", sans-serif;
+        min-height: 100vh;
+        margin: 0;
+        color: var(--text);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .cards-container {
+        display: flex;
+        gap: 60px;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        max-width: 1400px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(12px);
+        padding: 60px 50px 60px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card img {
+        width: 550px;
+        height: 350px;
+        border-radius: 20px;
+        object-fit: cover;
+        border: 6px solid rgba(255, 255, 255, 0.7);
+        margin-bottom: 30px;
+        transition: transform 0.4s ease;
+      }
+
+      .title-box {
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #113c3d;
+        padding: 8px 160px;
+        border-radius: 18px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        transition: all 0.3s ease;
+      }
+
+      .title-box:hover {
+        transform: translateX(-50%) scale(1.1);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+      }
+
+      .title {
+        font-size: 3.2rem;
+        font-weight: 600;
+        font-family: "SomarSans", sans-serif;
+        background-color: #566572;
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        margin: 0.5rem;
+        padding: 0;
+      }
+
+      /* 🎯 ريسبونسڤ */
+      @media (max-width: 1200px) {
+        .card img {
+          width: 450px;
+          height: 280px;
+        }
+        .title-box {
+          padding: 8px 100px;
+        }
+        .title {
+          font-size: 2.5rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .cards-container {
+          gap: 30px;
+        }
+        .card {
+          padding: 40px 30px;
+        }
+        .card img {
+          width: 100%;
+          height: auto;
+        }
+        .title-box {
+          padding: 6px 60px;
+        }
+        .title {
+          font-size: 2rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .card {
+          padding: 25px 20px;
+        }
+        .card img {
+          width: 100%;
+          height: auto;
+        }
+        .title-box {
+          padding: 6px 30px;
+        }
+        .title {
+          font-size: 1.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="cards-container">
+        <!-- كارت المرحلة الإعدادية -->
+        <article
+          class="card"
+          onclick="window.location.href='/phase/'"
+          style="cursor: pointer"
+        >
+          <img
+            src="{% static 'images/shen-tony-V4t3tyU13TQ-unsplash.jpg' %}"
+            alt="طلاب في المرحلة الإعدادية"
+          />
+          <div class="title-box">
+            <h1 class="title">المرحلة الإعدادية</h1>
+          </div>
+        </article>
+
+        <!-- كارت المرحلة الثانوية -->
+        <article
+          class="card"
+          onclick="window.location.href='/stages/'"
+          style="cursor: pointer"
+        >
+          <img
+            src="{% static 'images/s-o-c-i-a-l-c-u-t--e28b_f0eu0-unsplash.jpg' %}"
+            alt="طلاب في المرحلة الإعدادية"
+          />
+          <div class="title-box">
+            <h1 class="title">المرحلة الثانوية</h1>
+          </div>
+        </article>
+      </div>
+    </div>
+  </body>
+</html>

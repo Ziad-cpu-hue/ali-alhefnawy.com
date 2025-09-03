@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ exam.title }}</title>
+    <style>
+      /* تعريف متغيرات الألوان والخطوط */
+      :root {
+        --primary-color: #2575fc;
+        --secondary-color: #6a11cb;
+        --background-gradient: linear-gradient(
+          135deg,
+          var(--secondary-color),
+          var(--primary-color)
+        );
+        --card-bg: #ffffff;
+        --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        --text-color: #333333;
+        --button-gradient: linear-gradient(90deg, #ff6a00, #ee0979);
+        --button-hover-gradient: linear-gradient(90deg, #ee0979, #ff6a00);
+        --border-radius: 12px;
+        --choice-bg: #f9f9f9;
+        --choice-hover-bg: #e9e9e9;
+      }
+
+      /* تنسيق الصفحة العامة */
+      body {
+        font-family: "Tajawal", Arial, sans-serif;
+        background: var(--background-gradient);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: var(--text-color);
+        text-align: center;
+        line-height: 1.6;
+      }
+
+      /* تصميم الكرت المركزي */
+      .container {
+        max-width: 700px;
+        width: 90%;
+        background: var(--card-bg);
+        padding: 30px;
+        margin: 20px auto;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        text-align: left;
+        position: relative;
+        animation: fadeInUp 0.6s ease-out both;
+      }
+
+      h1 {
+        color: var(--primary-color);
+        font-size: 28px;
+        margin-bottom: 15px;
+      }
+
+      p {
+        font-size: 18px;
+        margin-bottom: 15px;
+      }
+
+      /* حركة سلسة للأسئلة */
+      .question {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        display: block;
+        margin-bottom: 20px;
+      }
+
+      .question.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* تصميم الأزرار مع تأثيرات عصرية */
+      button {
+        padding: 12px 25px;
+        border: none;
+        background: var(--button-gradient);
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: transform 0.3s ease, background 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      button:hover {
+        background: var(--button-hover-gradient);
+        transform: scale(1.05);
+      }
+
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* تحسين تنسيق الصور */
+      img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* تنسيق الاختيارات */
+      .choice-label {
+        display: block;
+        background: var(--choice-bg);
+        padding: 10px 15px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        border: 1px solid #ddd;
+      }
+      .choice-label:hover {
+        background: var(--choice-hover-bg);
+      }
+      .choice-label input {
+        margin-right: 8px;
+        transform: scale(1.2);
+        vertical-align: middle;
+      }
+
+      /* تنسيق مناطق النصوص (السؤال المقالي) */
+      textarea {
+        width: 95%;
+        min-height: 150px; /* يمكنك تعديل القيمة حسب الحجم المطلوب */
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        resize: vertical;
+        background: #fff;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      /* تأثير التركيز على حقل الإجابة المقالية مع زيادة الشعاع */
+      textarea:focus {
+        border: 1px solid var(--primary-color);
+        box-shadow: 0 0 40px var(--primary-color); /* زيادة الشعاع أكثر */
+        outline: none;
+      }
+
+      /* تنسيق التنقل داخل الصفحة */
+      .navigation {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      /* تصميم المؤقت بتأثيرات حديثة وتثبيته في أعلى الشاشة بمنتصفها */
+      .timer {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
+        background: var(--button-gradient);
+        padding: 10px 15px;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+      }
+
+      /* حركة ظهور للكرت */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* دعم تجاوب التصميم */
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px;
+        }
+        h1 {
+          font-size: 24px;
+        }
+        p {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!--<h1>{{ exam.title }}</h1>
+      <p>{{ exam.description }}</p>-->
+
+      <form method="post" action="{% url 'submit_exam' exam.id %}">
+        {% csrf_token %} {% for question in questions %}
+        <div
+          class="question {% if forloop.first %}active{% endif %}"
+          id="question{{ forloop.counter0 }}"
+          {%
+          if
+          forloop.first
+          %}style="display: block"
+          {%
+          else
+          %}style="display: none"
+          {%
+          endif
+          %}
+        >
+          <!----------------------------------------------------------------------->
+          {% if question.text %}
+          <h3>{{ question.text }}</h3>
+          {% endif %}
+          <!----------------------------------------------------------------------->
+
+          {% if question.image %}
+          <img src="{{ question.image.url }}" alt="صورة السؤال" />
+          {% endif %}
+          <!----------------------------------------------------------------------->
+
+          {% if question.question_type == "mcq" %}
+          <!----------------------------------------------------------------------->
+          {% for choice in question.choices.all %}
+          <label class="choice-label">
+            <input
+              type="radio"
+              name="question{{ question.id }}"
+              value="{{ choice.id }}"
+              required
+            />
+            {{ choice.text }}
+          </label>
+          {% endfor %}
+          <!----------------------------------------------------------------------->
+
+          {% elif question.question_type == "essay" %}
+          <textarea
+            name="question{{ question.id }}"
+            rows="4"
+            placeholder="اكتب إجابتك هنا..."
+            required
+          ></textarea>
+          {% endif %}
+          <!----------------------------------------------------------------------->
+        </div>
+        {% endfor %}
+
+        <div class="navigation">
+          <button
+            type="button"
+            id="prevBtn"
+            onclick="changeQuestion(-1)"
+            disabled
+          >
+            السابق
+          </button>
+          <button type="button" id="nextBtn" onclick="changeQuestion(1)">
+            التالي
+          </button>
+        </div>
+        <button
+          type="submit"
+          id="submitBtn"
+          style="display: none; margin-top: 20px"
+        >
+          إرسال الإجابات
+        </button>
+      </form>
+    </div>
+
+    <div class="timer">⏳ الوقت المتبقي: <span id="countdown"></span></div>
+
+    <script>
+      let currentQuestion = 0;
+      let questions = document.querySelectorAll(".question");
+      let totalQuestions = questions.length;
+
+      function showQuestion(index) {
+        questions.forEach((q, i) => {
+          if (i === index) {
+            q.style.display = "block";
+            q.classList.add("active");
+          } else {
+            q.style.display = "none";
+            q.classList.remove("active");
+          }
+        });
+
+        document.getElementById("prevBtn").disabled = index === 0;
+        document.getElementById("nextBtn").style.display =
+          index === totalQuestions - 1 ? "none" : "inline-block";
+        document.getElementById("submitBtn").style.display =
+          index === totalQuestions - 1 ? "inline-block" : "none";
+      }
+
+      function changeQuestion(direction) {
+        currentQuestion += direction;
+        showQuestion(currentQuestion);
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        if (totalQuestions > 0) {
+          showQuestion(0);
+        }
+      });
+
+      // استلام الوقت بالدقائق من لوحة الأدمن وتحويله إلى ثواني للعد التنازلي
+      let timeLeft = {{ exam.duration_minutes }} * 60;
+      let countdownElement = document.getElementById("countdown");
+
+      function updateCountdown() {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        countdownElement.innerHTML = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+        if (timeLeft > 0) {
+          timeLeft--;
+          setTimeout(updateCountdown, 1000);
+        } else {
+          document.querySelector("form").submit();
+        }
+      }
+
+      updateCountdown();
+    </script>
+  </body>
+</html>
