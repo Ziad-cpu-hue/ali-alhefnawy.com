@@ -477,10 +477,19 @@
             ><i class="fa-regular fa-circle-play" aria-hidden="true"></i> جرب
             درسًا مجانيًا</a
           >
-          <a href="#contact" class="btn secondary" role="button"
-            ><i class="fa-solid fa-message" aria-hidden="true"></i> تواصل
-            معنا</a
+          <a
+            href="{% url 'top_students_page' %}"
+            class="btn secondary"
+            role="button"
+            style="display: flex; align-items: center; gap: 10px"
           >
+            <img
+              src="{% static 'images/education_6041341.png' %}"
+              alt="icon"
+              style="width: 40px; height: 40px"
+            />
+            أوائل المسابقات
+          </a>
         </div>
       </div>
     </section>
@@ -537,3 +546,4 @@
     </script>
   </body>
 </html>
+
