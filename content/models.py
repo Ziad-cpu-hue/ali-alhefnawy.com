@@ -176,3 +176,25 @@ class ExamAttendance(models.Model):
     def save(self, *args, **kwargs):
         self.update_status()
         super().save(*args, **kwargs)
+
+
+
+
+from django.db import models
+
+class TopStudent(models.Model):
+    name = models.CharField("الاسم", max_length=200)
+    description = models.TextField("النص")
+    number = models.IntegerField("الرقم")
+    image = models.ImageField("الصورة", upload_to="top_students/")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Top student"
+        verbose_name_plural = "Top students"
+
+    def __str__(self):
+        return self.name
+
+
