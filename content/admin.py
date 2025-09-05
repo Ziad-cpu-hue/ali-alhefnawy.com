@@ -115,3 +115,12 @@ class QuestionAdmin(admin.ModelAdmin):
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('title', 'grade', 'price', 'created_at')
     list_filter  = ('grade',)
+
+from django.contrib import admin
+from .models import TopStudent
+
+@admin.register(TopStudent)
+class TopStudentAdmin(admin.ModelAdmin):
+    list_display = ("name", "number", "created_at")
+    search_fields = ("name", "description")
+    list_filter = ("created_at",)
