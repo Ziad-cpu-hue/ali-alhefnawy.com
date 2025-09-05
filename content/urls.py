@@ -6,6 +6,9 @@ from .views import home, lecture_detail, exam_detail, submit_exam, exam_analysis
 
 urlpatterns = [
 
+    # ✅ ضع المسار المحدّد أولاً
+    path('top-students-page/', views.top_students_page, name='top_students_page'),
+    
     # --- خرائط ثابتة لدرجات الإعدادية (تحويل لمسارات رقيمة متوافقة مع models) ---
     path("first/", views.course_list, {'grade': '4'}, name='course_first'),
     path("second/", views.course_list, {'grade': '5'}, name='course_second'),
@@ -31,3 +34,4 @@ urlpatterns = [
 # ✅ إضافة دعم لعرض الفيديوهات والملفات المرفوعة أثناء التطوير
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
