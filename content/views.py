@@ -523,3 +523,19 @@ def update_watch_progress(request, lecture_id):
         "lecture_duration": attendance.lecture_duration,
         "status": attendance.status
     })
+
+# content/views.py
+from django.shortcuts import render
+from .models import TopStudent
+
+def top_students_page(request):
+    top_students = TopStudent.objects.all().order_by("number")
+    # ناخد النص من أول طالب مضاف مثلاً
+    top_header = top_students.first().description if top_students.exists() else "لا يوجد نص محدد"
+
+    return render(request, "Test/superiority.html", {
+        "top_students": top_students,
+        "top_header": top_header
+    })
+
+
