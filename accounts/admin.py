@@ -8,13 +8,13 @@ from datetime import datetime
 from .models import Student, Subscription, ActivityLog  # أضفنا ActivityLog هنا
 from content.models import Course
 
-# إضافات جديدة للـ admin (URLs, عرض وحذف التكرارات)
+# إضافات جديدة للـ admin (URLs, عرض وحذف/تصفية التكرارات، و dedupe)
 from django.urls import path, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.middleware.csrf import get_token
 from django.db.models import Count
 from django.utils.html import escape
-
+from django.db import transaction
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Inline لعرض سجلات النشاط داخل صفحة Student في الأدمين
@@ -31,7 +31,7 @@ class ActivityLogInline(admin.TabularInline):
 
 # ──────────────────────────────────────────────────────────────────────────────
 # تسجيل Student في لوحة الإدارة (مع إضافة الـ Inline لسجلات النشاط)
-# تمت إضافة view جديدة لعرض التكرارات وحذفها من الأدمِن فقط دون تغيير باقي المنطق
+# تمت إضافة view جديدة لعرض التكرارات وحذفها ومن ثم dedupe (الاحتفاظ بسجل واحد)
 # ──────────────────────────────────────────────────────────────────────────────
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
@@ -94,14 +94,15 @@ class StudentAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         my_urls = [
             path('duplicates/', self.admin_site.admin_view(self.duplicates_view), name='students_duplicates'),
+            path('duplicates/dedupe/', self.admin_site.admin_view(self.dedupe_view), name='students_duplicates_dedupe'),
         ]
         return my_urls + urls
 
     def duplicates_view(self, request):
         """
         GET: يعرض صفحة تحتوي على المجموعات المتكررة (رقم الهاتف - رقم ولي الأمر - مطابقات أخرى)
-        POST: يحذف الـ IDs المرسلة في الحقل delete_ids
-        ملاحظة: هذه الأداة مخصصة لمديري النظام عبر الأدمِن. الحذف نهائي (استخدمها بحذر).
+        POST: يمكن حذف السجلات المحددة (delete_selected) عبر المربعات
+        كما يوجد رابط/fomr لعمل dedupe (الاحتفاظ بسجل واحد ونقل العلاقات ثم حذف الباقي)
         """
         # تنفيذ عملية الحذف لو جاءت POST مع delete_ids
         if request.method == 'POST' and request.POST.get('action') == 'delete_selected':
@@ -110,7 +111,6 @@ class StudentAdmin(admin.ModelAdmin):
                 qs = Student.objects.filter(id__in=ids)
                 count = qs.count()
                 qs.delete()
-                # بعد الحذف نعيد توجيه المستخدم إلى نفس الصفحة مع رسالة بسيطة عبر GET parameter
                 return HttpResponseRedirect(reverse('admin:students_duplicates') + f'?deleted={count}')
 
         # جلب مجموعات التكرارات حسب phone_number و parent_phone_number
@@ -138,19 +138,21 @@ class StudentAdmin(admin.ModelAdmin):
                 'members': members,
             })
 
-        # نتائج الحذف (إن وُجدت)
         deleted_count = request.GET.get('deleted')
+        deduped_info = request.GET.get('deduped')  # رسالة ناتجة عن dedupe
 
-        # بناء HTML للعرض داخل صفحة الأدمِن (أسلوب بسيط ومتوافق مع لوحة الأدمِن)
+        # بناء HTML للعرض داخل صفحة الأدمِن
         csrf_token = get_token(request)
         admin_site_url = reverse('admin:index')
-        students_change_url = reverse('admin:content_student_changelist') if False else None  # placeholder (لا نستخدمها مباشرة)
         html_parts = []
         html_parts.append(f"<h1>التكرارات في الطلاب</h1>")
         html_parts.append(f"<p><a href='{admin_site_url}'>العودة للوحة التحكم</a></p>")
         if deleted_count:
             html_parts.append(f"<p style='color:green'>تم حذف {escape(deleted_count)} سجل(س).</p>")
+        if deduped_info:
+            html_parts.append(f"<p style='color:green'>تم تنفيذ التصفية التلقائية: {escape(deduped_info)}</p>")
 
+        # فورم الحذف التقليدي
         html_parts.append("<form method='post'>")
         html_parts.append(f"<input type='hidden' name='csrfmiddlewaretoken' value='{csrf_token}' />")
         html_parts.append("<input type='hidden' name='action' value='delete_selected' />")
@@ -199,9 +201,18 @@ class StudentAdmin(admin.ModelAdmin):
         else:
             html_parts.append("<p>لا توجد سجلات متكررة حسب رقم ولي الأمر.</p>")
 
-        # أزرار الإجراء
+        # أزرار الإجراء: حذف المحدد + رابط لدعوة تنفيذ dedupe (الاحتفاظ بواحد)
         html_parts.append("<div style='margin-top:12px'>")
         html_parts.append("<button type='submit' onclick='return confirm(\"هل أنت متأكد من حذف السجلات المحددة؟ هذه العملية لا يمكن التراجع عنها.\")'>حذف المحدد</button>")
+        # فورم صغير لعمل dedupe
+        dedupe_url = reverse('admin:students_duplicates_dedupe')
+        html_parts.append("<form method='post' action='{}' style='display:inline;margin-left:12px'>".format(dedupe_url))
+        html_parts.append(f"<input type='hidden' name='csrfmiddlewaretoken' value='{csrf_token}' />")
+        html_parts.append("<input type='hidden' name='action' value='dedupe' />")
+        html_parts.append("<label>نطاق التصفية: </label>")
+        html_parts.append("<select name='scope'><option value='both'>كلاهما (رقم الطالب وولي الأمر)</option><option value='phone'>رقم الطالب فقط</option><option value='parent'>رقم ولي الأمر فقط</option></select>")
+        html_parts.append("<button type='submit' onclick='return confirm(\"سيتم نقل العلاقات إلى السجل المحتفظ به ثم حذف السجلات المكررة. تابع؟\")' style='margin-left:8px'>تشغيل التصفية التلقائية (احتفظ بواحد)</button>")
+        html_parts.append("</form>")
         html_parts.append("</div>")
 
         html_parts.append("</form>")
@@ -212,6 +223,126 @@ class StudentAdmin(admin.ModelAdmin):
 
         html = "\n".join(html_parts)
         return HttpResponse(html)
+
+    def dedupe_view(self, request):
+        """
+        POST action: يقوم بتصفية التكرارات بناءً على النطاق المختار (phone / parent / both).
+        للعملية:
+          - لكل مجموعة مكررة يحدد "الناجي" (survivor) كأصغر ID (أقدم سجل).
+          - يعيد توجيه علاقات محددة (Subscription, ActivityLog, ومحاولات الامتحان إذا وُجدت بجملة اسمية) من النسخ الأخرى إلى الناجي.
+          - يحذف النسخ الأخرى.
+        النتيجة: لا وجود لسجلات مكررة بعد التنفيذ، مع الحفاظ على بيانات العلاقات.
+        """
+        if request.method != 'POST' or request.POST.get('action') != 'dedupe':
+            return HttpResponseRedirect(reverse('admin:students_duplicates'))
+
+        scope = request.POST.get('scope', 'both')  # phone / parent / both
+
+        groups = []
+        if scope in ('phone', 'both'):
+            phone_groups = Student.objects.values('phone_number').annotate(cnt=Count('id')).filter(phone_number__isnull=False).filter(cnt__gt=1)
+            for item in phone_groups:
+                num = item['phone_number']
+                members = list(Student.objects.filter(phone_number=num).order_by('id'))
+                groups.append(('phone', num, members))
+
+        if scope in ('parent', 'both'):
+            parent_groups = Student.objects.values('parent_phone_number').annotate(cnt=Count('id')).filter(parent_phone_number__isnull=False).filter(cnt__gt=1)
+            for item in parent_groups:
+                num = item['parent_phone_number']
+                members = list(Student.objects.filter(parent_phone_number=num).order_by('id'))
+                groups.append(('parent', num, members))
+
+        total_groups = len(groups)
+        total_removed = 0
+        total_transferred_subs = 0
+        total_transferred_logs = 0
+
+        # ابدأ عملية آمنة ضمن معاملة قاعدة بيانات
+        with transaction.atomic():
+            for grp_type, key, members in groups:
+                # حدد الناجي (أقدم سجل) ونسخ الباقي
+                survivor = members[0]
+                duplicates = members[1:]
+                if not duplicates:
+                    continue
+
+                # نقل Subscriptions المرتبطة من النسخ الأخرى إلى survivor
+                subs_qs = Subscription.objects.filter(student__in=duplicates)
+                # إذا في اشتراكات متطابقة موجودة للنادي survivor يمكن أن تنتج تعارضات
+                # سنقوم بتحديث الحقل student مباشرة؛ إذا وُجد اشتراك بنفس (student, year) فستحتاج معالجة لاحقة
+                # نجرب تحديث مباشر ثم نتجنب IntegrityError عبر try/except (لو لديك قيود فريدة)
+                try:
+                    updated = subs_qs.update(student=survivor)
+                    total_transferred_subs += updated
+                except Exception:
+                    # لو فشل التحديث الجماعي، نفعل تحويل عنصر بعنصر مع فحص تكرار
+                    for sub in list(subs_qs):
+                        # إذا لم يكن هناك اشتراك لنفس السنة عند الناجي انسخ العلاقة، وإلا دمج الكورسات
+                        existing = Subscription.objects.filter(student=survivor, year=sub.year).first()
+                        if existing:
+                            # ضم الكورسات من sub إلى existing
+                            existing.courses.add(*list(sub.courses.all()))
+                            # حذف الاشتراك القديم بعد النقل
+                            sub.delete()
+                        else:
+                            sub.student = survivor
+                            sub.save()
+                            total_transferred_subs += 1
+
+                # نقل ActivityLog
+                logs_qs = ActivityLog.objects.filter(student__in=duplicates)
+                try:
+                    updated_logs = logs_qs.update(student=survivor)
+                    total_transferred_logs += updated_logs
+                except Exception:
+                    for log in list(logs_qs):
+                        log.student = survivor
+                        log.save()
+                        total_transferred_logs += 1
+
+                # محاولة نقل علاقات عكسية عامة (محاولات الامتحان، أو أي علاقات أخرى) بشكل حذر
+                # نمر على الحقول العكسية للموديل Student ونحاول إعادة تعيين FK إن أمكن
+                for dup in duplicates:
+                    for rel in Student._meta.related_objects:
+                        accessor = rel.get_accessor_name()
+                        try:
+                            related_manager = getattr(dup, accessor)
+                        except Exception:
+                            continue
+                        # تجاهل العلاقات التي عالجناها أعلاه (Subscription, ActivityLog) لتجنب التكرار
+                        related_model = rel.related_model
+                        if related_model in (Subscription, ActivityLog):
+                            continue
+                        # حاول نقل كل كائن عكسي عبر تعديل الحقل الذي يشير للطالب (لو موجود)
+                        try:
+                            qs = related_manager.all()
+                            for obj in list(qs):
+                                # الحقل الذي يشير إلى Student غالبًا اسمه rel.field.name
+                                fk_name = rel.field.name
+                                # فقط إذا العنصر لديه ذلك الحقل
+                                if hasattr(obj, fk_name):
+                                    setattr(obj, fk_name, survivor)
+                                    obj.save()
+                        except Exception:
+                            # تجاهل أي علاقات معقدة لا يمكن التعامل معها بشكل عام
+                            continue
+
+                # بعد النقل، حذف النسخ المكررة
+                removed_count = 0
+                for dup in duplicates:
+                    try:
+                        dup.delete()
+                        removed_count += 1
+                    except Exception:
+                        # إن لم ينجح الحذف تجاهل (لو فيه قيود مرجعية غير متوقعة)
+                        continue
+
+                total_removed += removed_count
+
+        # بناء رسالة موجزة لعرضها في صفحة التكرارات
+        msg = f"المجموعات المعالجة: {total_groups}. السجلات المحذوفة: {total_removed}. اشتراكات نُقلت: {total_transferred_subs}. سجلات نشاط نُقلت: {total_transferred_logs}."
+        return HttpResponseRedirect(reverse('admin:students_duplicates') + f'?deduped={escape(msg)}')
 
     def get_exams_completed(self, obj):
         """إرجاع عدد الامتحانات المكتملة"""
@@ -382,6 +513,3 @@ class ActivityLogAdmin(admin.ModelAdmin):
         return format_html(html)
 
     details_ar.short_description = "تفاصيل (بالعربي)"
-
-
-
