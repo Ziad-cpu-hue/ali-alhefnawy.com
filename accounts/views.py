@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Student
 from django.contrib.auth.hashers import check_password, make_password
+from django.db import IntegrityError
 
 
 def register_student(request):
@@ -14,18 +15,15 @@ def register_student(request):
         grade = request.POST.get("grade")
         governorate = request.POST.get("governorate")
         password = request.POST.get("password")  # استقبال كلمة المرور
+        avatar = request.FILES.get("avatar")  # ✅ استقبال الصورة الشخصية
 
-        # طباعة البيانات للتحقق
-        print(f"First Name: {first_name}")
-        print(f"Last Name: {last_name}")
-        print(f"Phone Number: {phone_number}")
-        print(f"Parent Phone Number: {parent_phone_number}")
-        print(f"Grade: {grade}")
-        print(f"Governorate: {governorate}")
+        # التحقق من ملء جميع الحقول الأساسية + الصورة
+        if not all([first_name, last_name, phone_number, grade, governorate, password, avatar]):
+            return JsonResponse({"success": False, "message": "⚠️ يرجى ملء جميع الحقول المطلوبة مع رفع صورة شخصية."})
 
-        # التحقق من صحة البيانات
-        if not all([first_name, last_name, phone_number, grade, governorate, password]):
-            return JsonResponse({"success": False, "message": "يرجى ملء جميع الحقول المطلوبة."})
+        # التحقق من أن رقم الطالب لا يساوي رقم ولي الأمر
+        if parent_phone_number and phone_number == parent_phone_number:
+            return JsonResponse({"success": False, "message": "⚠️ رقم الهاتف لا يمكن أن يكون نفس رقم ولي الأمر."})
 
         try:
             student = Student.objects.create(
@@ -35,7 +33,8 @@ def register_student(request):
                 parent_phone_number=parent_phone_number,
                 grade=grade,
                 governorate=governorate,
-                password=make_password(password)
+                password=make_password(password),
+                avatar=avatar  # ✅ حفظ الصورة
             )
             student.save()
 
@@ -45,9 +44,18 @@ def register_student(request):
             request.session["is_registered"] = True
 
             messages.success(request, "تم إنشاء الحساب بنجاح!")
-            return JsonResponse({"success": True, "message": "تم إنشاء الحساب بنجاح!"})
+            return JsonResponse({"success": True, "message": "✅ تم إنشاء الحساب بنجاح!"})
+
+        except IntegrityError as e:
+            if "phone_number" in str(e):
+                return JsonResponse({"success": False, "message": "⚠️ رقم الهاتف مستخدم من قبل، يرجى إدخال رقم مختلف."})
+            elif "parent_phone_number" in str(e):
+                return JsonResponse({"success": False, "message": "⚠️ رقم ولي الأمر مستخدم من قبل، يرجى إدخال رقم مختلف."})
+            else:
+                return JsonResponse({"success": False, "message": "⚠️ حدث خطأ غير متوقع أثناء الحفظ."})
+
         except Exception as e:
-            return JsonResponse({"success": False, "message": str(e)})
+            return JsonResponse({"success": False, "message": f"⚠️ حدث خطأ: {str(e)}"})
 
     return render(request, "pages/register.html")
 
@@ -229,3 +237,4 @@ def course_page_10(request):
 
 def course_page_12(request):
     return render(request, 'pages/index (12).html')
+
