@@ -191,3 +191,5 @@ class ActivityLog(models.Model):
         return f"{self.student} — {self.get_activity_type_display()} @ {self.created_at:%Y-%m-%d %H:%M}"
 
 
+
+
