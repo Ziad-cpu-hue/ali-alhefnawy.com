@@ -1,16 +1,16 @@
 from django.db import models
-from content.models import Course  # نموذج الكورسات الأساسي
-from django.contrib.auth.models import User  
+from django.core.exceptions import ValidationError
+from content.models import Course
+from django.contrib.auth.models import User
 from datetime import datetime
-from django.contrib.auth.hashers import make_password, check_password  
-from content.models import Lecture, Exam  # استيراد المحاضرات والامتحانات
+import re
 
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)  # ربط الطالب بالمستخدم (يسمح بالقيم الفارغة مؤقتًا)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=100, verbose_name="الاسم الأول")
     last_name = models.CharField(max_length=100, verbose_name="الاسم الأخير")
-    phone_number = models.CharField(max_length=15, verbose_name="رقم الهاتف")
-    parent_phone_number = models.CharField(max_length=15, verbose_name="رقم هاتف ولي الأمر", null=True, blank=True)
+    phone_number = models.CharField(max_length=15, unique=True, verbose_name="رقم الهاتف")
+    parent_phone_number = models.CharField(max_length=15, unique=True, verbose_name="رقم هاتف ولي الأمر", null=True, blank=True)
     governorate = models.CharField(max_length=100, verbose_name="المحافظة")
     grade = models.CharField(
         max_length=50,
@@ -24,9 +24,47 @@ class Student(models.Model):
             ('6', 'تالته إعدادي'),
         ]
     )
-
     password = models.CharField(max_length=128, verbose_name="كلمة المرور", default='default_password')
     courses = models.ManyToManyField(Course, related_name='student_courses', verbose_name="الكورسات", blank=True)
+
+    # ✅ حقل الصورة الشخصية
+    avatar = models.ImageField(upload_to="avatars/%Y/%m/%d/", verbose_name="الصورة الشخصية", null=True, blank=True)
+
+    def normalize_phone(self, phone):
+        """تحويل الرقم إلى أرقام فقط (بدون مسافات أو علامات)"""
+        return re.sub(r'\D', '', phone or '')
+
+    def clean(self):
+        """ تحقق من عدم التكرار + عدم تساوي رقم الطالب مع رقم ولي الأمر """
+        # التحقق من phone_number
+        if self.phone_number:
+            qs = Student.objects.filter(phone_number=self.phone_number)
+            if self.pk:
+                qs = qs.exclude(pk=self.pk)
+            if qs.exists():
+                raise ValidationError({'phone_number': 'رقم الهاتف مستخدم بالفعل في النظام.'})
+
+        # التحقق من parent_phone_number (لو موجود)
+        if self.parent_phone_number:
+            qs2 = Student.objects.filter(parent_phone_number=self.parent_phone_number)
+            if self.pk:
+                qs2 = qs2.exclude(pk=self.pk)
+            if qs2.exists():
+                raise ValidationError({'parent_phone_number': 'رقم ولي الأمر مستخدم بالفعل في النظام.'})
+
+        # منع تساوي رقم الطالب مع رقم ولي الأمر
+        phone = self.normalize_phone(self.phone_number)
+        parent_phone = self.normalize_phone(self.parent_phone_number)
+        if phone and parent_phone and phone == parent_phone:
+            raise ValidationError("رقم الهاتف لا يمكن أن يكون نفس رقم هاتف ولي الأمر.")
+
+        super().clean()
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+
 
 
     # العلاقات مع المحاضرات والامتحانات
@@ -151,3 +189,5 @@ class ActivityLog(models.Model):
 
     def __str__(self):
         return f"{self.student} — {self.get_activity_type_display()} @ {self.created_at:%Y-%m-%d %H:%M}"
+
+
