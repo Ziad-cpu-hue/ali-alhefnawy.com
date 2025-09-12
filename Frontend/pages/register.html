@@ -117,6 +117,10 @@
         border-color: #66a6ff;
         box-shadow: 0 2px 8px rgba(102, 166, 255, 0.4);
       }
+      /* file input styling */
+      .reg-group input[type="file"] {
+        padding: 10px 12px;
+      }
       .reg-error {
         color: #ff8080;
         font-size: 0.85rem;
@@ -334,6 +338,7 @@
             id="regForm"
             action="{% url 'accounts:register_student' %}"
             method="POST"
+            enctype="multipart/form-data"
           >
             {% csrf_token %}
             <div class="reg-row">
@@ -454,7 +459,23 @@
                   كلمة المرور غير متطابقة.
                 </div>
               </div>
+
+              <!-- NEW: حقل الصورة الشخصية الإلزامي (آخر خانة قبل زر الإرسال) -->
+              <div class="reg-group full">
+                <label for="regAvatar">الصورة الشخصية (اجباري)</label>
+                <input
+                  type="file"
+                  id="regAvatar"
+                  name="avatar"
+                  accept="image/*"
+                  required
+                />
+                <div class="reg-error" id="regAvatarError">
+                  الرجاء رفع صورة شخصية (JPEG, PNG) بحجم أقصى 2 ميجابايت.
+                </div>
+              </div>
             </div>
+
             <div class="reg-group full">
               <!-- غيرنا type إلى button وأضفنا id -->
               <button type="button" id="regSubmitBtn" class="reg-btn-submit">
@@ -516,18 +537,25 @@
             "regLastNameError"
           );
           const phonePattern = /^[0-9]{10,15}$/;
-          validateField(
-            !phonePattern.test(
-              document.getElementById("regPhone").value.trim()
-            ),
-            "regPhoneError"
-          );
-          validateField(
-            !phonePattern.test(
-              document.getElementById("regParentPhone").value.trim()
-            ),
-            "regParentPhoneError"
-          );
+          const phoneValue = document.getElementById("regPhone").value.trim();
+          const parentValue = document
+            .getElementById("regParentPhone")
+            .value.trim();
+
+          validateField(!phonePattern.test(phoneValue), "regPhoneError");
+          validateField(!phonePattern.test(parentValue), "regParentPhoneError");
+
+          // ✅ تحقق إضافي: منع تساوي رقم الهاتف مع رقم ولي الأمر
+          if (phoneValue && parentValue && phoneValue === parentValue) {
+            showModal({
+              icon: "⚠️",
+              title: "هناك خطأ بالإدخالات!",
+              message: "لا يمكن أن يكون رقم الهاتف هو نفس رقم ولي الأمر.",
+              redirect: false,
+            });
+            return; // وقف التنفيذ
+          }
+
           validateField(
             document.getElementById("regGovernorate").value.trim() === "",
             "regGovernorateError"
@@ -546,6 +574,28 @@
                 document.getElementById("regPassword").value,
             "regConfirmPasswordError"
           );
+
+          // التحقق من الصورة الشخصية (إلزامي)
+          const avatarInput = document.getElementById("regAvatar");
+          const avatarFile = avatarInput.files && avatarInput.files[0];
+          if (!avatarFile) {
+            validateField(true, "regAvatarError");
+          } else {
+            // تحقق نوع الملف والحجم (مثال: الحد الأقصى 2 ميجابايت)
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            const acceptTypes = ["image/jpeg", "image/png", "image/webp"];
+            if (!acceptTypes.includes(avatarFile.type)) {
+              document.getElementById("regAvatarError").textContent =
+                "نوع الملف غير مدعوم. استخدم JPEG أو PNG أو WEBP.";
+              validateField(true, "regAvatarError");
+            } else if (avatarFile.size > maxSize) {
+              document.getElementById("regAvatarError").textContent =
+                "حجم الملف كبير جدًا. الحد الأقصى 2 ميجابايت.";
+              validateField(true, "regAvatarError");
+            } else {
+              document.getElementById("regAvatarError").style.display = "none";
+            }
+          }
 
           if (!isValid) {
             showModal({
@@ -568,7 +618,7 @@
           });
 
           const form = document.getElementById("regForm");
-          const formData = new FormData(form);
+          const formData = new FormData(form); // يحتوي الآن على ملف الصورة
           const csrfToken = form.querySelector(
             "input[name='csrfmiddlewaretoken']"
           ).value;
@@ -617,3 +667,5 @@
     </script>
   </body>
 </html>
+
+
