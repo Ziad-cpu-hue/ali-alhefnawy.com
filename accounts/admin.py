@@ -8,6 +8,13 @@ from datetime import datetime
 from .models import Student, Subscription, ActivityLog  # أضفنا ActivityLog هنا
 from content.models import Course
 
+# إضافات جديدة للـ admin (URLs, عرض وحذف التكرارات)
+from django.urls import path, reverse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.middleware.csrf import get_token
+from django.db.models import Count
+from django.utils.html import escape
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Inline لعرض سجلات النشاط داخل صفحة Student في الأدمين
@@ -24,6 +31,7 @@ class ActivityLogInline(admin.TabularInline):
 
 # ──────────────────────────────────────────────────────────────────────────────
 # تسجيل Student في لوحة الإدارة (مع إضافة الـ Inline لسجلات النشاط)
+# تمت إضافة view جديدة لعرض التكرارات وحذفها من الأدمِن فقط دون تغيير باقي المنطق
 # ──────────────────────────────────────────────────────────────────────────────
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
@@ -80,6 +88,130 @@ class StudentAdmin(admin.ModelAdmin):
 
     # إضافة inline لسجلات النشاط (لن يكسر الوظائف الأصلية)
     inlines = [ActivityLogInline]
+
+    # إتاحة روابط عرض التكرارات في قائمة الأكشنات عبر إضافة URL مخصص
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('duplicates/', self.admin_site.admin_view(self.duplicates_view), name='students_duplicates'),
+        ]
+        return my_urls + urls
+
+    def duplicates_view(self, request):
+        """
+        GET: يعرض صفحة تحتوي على المجموعات المتكررة (رقم الهاتف - رقم ولي الأمر - مطابقات أخرى)
+        POST: يحذف الـ IDs المرسلة في الحقل delete_ids
+        ملاحظة: هذه الأداة مخصصة لمديري النظام عبر الأدمِن. الحذف نهائي (استخدمها بحذر).
+        """
+        # تنفيذ عملية الحذف لو جاءت POST مع delete_ids
+        if request.method == 'POST' and request.POST.get('action') == 'delete_selected':
+            ids = request.POST.getlist('delete_ids')
+            if ids:
+                qs = Student.objects.filter(id__in=ids)
+                count = qs.count()
+                qs.delete()
+                # بعد الحذف نعيد توجيه المستخدم إلى نفس الصفحة مع رسالة بسيطة عبر GET parameter
+                return HttpResponseRedirect(reverse('admin:students_duplicates') + f'?deleted={count}')
+
+        # جلب مجموعات التكرارات حسب phone_number و parent_phone_number
+        duplicate_phones = Student.objects.values('phone_number').annotate(cnt=Count('id')).filter(phone_number__isnull=False).filter(cnt__gt=1)
+        duplicate_parents = Student.objects.values('parent_phone_number').annotate(cnt=Count('id')).filter(parent_phone_number__isnull=False).filter(cnt__gt=1)
+
+        # بناء بيانات مفصّلة لكل مجموعة
+        phone_groups = []
+        for item in duplicate_phones:
+            num = item['phone_number']
+            members = list(Student.objects.filter(phone_number=num).order_by('id'))
+            phone_groups.append({
+                'key': num,
+                'count': item['cnt'],
+                'members': members,
+            })
+
+        parent_groups = []
+        for item in duplicate_parents:
+            num = item['parent_phone_number']
+            members = list(Student.objects.filter(parent_phone_number=num).order_by('id'))
+            parent_groups.append({
+                'key': num,
+                'count': item['cnt'],
+                'members': members,
+            })
+
+        # نتائج الحذف (إن وُجدت)
+        deleted_count = request.GET.get('deleted')
+
+        # بناء HTML للعرض داخل صفحة الأدمِن (أسلوب بسيط ومتوافق مع لوحة الأدمِن)
+        csrf_token = get_token(request)
+        admin_site_url = reverse('admin:index')
+        students_change_url = reverse('admin:content_student_changelist') if False else None  # placeholder (لا نستخدمها مباشرة)
+        html_parts = []
+        html_parts.append(f"<h1>التكرارات في الطلاب</h1>")
+        html_parts.append(f"<p><a href='{admin_site_url}'>العودة للوحة التحكم</a></p>")
+        if deleted_count:
+            html_parts.append(f"<p style='color:green'>تم حذف {escape(deleted_count)} سجل(س).</p>")
+
+        html_parts.append("<form method='post'>")
+        html_parts.append(f"<input type='hidden' name='csrfmiddlewaretoken' value='{csrf_token}' />")
+        html_parts.append("<input type='hidden' name='action' value='delete_selected' />")
+
+        # عرض مجموعات أرقام الهاتف المتكررة
+        html_parts.append("<h2>التكرارات حسب رقم الطالب (phone_number)</h2>")
+        if phone_groups:
+            for grp in phone_groups:
+                html_parts.append(f"<div style='border:1px solid #ddd;padding:8px;margin-bottom:12px'>")
+                html_parts.append(f"<strong>الرقم: {escape(grp['key'])} — عدد السجلات: {grp['count']}</strong><br/>")
+                html_parts.append("<table style='width:100%;border-collapse:collapse;margin-top:6px'>")
+                html_parts.append("<tr><th style='text-align:left;padding:6px'>اختيار</th><th style='text-align:left;padding:6px'>ID</th><th style='text-align:left;padding:6px'>الاسم</th><th style='text-align:left;padding:6px'>الصف</th><th style='text-align:left;padding:6px'>عرض</th></tr>")
+                for s in grp['members']:
+                    change_url = reverse('admin:%s_%s_change' % (s._meta.app_label, s._meta.model_name), args=[s.id])
+                    html_parts.append("<tr>")
+                    html_parts.append(f"<td style='padding:6px'><input type='checkbox' name='delete_ids' value='{s.id}'/></td>")
+                    html_parts.append(f"<td style='padding:6px'>{s.id}</td>")
+                    html_parts.append(f"<td style='padding:6px'>{escape(s.first_name)} {escape(s.last_name)}</td>")
+                    html_parts.append(f"<td style='padding:6px'>{escape(str(s.grade))}</td>")
+                    html_parts.append(f"<td style='padding:6px'><a href='{change_url}'>تحرير/عرض</a></td>")
+                    html_parts.append("</tr>")
+                html_parts.append("</table>")
+                html_parts.append("</div>")
+        else:
+            html_parts.append("<p>لا توجد سجلات متكررة حسب رقم الطالب.</p>")
+
+        # عرض مجموعات أرقام ولي الأمر المتكررة
+        html_parts.append("<h2>التكرارات حسب رقم ولي الأمر (parent_phone_number)</h2>")
+        if parent_groups:
+            for grp in parent_groups:
+                html_parts.append(f"<div style='border:1px solid #ddd;padding:8px;margin-bottom:12px'>")
+                html_parts.append(f"<strong>الرقم: {escape(grp['key'])} — عدد السجلات: {grp['count']}</strong><br/>")
+                html_parts.append("<table style='width:100%;border-collapse:collapse;margin-top:6px'>")
+                html_parts.append("<tr><th style='text-align:left;padding:6px'>اختيار</th><th style='text-align:left;padding:6px'>ID</th><th style='text-align:left;padding:6px'>الاسم</th><th style='text-align:left;padding:6px'>الصف</th><th style='text-align:left;padding:6px'>عرض</th></tr>")
+                for s in grp['members']:
+                    change_url = reverse('admin:%s_%s_change' % (s._meta.app_label, s._meta.model_name), args=[s.id])
+                    html_parts.append("<tr>")
+                    html_parts.append(f"<td style='padding:6px'><input type='checkbox' name='delete_ids' value='{s.id}'/></td>")
+                    html_parts.append(f"<td style='padding:6px'>{s.id}</td>")
+                    html_parts.append(f"<td style='padding:6px'>{escape(s.first_name)} {escape(s.last_name)}</td>")
+                    html_parts.append(f"<td style='padding:6px'>{escape(str(s.grade))}</td>")
+                    html_parts.append(f"<td style='padding:6px'><a href='{change_url}'>تحرير/عرض</a></td>")
+                    html_parts.append("</tr>")
+                html_parts.append("</table>")
+                html_parts.append("</div>")
+        else:
+            html_parts.append("<p>لا توجد سجلات متكررة حسب رقم ولي الأمر.</p>")
+
+        # أزرار الإجراء
+        html_parts.append("<div style='margin-top:12px'>")
+        html_parts.append("<button type='submit' onclick='return confirm(\"هل أنت متأكد من حذف السجلات المحددة؟ هذه العملية لا يمكن التراجع عنها.\")'>حذف المحدد</button>")
+        html_parts.append("</div>")
+
+        html_parts.append("</form>")
+
+        # إرشاد سريع: روابط العودة لصفحة الطلاب
+        changelist_url = reverse('admin:%s_%s_changelist' % (Student._meta.app_label, Student._meta.model_name))
+        html_parts.append(f"<hr/><p><a href='{changelist_url}'>العودة لقائمة الطلاب</a></p>")
+
+        html = "\n".join(html_parts)
+        return HttpResponse(html)
 
     def get_exams_completed(self, obj):
         """إرجاع عدد الامتحانات المكتملة"""
@@ -250,4 +382,6 @@ class ActivityLogAdmin(admin.ModelAdmin):
         return format_html(html)
 
     details_ar.short_description = "تفاصيل (بالعربي)"
+
+
 
