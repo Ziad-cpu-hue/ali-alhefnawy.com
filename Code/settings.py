@@ -86,6 +86,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # ضيف هنا:
+                'accounts.context_processors.student_session',
             ],
         },
     },
@@ -170,3 +172,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 PAYMOB_API_KEY = "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRBeU1qTXdOQ3dpYm1GdFpTSTZJakUzTkRBMU5qQTNNRFF1TWpRM056WTRJbjAuMWpaUk4wR2RkMFRtTGVKOVpDN2hCaEloVDIxTUFVUXBoLVhPeVZNMmZVZTYwWEdmc28wM3RuLUJyZ0FIOWkxc29QV3J4Rk5veDkyQnN4MHhzVVhnUWc="
 PAYMOB_INTEGRATION_ID = 4947232
+
+
