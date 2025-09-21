@@ -16,9 +16,9 @@ class Student(models.Model):
         max_length=50,
         verbose_name="الصف الدراسي",
         choices=[
-            ('1', 'الصف الدراسي الأول'),
-            ('2', 'الصف الدراسي الثاني'),
-            ('3', 'الصف الدراسي الثالث'),
+            ('1', 'الصف الأول الثانوي'),
+            ('2', 'الصف الثاني الثانوي'),
+            ('3', 'الصف الثالث الثانوي'),
             ('4', 'أولى إعدادي'),
             ('5', 'تانية إعدادي'),
             ('6', 'تالته إعدادي'),
@@ -189,6 +189,8 @@ class ActivityLog(models.Model):
 
     def __str__(self):
         return f"{self.student} — {self.get_activity_type_display()} @ {self.created_at:%Y-%m-%d %H:%M}"
+
+
 
 
 
