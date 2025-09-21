@@ -176,9 +176,11 @@
   <body>
     <div class="scoped-root">
       <header>
+        <!-- الهيدر يعرض صورة ثابتة لكل المستخدمين -->
         {% if is_registered or user.is_authenticated %}
         <!-- 🟢 حالة الطالب مسجل دخول -->
         <div class="avatar-container">
+          <!-- استخدمنا صورة ثابتة من static لجميع المستخدمين -->
           <img
             src="{% static 'images/male.webp' %}"
             alt="الصورة الشخصية"
@@ -212,36 +214,61 @@
     </div>
 
     <script>
-      const avatarBtn = document.getElementById("avatarBtn");
-      const form = document.querySelector("form");
+      // قيم ابتدائية يمكن استخدامها كـ fallback
+      const INITIAL_STUDENT_NAME = "{{ student_name|default:''|escapejs }}";
+      // الصورة ثابتة لكل المستخدمين
+      const INITIAL_AVATAR_URL = "{% static 'images/male.webp' %}";
 
-      if (form) {
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
-          const formData = new FormData(form);
+      // دالة لتحديث الهيدر فورًا بعد نجاح التسجيل/الدخول
+      function updateHeaderAfterAuth(studentName, avatarUrl) {
+        // إخفاء أزرار التسجيل والدخول (لو موجودين)
+        const signupBtn = document.querySelector(".btn-signup");
+        const loginBtn = document.querySelector(".btn-login");
+        if (signupBtn) signupBtn.style.display = "none";
+        if (loginBtn) loginBtn.style.display = "none";
 
-          fetch(form.action, {
-            method: "POST",
-            body: formData,
-            headers: {
-              "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]")
-                .value,
-            },
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success) {
-                // ✅ إعادة التوجيه للصفحة الرئيسية
-                window.location.href = "/";
-              } else {
-                alert(data.message || "حدث خطأ أثناء العملية");
-              }
-            })
-            .catch((err) => console.error("Error:", err));
-        });
-      }
-      const dropdownMenu = document.getElementById("dropdownMenu");
-      if (avatarBtn) {
+        // العثور على avatarBtn و dropdownMenu إذا موجودين
+        let avatarBtn = document.getElementById("avatarBtn");
+        let dropdownMenu = document.getElementById("dropdownMenu");
+
+        // إذا لم يكن avatar موجود فأنشئ الحاوية نفسها بنفس الكلاسات والتنسيق
+        if (!avatarBtn) {
+          const container = document.createElement("div");
+          container.className = "avatar-container";
+
+          avatarBtn = document.createElement("img");
+          avatarBtn.className = "avatar";
+          avatarBtn.id = "avatarBtn";
+          avatarBtn.alt = "الصورة الشخصية";
+
+          dropdownMenu = document.createElement("div");
+          dropdownMenu.className = "dropdown-menu";
+          dropdownMenu.id = "dropdownMenu";
+          container.appendChild(avatarBtn);
+          container.appendChild(dropdownMenu);
+
+          // ضع الحاوية في الهيدر قبل الأزرار
+          const header = document.querySelector(".scoped-root header");
+          if (header) {
+            header.insertBefore(container, header.firstChild);
+          }
+        }
+
+        // حدّث الصورة (ثابتة)
+        avatarBtn.src = avatarUrl || INITIAL_AVATAR_URL;
+
+        // حدّث محتوى القائمة
+        if (dropdownMenu) {
+          dropdownMenu.innerHTML = `
+            <div class="dropdown-header">أهلاً ${
+              studentName || INITIAL_STUDENT_NAME
+            }</div>
+            <a href="{% url 'accounts:profile' %}">حسابي</a>
+            <a href="{% url 'accounts:logout' %}">تسجيل الخروج</a>
+          `;
+        }
+
+        // أضف listeners كما في السلوك الأصلي
         avatarBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           dropdownMenu.classList.toggle("active");
@@ -255,6 +282,65 @@
           }
         });
       }
+
+      // استمع لأي فورم في الصفحة (مثلاً نموذج التسجيل أو تسجيل الدخول)
+      const form = document.querySelector("form");
+      if (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const formData = new FormData(form);
+
+          fetch(form.action, {
+            method: "POST",
+            body: formData,
+            credentials: "same-origin",
+            headers: {
+              "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]")
+                ?.value,
+            },
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success) {
+                // بما إن الصورة ثابتة، نستخدم INITIAL_AVATAR_URL دائماً
+                const studentName = data.student_name || INITIAL_STUDENT_NAME;
+                const avatarUrl = INITIAL_AVATAR_URL;
+
+                // حدّث الهيدر ديناميكياً
+                updateHeaderAfterAuth(studentName, avatarUrl);
+
+                // لو حبيت إعادة تحميل:
+                // window.location.reload();
+              } else {
+                alert(data.message || "حدث خطأ أثناء العملية");
+              }
+            })
+            .catch((err) => {
+              console.error("Error:", err);
+              alert("حدث خطأ في الاتصال");
+            });
+        });
+      }
+
+      // السلوك الافتراضي لقائمة الأفاتار (لو موجود)
+      const existingAvatarBtn = document.getElementById("avatarBtn");
+      const existingDropdownMenu = document.getElementById("dropdownMenu");
+      if (existingAvatarBtn && existingDropdownMenu) {
+        existingAvatarBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          existingDropdownMenu.classList.toggle("active");
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !existingDropdownMenu.contains(e.target) &&
+            !existingAvatarBtn.contains(e.target)
+          ) {
+            existingDropdownMenu.classList.remove("active");
+          }
+        });
+      }
     </script>
   </body>
 </html>
+
+
