@@ -15,11 +15,14 @@ def register_student(request):
         grade = request.POST.get("grade")
         governorate = request.POST.get("governorate")
         password = request.POST.get("password")  # استقبال كلمة المرور
-        avatar = request.FILES.get("avatar")  # ✅ استقبال الصورة الشخصية
+        
+        # === تعديل مؤقت: نوقف استقبال الصورة ونعرّفها None حتى لا يحدث خطأ ===
+        #avatar = request.FILES.get("avatar")  # ✅ لو عايز تفعلها تاني: أعد uncomment للسطر دا
+        avatar = None  # <-- تعريف مؤقت علشان المتغير موجود لكن غير مطلوب
 
-        # التحقق من ملء جميع الحقول الأساسية + الصورة
-        if not all([first_name, last_name, phone_number, grade, governorate, password, avatar]):
-            return JsonResponse({"success": False, "message": "⚠️ يرجى ملء جميع الحقول المطلوبة مع رفع صورة شخصية."})
+        # التحقق من ملء جميع الحقول الأساسية (ملاحظة: حذفنا avatar من قائمة الفحص مؤقتًا)
+        if not all([first_name, last_name, phone_number, grade, governorate, password]):
+            return JsonResponse({"success": False, "message": "⚠️ يرجى ملء جميع الحقول المطلوبة."})
 
         # التحقق من أن رقم الطالب لا يساوي رقم ولي الأمر
         if parent_phone_number and phone_number == parent_phone_number:
@@ -34,7 +37,7 @@ def register_student(request):
                 grade=grade,
                 governorate=governorate,
                 password=make_password(password),
-                avatar=avatar  # ✅ حفظ الصورة
+                #avatar=avatar  # ✅ لو عايز تحفظ الصورة تاني: أعد uncomment للسطر دا
             )
             student.save()
 
@@ -237,4 +240,5 @@ def course_page_10(request):
 
 def course_page_12(request):
     return render(request, 'pages/index (12).html')
+
 
