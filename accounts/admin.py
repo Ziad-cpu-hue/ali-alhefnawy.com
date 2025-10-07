@@ -8,6 +8,15 @@ from datetime import datetime
 from .models import Student, Subscription, ActivityLog  # أضفنا ActivityLog هنا
 from content.models import Course
 
+# إضافات جديدة للـ admin (URLs, عرض وحذف/تصفية التكرارات، و dedupe)
+from django.urls import path, reverse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.middleware.csrf import get_token
+from django.db.models import Count
+from django.utils.html import escape
+from django.db import transaction
+import json
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Inline لعرض سجلات النشاط داخل صفحة Student في الأدمين
@@ -24,6 +33,8 @@ class ActivityLogInline(admin.TabularInline):
 
 # ──────────────────────────────────────────────────────────────────────────────
 # تسجيل Student في لوحة الإدارة (مع إضافة الـ Inline لسجلات النشاط)
+# تمّت إضافة زرّات JS لصفحة التكرارات: "تحديد التكرارات" (يعلّم كل المكررات ما عدا الناجي),
+# "إلغاء التحديد", و الزرّ الموجود بالفعل "حذف المحدد"، بالإضافة إلى زرّ التصفية الآمنة (dedupe)
 # ──────────────────────────────────────────────────────────────────────────────
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
@@ -34,7 +45,7 @@ class StudentAdmin(admin.ModelAdmin):
         'parent_phone_number',
         'governorate',
         'grade',
-        'avatar',  # ✅ عرض الصورة thumbnail
+        # 'avatar',   # ← مُعلّق مؤقتًا: أزل التعليق لإظهار الصورة في القائمة مجددًا
         'get_exams_completed',  # حساب عدد الامتحانات المكتملة ديناميكيًا
         'get_average_score',    # حساب متوسط الدرجة ديناميكيًا
         'total_lecture_time',
@@ -67,8 +78,7 @@ class StudentAdmin(admin.ModelAdmin):
                 'parent_phone_number',
                 'governorate',
                 'grade',
-                'avatar',   # ✅ الصورة في تفاصيل الطالب
-
+                # 'avatar',  # ← مُعلّق مؤقتًا: أزل التعليق لو أردت إعادة الحقل في صفحة التفاصيل
             ),
         }),
         ('إحصائيات المنصة', {
@@ -80,12 +90,296 @@ class StudentAdmin(admin.ModelAdmin):
             ),
         }),
     )
-    # ✅ دالة تعرض الصورة thumbnail
+
     def profile_pic_thumb(self, obj):
-        if obj.avatar:
+        # تابع صغير لعرض صورة الملف الشخصي إن وُجد — لا يؤثر طالما لم تُدرَج في list_display
+        if getattr(obj, 'avatar', None):
             return format_html('<img src="{}" style="width:45px;height:45px;border-radius:50%;" />', obj.avatar.url)
         return "❌ لا توجد صورة"
 
+
+
+    # إضافة inline لسجلات النشاط (لن يكسر الوظائف الأصلية)
+    inlines = [ActivityLogInline]
+
+    # إتاحة روابط عرض التكرارات في قائمة الأكشنات عبر إضافة URL مخصص
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('duplicates/', self.admin_site.admin_view(self.duplicates_view), name='students_duplicates'),
+            path('duplicates/dedupe/', self.admin_site.admin_view(self.dedupe_view), name='students_duplicates_dedupe'),
+        ]
+        return my_urls + urls
+
+    def duplicates_view(self, request):
+        """
+        GET: يعرض صفحة تحتوي على المجموعات المتكررة (رقم الهاتف - رقم ولي الأمر)
+        POST: عند الضغط على زر "حذف المحدد" يحذف مباشرة السجلات المحددة بدون أي طبقات إضافية.
+        لاحظ: تم فصل فورم الحذف عن فورم dedupe لتفادي تداخل الفورمز الذي كان يمنع الحذف من العمل.
+        """
+        # عملية الحذف المباشرة عند استقبال POST مع action=delete_selected
+        if request.method == 'POST' and request.POST.get('action') == 'delete_selected':
+            ids = request.POST.getlist('delete_ids')
+            if ids:
+                qs = Student.objects.filter(id__in=ids)
+                count = qs.count()
+                qs.delete()
+                return HttpResponseRedirect(reverse('admin:students_duplicates') + f'?deleted={count}')
+
+        # جلب مجموعات التكرارات حسب phone_number و parent_phone_number
+        duplicate_phones = Student.objects.values('phone_number').annotate(cnt=Count('id')).filter(phone_number__isnull=False).filter(cnt__gt=1)
+        duplicate_parents = Student.objects.values('parent_phone_number').annotate(cnt=Count('id')).filter(parent_phone_number__isnull=False).filter(cnt__gt=1)
+
+        # بناء بيانات مفصّلة لكل مجموعة
+        phone_groups = []
+        for item in duplicate_phones:
+            num = item['phone_number']
+            members = list(Student.objects.filter(phone_number=num).order_by('id'))
+            phone_groups.append({
+                'key': num,
+                'count': item['cnt'],
+                'members': members,
+            })
+
+        parent_groups = []
+        for item in duplicate_parents:
+            num = item['parent_phone_number']
+            members = list(Student.objects.filter(parent_phone_number=num).order_by('id'))
+            parent_groups.append({
+                'key': num,
+                'count': item['cnt'],
+                'members': members,
+            })
+
+        deleted_count = request.GET.get('deleted')
+        deduped_info = request.GET.get('deduped')  # رسالة ناتجة عن dedupe
+
+        # بناء HTML للعرض داخل صفحة الأدمِن
+        csrf_token = get_token(request)
+        admin_site_url = reverse('admin:index')
+        html_parts = []
+        html_parts.append(f"<h1>التكرارات في الطلاب</h1>")
+        html_parts.append(f"<p><a href='{admin_site_url}'>العودة للوحة التحكم</a></p>")
+        if deleted_count:
+            html_parts.append(f"<p style='color:green'>تم حذف {escape(deleted_count)} سجل(س).</p>")
+        if deduped_info:
+            html_parts.append(f"<p style='color:green'>تم تنفيذ التصفية التلقائية: {escape(deduped_info)}</p>")
+
+        # === فورم الحذف (مغلق منفصل وضمان عدم وجود فورم داخل فورم) ===
+        html_parts.append("<form method='post' id='delete-form'>")
+        html_parts.append(f"<input type='hidden' name='csrfmiddlewaretoken' value='{csrf_token}' />")
+        html_parts.append("<input type='hidden' name='action' value='delete_selected' />")
+
+        # زرّات مساعدة (JS)
+        html_parts.append("<div style='margin-bottom:10px'>")
+        html_parts.append("<button type='button' id='select-duplicates-btn'>تحديد التكرارات (كل المكررات ما عدا الناجي)</button>")
+        html_parts.append("<button type='button' id='clear-selection-btn' style='margin-left:8px'>إلغاء التحديد</button>")
+        html_parts.append("<button type='submit' style='margin-left:8px' onclick='return confirm(\"هل أنت متأكد من حذف السجلات المحددة؟ هذه العملية لا يمكن التراجع عنها.\")'>حذف المحدد</button>")
+        html_parts.append("</div>")
+
+        # عرض مجموعات أرقام الهاتف المتكررة
+        html_parts.append("<h2>التكرارات حسب رقم الطالب (phone_number)</h2>")
+        if phone_groups:
+            for gi, grp in enumerate(phone_groups):
+                group_id = f"phone::{grp['key']}"
+                html_parts.append(f"<div style='border:1px solid #ddd;padding:8px;margin-bottom:12px' data-group='{escape(group_id)}'>")
+                html_parts.append(f"<strong>الرقم: {escape(grp['key'])} — عدد السجلات: {grp['count']}</strong><br/>")
+                html_parts.append("<table style='width:100%;border-collapse:collapse;margin-top:6px'>")
+                html_parts.append("<tr><th style='text-align:left;padding:6px'>اختيار</th><th style='text-align:left;padding:6px'>ID</th><th style='text-align:left;padding:6px'>الاسم</th><th style='text-align:left;padding:6px'>الصف</th><th style='text-align:left;padding:6px'>عرض</th></tr>")
+                for idx, s in enumerate(grp['members']):
+                    change_url = reverse('admin:%s_%s_change' % (s._meta.app_label, s._meta.model_name), args=[s.id])
+                    html_parts.append("<tr>")
+                    html_parts.append(f"<td style='padding:6px'><input type='checkbox' name='delete_ids' value='{s.id}' data-group='{escape(group_id)}' data-index='{idx}'/></td>")
+                    html_parts.append(f"<td style='padding:6px'>{s.id}</td>")
+                    html_parts.append(f"<td style='padding:6px'>{escape(s.first_name)} {escape(s.last_name)}</td>")
+                    html_parts.append(f"<td style='padding:6px'>{escape(str(s.grade))}</td>")
+                    html_parts.append(f"<td style='padding:6px'><a href='{change_url}'>تحرير/عرض</a></td>")
+                    html_parts.append("</tr>")
+                html_parts.append("</table>")
+                html_parts.append("</div>")
+        else:
+            html_parts.append("<p>لا توجد سجلات متكررة حسب رقم الطالب.</p>")
+
+        # عرض مجموعات أرقام ولي الأمر المتكررة
+        html_parts.append("<h2>التكرارات حسب رقم ولي الأمر (parent_phone_number)</h2>")
+        if parent_groups:
+            for gi, grp in enumerate(parent_groups):
+                group_id = f"parent::{grp['key']}"
+                html_parts.append(f"<div style='border:1px solid #ddd;padding:8px;margin-bottom:12px' data-group='{escape(group_id)}'>")
+                html_parts.append(f"<strong>الرقم: {escape(grp['key'])} — عدد السجلات: {grp['count']}</strong><br/>")
+                html_parts.append("<table style='width:100%;border-collapse:collapse;margin-top:6px'>")
+                html_parts.append("<tr><th style='text-align:left;padding:6px'>اختيار</th><th style='text-align:left;padding:6px'>ID</th><th style='text-align:left;padding:6px'>الاسم</th><th style='text-align:left;padding:6px'>الصف</th><th style='text-align:left;padding:6px'>عرض</th></tr>")
+                for idx, s in enumerate(grp['members']):
+                    change_url = reverse('admin:%s_%s_change' % (s._meta.app_label, s._meta.model_name), args=[s.id])
+                    html_parts.append("<tr>")
+                    html_parts.append(f"<td style='padding:6px'><input type='checkbox' name='delete_ids' value='{s.id}' data-group='{escape(group_id)}' data-index='{idx}'/></td>")
+                    html_parts.append(f"<td style='padding:6px'>{s.id}</td>")
+                    html_parts.append(f"<td style='padding:6px'>{escape(s.first_name)} {escape(s.last_name)}</td>")
+                    html_parts.append(f"<td style='padding:6px'>{escape(str(s.grade))}</td>")
+                    html_parts.append(f"<td style='padding:6px'><a href='{change_url}'>تحرير/عرض</a></td>")
+                    html_parts.append("</tr>")
+                html_parts.append("</table>")
+                html_parts.append("</div>")
+        else:
+            html_parts.append("<p>لا توجد سجلات متكررة حسب رقم ولي الأمر.</p>")
+
+        # إغلاق فورم الحذف
+        html_parts.append("</form>")
+
+        # فورم dedupe منفصل (لا يتداخل مع الحذف)
+        html_parts.append("<div style='margin-top:12px'>")
+        html_parts.append("<form method='post' action='{}' id='dedupe-form' style='display:inline;margin-left:12px'>".format(reverse('admin:students_duplicates_dedupe')))
+        html_parts.append(f"<input type='hidden' name='csrfmiddlewaretoken' value='{csrf_token}' />")
+        html_parts.append("<input type='hidden' name='action' value='dedupe' />")
+        html_parts.append("<label>نطاق التصفية: </label>")
+        html_parts.append("<select name='scope'><option value='both'>كلاهما (رقم الطالب وولي الأمر)</option><option value='phone'>رقم الطالب فقط</option><option value='parent'>رقم ولي الأمر فقط</option></select>")
+        html_parts.append("<button type='submit' onclick='return confirm(\"سيتم نقل العلاقات إلى السجل المحتفظ به ثم حذف السجلات المكررة. تابع؟\")' style='margin-left:8px'>تشغيل التصفية التلقائية (احتفظ بواحد)</button>")
+        html_parts.append("</form>")
+        html_parts.append("</div>")
+
+        # إرشاد سريع: روابط العودة لصفحة الطلاب
+        changelist_url = reverse('admin:%s_%s_changelist' % (Student._meta.app_label, Student._meta.model_name))
+        html_parts.append(f"<hr/><p><a href='{changelist_url}'>العودة لقائمة الطلاب</a></p>")
+
+        # --- JavaScript: وظائف الأزرار (تحديد التكرارات، إلغاء التحديد) ---
+        js = r"""
+<script>
+(function(){
+  function uniq(arr){ return Array.from(new Set(arr)); }
+  document.getElementById('select-duplicates-btn').addEventListener('click', function(e){
+    // اجمع كل الشيك بوكسات المصنفة حسب data-group
+    const checkboxes = Array.from(document.querySelectorAll("input[name='delete_ids']"));
+    const groups = {};
+    checkboxes.forEach(function(cb){
+      const g = cb.getAttribute('data-group') || '__nogroup__';
+      const idx = parseInt(cb.getAttribute('data-index')||'0');
+      if(!groups[g]) groups[g]=[];
+      groups[g].push({cb:cb, idx:idx});
+    });
+    // لكل مجموعة نترك العنصر صاحب idx==0 دون تحديد ونعلّم الباقي
+    Object.keys(groups).forEach(function(g){
+      const items = groups[g].sort(function(a,b){return a.idx-b.idx});
+      for(let i=0;i<items.length;i++){
+        items[i].cb.checked = (i!==0); // علم كل شيء ما عدا الأول
+      }
+    });
+    alert('تم تحديد كل السجلات المكررة (كل مجموعة تم اختيار كل العناصر ما عدا واحد). الآن يمكنك الضغط على "حذف المحدد" أو تعديل الاختيارات يدوياً.');
+  });
+
+  document.getElementById('clear-selection-btn').addEventListener('click', function(e){
+    const checkboxes = document.querySelectorAll("input[name='delete_ids']");
+    checkboxes.forEach(function(cb){ cb.checked=false; });
+  });
+})();
+</script>
+"""
+
+        html_parts.append(js)
+
+        html = "\n".join(html_parts)
+
+        return HttpResponse(html)
+
+    def dedupe_view(self, request):
+        """
+        POST action: يقوم بتصفية التكرارات بناءً على النطاق المختار (phone / parent / both).
+        يتم الحفاظ على سجل واحد ونقل العلاقات ثم حذف الباقي.
+        """
+        if request.method != 'POST' or request.POST.get('action') != 'dedupe':
+            return HttpResponseRedirect(reverse('admin:students_duplicates'))
+
+        scope = request.POST.get('scope', 'both')  # phone / parent / both
+
+        groups = []
+        if scope in ('phone', 'both'):
+            phone_groups = Student.objects.values('phone_number').annotate(cnt=Count('id')).filter(phone_number__isnull=False).filter(cnt__gt=1)
+            for item in phone_groups:
+                num = item['phone_number']
+                members = list(Student.objects.filter(phone_number=num).order_by('id'))
+                groups.append(('phone', num, members))
+
+        if scope in ('parent', 'both'):
+            parent_groups = Student.objects.values('parent_phone_number').annotate(cnt=Count('id')).filter(parent_phone_number__isnull=False).filter(cnt__gt=1)
+            for item in parent_groups:
+                num = item['parent_phone_number']
+                members = list(Student.objects.filter(parent_phone_number=num).order_by('id'))
+                groups.append(('parent', num, members))
+
+        total_groups = len(groups)
+        total_removed = 0
+        total_transferred_subs = 0
+        total_transferred_logs = 0
+
+        # ابدأ عملية آمنة ضمن معاملة قاعدة بيانات
+        with transaction.atomic():
+            for grp_type, key, members in groups:
+                # حدد الناجي (أقدم سجل) ونسخ الباقي
+                survivor = members[0]
+                duplicates = members[1:]
+                if not duplicates:
+                    continue
+
+                # نقل Subscriptions المرتبطة من النسخ الأخرى إلى survivor
+                subs_qs = Subscription.objects.filter(student__in=duplicates)
+                try:
+                    updated = subs_qs.update(student=survivor)
+                    total_transferred_subs += updated
+                except Exception:
+                    for sub in list(subs_qs):
+                        existing = Subscription.objects.filter(student=survivor, year=sub.year).first()
+                        if existing:
+                            existing.courses.add(*list(sub.courses.all()))
+                            sub.delete()
+                        else:
+                            sub.student = survivor
+                            sub.save()
+                            total_transferred_subs += 1
+
+                # نقل ActivityLog
+                logs_qs = ActivityLog.objects.filter(student__in=duplicates)
+                try:
+                    updated_logs = logs_qs.update(student=survivor)
+                    total_transferred_logs += updated_logs
+                except Exception:
+                    for log in list(logs_qs):
+                        log.student = survivor
+                        log.save()
+                        total_transferred_logs += 1
+
+                # محاولة نقل علاقات عكسية عامة (محاولات الامتحان، أو أي علاقات أخرى) بشكل حذر
+                for dup in duplicates:
+                    for rel in Student._meta.related_objects:
+                        accessor = rel.get_accessor_name()
+                        try:
+                            related_manager = getattr(dup, accessor)
+                        except Exception:
+                            continue
+                        related_model = rel.related_model
+                        if related_model in (Subscription, ActivityLog):
+                            continue
+                        try:
+                            qs = related_manager.all()
+                            for obj in list(qs):
+                                fk_name = rel.field.name
+                                if hasattr(obj, fk_name):
+                                    setattr(obj, fk_name, survivor)
+                                    obj.save()
+                        except Exception:
+                            continue
+
+                # بعد النقل، حذف النسخ المكررة
+                removed_count = 0
+                for dup in duplicates:
+                    try:
+                        dup.delete()
+                        removed_count += 1
+                    except Exception:
+                        continue
+
+                total_removed += removed_count
+
+        msg = f"المجموعات المعالجة: {total_groups}. السجلات المحذوفة: {total_removed}. اشتراكات نُقلت: {total_transferred_subs}. سجلات نشاط نُقلت: {total_transferred_logs}."
+        return HttpResponseRedirect(reverse('admin:students_duplicates') + f'?deduped={escape(msg)}')
 
     def get_exams_completed(self, obj):
         """إرجاع عدد الامتحانات المكتملة"""
@@ -185,12 +479,6 @@ class SubscriptionAdmin(admin.ModelAdmin):
 # ──────────────────────────────────────────────────────────────────────────────
 # تسجيل ActivityLog كـ ModelAdmin مستقل (اختياري لعرض السجلات كاملة بشكل منفصل)
 # ──────────────────────────────────────────────────────────────────────────────
-import json
-from django.contrib import admin
-from django.utils.html import format_html
-
-# ... تأكد أن ActivityLog مستورد أو مسجّل أعلاه ...
-
 @admin.register(ActivityLog)
 class ActivityLogAdmin(admin.ModelAdmin):
     list_display = ('student', 'activity_type', 'lecture', 'exam', 'score', 'created_at')
@@ -210,10 +498,8 @@ class ActivityLogAdmin(admin.ModelAdmin):
             try:
                 data = json.loads(data)
             except Exception:
-                # إذا لم يكن JSON صالح، نرجع النص كما هو
                 return format_html("<pre>{}</pre>", data)
 
-        # خريطة مفاتيح -> تسميات عربية (أضف مفاتيحك هنا حسب الحاجة)
         labels = {
             'delta_seconds': 'الزيادة في الثواني',
             'watched_seconds': 'الثواني المشاهدة',
@@ -234,14 +520,11 @@ class ActivityLogAdmin(admin.ModelAdmin):
         if not data:
             return "-"
 
-        # بناء جدول HTML بسيط
         rows = []
         for key, value in data.items():
-            label = labels.get(key, key)  # استخدم التسمية العربية إن وُجدت، وإلا المفتاح نفسه
-            # تحويل القيم البوليانية إلى نعم/لا
+            label = labels.get(key, key)
             if isinstance(value, bool):
                 value = 'نعم' if value else 'لا'
-            # تنسيق القوائم أو القواميس بشكل بصري
             if isinstance(value, (dict, list)):
                 try:
                     pretty = json.dumps(value, ensure_ascii=False, indent=2)
@@ -256,6 +539,8 @@ class ActivityLogAdmin(admin.ModelAdmin):
         return format_html(html)
 
     details_ar.short_description = "تفاصيل (بالعربي)"
+
+
 
 
 
