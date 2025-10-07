@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ar">
   <head>
@@ -320,6 +322,106 @@
           font-size: 0.95rem;
         }
       }
+
+      /* خاص: قاعدة لإخفاء خانة الصورة (يمكن تطبيقها عبر JS دون حذف HTML) */
+      .__hide-avatar__ {
+        display: none !important;
+      }
+      /*************************************/
+      /* تحديث تصميم زر "تواصل مع الدعم" — ألوان مريحة وجذابة + صورة بدل الأيقونة */
+      /* استهداف الرابط بالـ attribute selector (لن نغيّر أي HTML) */
+      a[href^="https://wa.me/201556060683"]
+      {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        padding: 12px 20px !important;
+        min-width: 170px !important;
+        width: auto !important;
+        font-size: 1.03rem !important;
+        font-weight: 800 !important;
+        color: #04202a !important; /* نص داكن على خلفية فاتحة */
+        text-decoration: none !important;
+        border-radius: 14px !important;
+        border: none !important;
+        background: linear-gradient(
+          135deg,
+          #e6fffa 0%,
+          #dff8f2 38%,
+          #c6f0e9 100%
+        ) !important; /* مريح للعين */
+        box-shadow: 0 6px 20px rgba(2, 18, 23, 0.08),
+          0 2px 6px rgba(6, 150, 136, 0.06);
+        transition: transform 200ms cubic-bezier(0.2, 0.9, 0.2, 1),
+          box-shadow 200ms, background 350ms !important;
+        position: relative !important;
+        overflow: hidden !important;
+        padding-right: 22px !important;
+        padding-left: 22px !important;
+        text-align: center !important;
+      }
+
+      /* أنشئ المساحة للصورة على اليسار (بدل الإيموجي) */
+      a[href^="https://wa.me/201556060683"]::before
+      {
+        content: "";
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        margin-inline-end: 8px;
+        box-shadow: 0 4px 12px rgba(2, 18, 23, 0.06) inset;
+        /* القيمة الافتراضية لصورة الأيقونة: يمكنك استبدالها عبر JS أو تغيير المسار مباشرة */
+        background-image: url("{% static 'images/—Pngtree—whatsapp icon_8704827.png' %}");
+      }
+
+      /* نص الزر: لون متباين لطيف */
+      a[href^="https://wa.me/201556060683"] span,
+a[href^="https://wa.me/201556060683"] > *
+      {
+        color: #04202a !important;
+      }
+
+      /* Hover effect */
+      a[href^="https://wa.me/201556060683"]:hover
+      {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 18px 50px rgba(2, 18, 23, 0.14),
+          0 6px 22px rgba(6, 150, 136, 0.08);
+        background: linear-gradient(
+          135deg,
+          #f0fffd 0%,
+          #e6fff8 50%,
+          #dff8f2 100%
+        ) !important;
+      }
+
+      /* Focus (accessibility) */
+      a[href^="https://wa.me/201556060683"]:focus
+      {
+        outline: 3px solid rgba(34, 193, 166, 0.18) !important;
+        outline-offset: 4px !important;
+      }
+
+      /* Responsive tweak */
+      @media (max-width: 720px) {
+        a[href^="https://wa.me/201556060683"]
+        {
+          padding: 10px 14px !important;
+          min-width: 140px !important;
+          font-size: 1rem !important;
+        }
+        a[href^="https://wa.me/201556060683"]::before
+        {
+          width: 34px;
+          height: 34px;
+          margin-inline-end: 6px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -334,6 +436,28 @@
         </div>
         <div class="reg-form-box">
           <h2>إنشاء الحساب</h2>
+          <a
+            href="https://wa.me/201556060683?text=مرحبا، لدي مشكلة في إنشاء الحساب"
+            style="
+              background: linear-gradient(135deg, #25d366, #128c7e);
+              color: #fff;
+              background-image: url(images/WhatsApp\ Image\ 2025-07-12\ at\ 7.19.47\ PM.jpeg);
+              border: none;
+              padding: 15px;
+              width: 20%;
+              min-width: 150px;
+              font-size: 1.1rem;
+              border-radius: 30px;
+              cursor: pointer;
+              transition: transform 0.3s ease, box-shadow 0.3s ease;
+              margin-top: 25px;
+              font-weight: 700;
+              text-decoration: none;
+              display: inline-block;
+              text-align: center;
+            "
+            >تواصل مع الدعم
+          </a>
           <form
             id="regForm"
             action="{% url 'accounts:register_student' %}"
@@ -461,7 +585,7 @@
               </div>
 
               <!-- NEW: حقل الصورة الشخصية الإلزامي (آخر خانة قبل زر الإرسال) -->
-              <div class="reg-group full">
+              <div class="reg-group full" id="regAvatarWrapper">
                 <label for="regAvatar">الصورة الشخصية (اجباري)</label>
                 <input
                   type="file"
@@ -665,7 +789,76 @@
           }
         });
     </script>
+
+    <!-- === سكربت إضافي خفيف لتعطيل الصورة فعليًا ودون حذف أي سطر من الكود أعلاه ===
+         - يخفي خانة الصورة من العرض (display: none) دون حذف HTML.
+         - يضع ملف وهمي داخل input ليجتاز التحقق الأمامي.
+         - يمنع إرسال أي ملف 'avatar' عبر fetch عن طريق مسح الحقل من FormData.
+         لإلغاء التعطيل: احذف أو علّق هذا السكربت.
+    -->
+    <script>
+      (function () {
+        document.addEventListener("DOMContentLoaded", function () {
+          try {
+            // 1) إخفاء خانة الصورة بصريًا (HTML يبقى كما هو)
+            const avatarWrapper = document.getElementById("regAvatarWrapper");
+            if (avatarWrapper) {
+              avatarWrapper.classList.add("__hide-avatar__");
+            }
+
+            // 2) ضع ملف وهمي داخل input#regAvatar حتى لا يكسر التحقق الأمامي (إن وُجد)
+            const avatarInput = document.getElementById("regAvatar");
+            if (avatarInput) {
+              try {
+                const blob = new Blob([""], { type: "image/png" });
+                const fakeFile = new File([blob], "placeholder.png", {
+                  type: "image/png",
+                });
+                const dt = new DataTransfer();
+                dt.items.add(fakeFile);
+                avatarInput.files = dt.files;
+              } catch (e) {
+                // تجاهل إذا فشل
+              }
+            }
+          } catch (e) {
+            // تجاهل أي خطأ
+            console.warn("avatar-hide helper failed:", e);
+          }
+        });
+
+        // 3) اعتراض fetch وحذف 'avatar' من FormData قبل الإرسال
+        (function () {
+          const originalFetch = window.fetch;
+          window.fetch = function (input, init) {
+            try {
+              if (init && init.body && typeof init.body.get === "function") {
+                try {
+                  init.body.delete && init.body.delete("avatar");
+                } catch (e) {
+                  // تجاهل أخطاء الحذف
+                }
+              } else if (input instanceof Request) {
+                // لو fetch استُدعي مع Request كأول وسيط، نحاول تعديل جسمه (نادر الاستخدام هنا)
+                try {
+                  const req = input;
+                  if (req && req.bodyUsed === false) {
+                    // لا نفعل شيء معقد هنا، نترك الأصل للتعامل الطبيعي
+                  }
+                } catch (e) {}
+              }
+            } catch (e) {
+              // تجاهل
+            }
+            return originalFetch.apply(this, arguments);
+          };
+        })();
+      })();
+    </script>
+    <!---------------------------------------------------->
   </body>
 </html>
+
+
 
 
