@@ -28,7 +28,7 @@ class Student(models.Model):
     courses = models.ManyToManyField(Course, related_name='student_courses', verbose_name="الكورسات", blank=True)
 
     # ✅ حقل الصورة الشخصية
-    avatar = models.ImageField(upload_to="avatars/%Y/%m/%d/", verbose_name="الصورة الشخصية", null=True, blank=True)
+    #avatar = models.ImageField(upload_to="avatars/%Y/%m/%d/", verbose_name="الصورة الشخصية", null=True, blank=True)
 
     def normalize_phone(self, phone):
         """تحويل الرقم إلى أرقام فقط (بدون مسافات أو علامات)"""
@@ -189,6 +189,8 @@ class ActivityLog(models.Model):
 
     def __str__(self):
         return f"{self.student} — {self.get_activity_type_display()} @ {self.created_at:%Y-%m-%d %H:%M}"
+
+
 
 
 
