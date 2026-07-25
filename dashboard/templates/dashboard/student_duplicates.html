@@ -1,0 +1,51 @@
+{% extends "dashboard/base.html" %}
+{% block title %}تكرارات الطلاب{% endblock %}
+{% block content %}
+
+<div class="dash-topbar">
+  <div>
+    <h1>🧹 تكرارات الطلاب</h1>
+    <div class="subtitle">حسابات مسجلة أكثر من مرة بنفس رقم هاتف ولي الأمر</div>
+  </div>
+  <a class="btn btn-outline" href="{% url 'dashboard:list' 'students' %}">← رجوع لقائمة الطلاب</a>
+</div>
+
+<form method="post" id="dup-form">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="delete_selected" />
+
+  <div class="panel">
+    <h2>حسب رقم هاتف ولي الأمر</h2>
+    {% if parent_groups %}
+      {% for group in parent_groups %}
+        <div style="border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:14px;">
+          <strong>الرقم: {{ group.key }}</strong> — {{ group.members|length }} حسابات
+          <table class="dash-table" style="margin-top:8px;">
+            <thead><tr><th></th><th>الاسم</th><th>الصف</th><th>المحافظة</th></tr></thead>
+            <tbody>
+              {% for m in group.members %}
+              <tr>
+                <td><input type="checkbox" name="delete_ids" value="{{ m.pk }}" /></td>
+                <td>{{ m.full_name }}</td>
+                <td>{{ m.get_grade_display }}</td>
+                <td>{{ m.governorate }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state"><div class="emoji">🎉</div>لا توجد أرقام ولي أمر مكررة.</div>
+    {% endif %}
+  </div>
+
+  {% if parent_groups %}
+  <div class="form-actions">
+    <button type="submit" class="btn btn-danger" onclick="return confirm('هل أنت متأكد من حذف الحسابات المحددة؟ لا يمكن التراجع عن هذه العملية.');">
+      🗑️ حذف المحدد
+    </button>
+  </div>
+  {% endif %}
+</form>
+{% endblock %}

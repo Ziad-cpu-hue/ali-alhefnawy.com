@@ -1,0 +1,28 @@
+{% extends "dashboard/base.html" %}
+{% block title %}تأكيد الحذف{% endblock %}
+{% block content %}
+
+<div class="dash-topbar">
+  <h1>🗑️ تأكيد الحذف</h1>
+</div>
+
+<div class="panel" style="max-width:520px;">
+  <p style="font-size:1rem;">
+    هل أنت متأكد من حذف
+    <strong>{{ config.label_singular }}: {{ obj }}</strong>؟
+    <br />
+    <span style="color:var(--danger); font-weight:700;">لا يمكن التراجع عن هذه العملية.</span>
+  </p>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-danger">نعم، احذف</button>
+      {% if model_slug %}
+        <a class="btn btn-outline" href="{% url 'dashboard:list' model_slug %}">إلغاء</a>
+      {% else %}
+        <a class="btn btn-outline" href="{% url cancel_url_name %}">إلغاء</a>
+      {% endif %}
+    </div>
+  </form>
+</div>
+{% endblock %}

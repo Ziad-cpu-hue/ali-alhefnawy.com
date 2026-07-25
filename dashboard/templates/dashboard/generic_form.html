@@ -1,0 +1,47 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if is_edit %}تعديل{% else %}إضافة{% endif %} {{ config.label_singular }}{% endblock %}
+{% block content %}
+
+<div class="dash-topbar">
+  <div>
+    <h1>{% if is_edit %}✏️ تعديل {{ config.label_singular }}{% else %}➕ إضافة {{ config.label_singular }}{% endif %}</h1>
+  </div>
+  <a class="btn btn-outline" href="{% url 'dashboard:list' model_slug %}">← رجوع للقائمة</a>
+</div>
+
+<div class="panel">
+  {% if form.non_field_errors %}
+    <ul class="errorlist" style="margin-bottom:16px;">
+      {% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if model_slug == 'subscriptions' %}
+    <div class="msg error" style="margin-bottom:18px;">
+      ⚠️ اختر <strong>إما</strong> "الطالب" (لاشتراك فردي) <strong>أو</strong> "صف دراسي مستهدف" (لاشتراك يشمل الصف كله)،
+      ولا تختار الاثنين معًا ولا تتركهما فارغين — وإلا لن يتم الحفظ.
+    </div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <div class="form-grid">
+      {% for field in form %}
+        <div class="form-field {% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %} {% if field.field.widget.input_type == 'textarea' or field.html_name == 'description' %}full{% endif %}">
+          <label for="{{ field.id_for_label }}">
+            {{ field.label }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+          </label>
+          {{ field }}
+          {% if field.help_text %}<div class="help-text">{{ field.help_text }}</div>{% endif %}
+          {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">💾 حفظ</button>
+      <a class="btn btn-outline" href="{% url 'dashboard:list' model_slug %}">إلغاء</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

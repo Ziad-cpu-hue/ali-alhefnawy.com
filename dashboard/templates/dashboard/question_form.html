@@ -1,0 +1,60 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if is_edit %}تعديل سؤال{% else %}إضافة سؤال{% endif %}{% endblock %}
+{% block content %}
+
+<div class="dash-topbar">
+  <h1>{% if is_edit %}✏️ تعديل السؤال{% else %}➕ إضافة سؤال جديد{% endif %}</h1>
+  <a class="btn btn-outline" href="{% url 'dashboard:question_list' %}">← رجوع لبنك الأسئلة</a>
+</div>
+
+<div class="panel">
+  {% if form.non_field_errors %}
+    <ul class="errorlist" style="margin-bottom:16px;">
+      {% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <div class="form-grid">
+      {% for field in form %}
+        <div class="form-field {% if field.name == 'text' %}full{% endif %}">
+          <label for="{{ field.id_for_label }}">
+            {{ field.label }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+          </label>
+          {{ field }}
+          {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <h2 style="margin-top:26px;">🧩 الاختيارات (للأسئلة من نوع اختياري)</h2>
+    <div class="help-text" style="margin-bottom:14px;">حدد الاختيار الصحيح بعلامة ✅ بجانبه. اترك الحقل فارغًا لتجاهل الاختيار.</div>
+
+    {{ formset.management_form }}
+    {% for choice_form in formset %}
+      <div class="choice-row">
+        {{ choice_form.id }}
+        {{ choice_form.text }}
+        <label class="correct-toggle">
+          {{ choice_form.is_correct }} إجابة صحيحة ✅
+        </label>
+        {% if choice_form.instance.pk %}
+          <label class="correct-toggle" style="color:var(--danger);">
+            {{ choice_form.DELETE }} حذف
+          </label>
+        {% endif %}
+      </div>
+      {% if choice_form.errors %}
+        <ul class="errorlist">{% for field, errs in choice_form.errors.items %}{% for e in errs %}<li>{{ e }}</li>{% endfor %}{% endfor %}</ul>
+      {% endif %}
+    {% endfor %}
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">💾 حفظ السؤال</button>
+      <a class="btn btn-outline" href="{% url 'dashboard:question_list' %}">إلغاء</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

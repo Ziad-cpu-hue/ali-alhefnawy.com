@@ -1,0 +1,61 @@
+{% extends "dashboard/base.html" %}
+{% block title %}الأسئلة{% endblock %}
+{% block content %}
+
+<div class="dash-topbar">
+  <div>
+    <h1>❓ بنك الأسئلة</h1>
+    <div class="subtitle">أسئلة الاختيار من متعدد والمقالية لكل الامتحانات</div>
+  </div>
+  <a class="btn btn-primary" href="{% url 'dashboard:question_add' %}">+ إضافة سؤال</a>
+</div>
+
+<div class="toolbar">
+  <form class="search-box" method="get" style="min-width:280px;">
+    <span>📝</span>
+    <select name="exam" onchange="this.form.submit()" style="border:none;background:transparent;font-family:inherit;font-size:0.9rem;flex:1;">
+      <option value="">كل الامتحانات</option>
+      {% for exam in exams %}
+        <option value="{{ exam.id }}" {% if selected_exam == exam.id|stringformat:"s" %}selected{% endif %}>{{ exam.title }}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+<div class="panel">
+  {% if questions %}
+  <div class="table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>السؤال</th>
+          <th>النوع</th>
+          <th>الامتحان</th>
+          <th>الدرجة</th>
+          <th>إجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for q in questions %}
+        <tr>
+          <td>{{ q.text|default:"(سؤال بصورة)"|truncatechars:60 }}</td>
+          <td>{{ q.get_question_type_display }}</td>
+          <td>{{ q.exam }}</td>
+          <td>{{ q.score }}</td>
+          <td class="actions-cell">
+            <a class="btn btn-outline btn-sm" href="{% url 'dashboard:question_edit' q.pk %}">✏️ تعديل</a>
+            <a class="btn btn-danger btn-sm" href="{% url 'dashboard:question_delete' q.pk %}">🗑️ حذف</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="emoji">📭</div>
+    لا توجد أسئلة بعد.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

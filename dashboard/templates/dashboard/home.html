@@ -1,0 +1,112 @@
+{% extends "dashboard/base.html" %}
+{% block title %}الرئيسية{% endblock %}
+{% block content %}
+
+<div class="dash-topbar">
+  <div>
+    <h1>نظرة عامة</h1>
+    <div class="subtitle">أهم أرقام المنصة لحظة بلحظة</div>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="icon">👨‍🎓</div>
+    <div>
+      <div class="value">{{ stats.students_count }}</div>
+      <div class="label">إجمالي الطلاب</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="icon">📚</div>
+    <div>
+      <div class="value">{{ stats.courses_count }}</div>
+      <div class="label">الكورسات</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="icon">🎬</div>
+    <div>
+      <div class="value">{{ stats.lectures_count }}</div>
+      <div class="label">المحاضرات</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="icon">📝</div>
+    <div>
+      <div class="value">{{ stats.exams_count }}</div>
+      <div class="label">الامتحانات</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="icon">❓</div>
+    <div>
+      <div class="value">{{ stats.questions_count }}</div>
+      <div class="label">الأسئلة</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="icon">💳</div>
+    <div>
+      <div class="value">{{ stats.active_subscriptions }}</div>
+      <div class="label">اشتراكات مفعّلة</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="icon">🏆</div>
+    <div>
+      <div class="value">{{ stats.top_students_count }}</div>
+      <div class="label">الطلاب الأوائل</div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>⚡ إجراءات سريعة</h2>
+  <div style="display:flex; flex-wrap:wrap; gap:10px;">
+    <a class="btn btn-primary" href="{% url 'dashboard:add' 'courses' %}">+ كورس جديد</a>
+    <a class="btn btn-primary" href="{% url 'dashboard:add' 'lectures' %}">+ محاضرة جديدة</a>
+    <a class="btn btn-primary" href="{% url 'dashboard:add' 'exams' %}">+ امتحان جديد</a>
+    <a class="btn btn-primary" href="{% url 'dashboard:question_add' %}">+ سؤال جديد</a>
+    <a class="btn btn-outline" href="{% url 'dashboard:add' 'top-students' %}">+ طالب متفوق</a>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>📊 آخر النشاطات</h2>
+  {% if recent_activity %}
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>الطالب</th>
+            <th>النشاط</th>
+            <th>المحاضرة/الامتحان</th>
+            <th>الدرجة</th>
+            <th>الوقت</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in recent_activity %}
+          <tr>
+            <td>{{ log.student }}</td>
+            <td>{{ log.get_activity_type_display }}</td>
+            <td>{{ log.lecture|default:log.exam|default:"—" }}</td>
+            <td>{{ log.score|default:"—" }}</td>
+            <td>{{ log.created_at|date:"Y-m-d H:i" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:14px;">
+      <a class="btn btn-outline btn-sm" href="{% url 'dashboard:activity_log' %}">عرض السجل كاملاً →</a>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <div class="emoji">📭</div>
+      لا يوجد أي نشاط مسجل حتى الآن.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

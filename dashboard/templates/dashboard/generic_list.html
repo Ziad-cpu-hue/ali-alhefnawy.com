@@ -1,0 +1,72 @@
+{% extends "dashboard/base.html" %}
+{% load dashboard_extras %}
+{% block title %}{{ config.label }}{% endblock %}
+{% block content %}
+
+<div class="dash-topbar">
+  <div>
+    <h1>{{ config.icon }} {{ config.label }}</h1>
+    <div class="subtitle">إدارة كاملة: إضافة، تعديل، حذف</div>
+  </div>
+  <a class="btn btn-primary" href="{% url 'dashboard:add' model_slug %}">+ إضافة {{ config.label_singular }}</a>
+</div>
+
+{% if config.search_fields %}
+<div class="toolbar">
+  <form class="search-box" method="get">
+    <span>🔎</span>
+    <input type="text" name="q" placeholder="ابحث في {{ config.label }}..." value="{{ query }}" />
+  </form>
+  {% if model_slug == 'students' %}
+    <a class="btn btn-outline btn-sm" href="{% url 'dashboard:student_duplicates' %}">🧹 عرض التكرارات</a>
+  {% endif %}
+</div>
+{% endif %}
+
+<div class="panel">
+  {% if objects %}
+  <div class="table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          {% for field in config.list_fields %}
+            <th>{{ field }}</th>
+          {% endfor %}
+          <th>إجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for obj in objects %}
+        <tr>
+          {% for field in config.list_fields %}
+            <td>
+              {% if field == 'is_active' %}
+                {% if obj.is_active %}<span class="badge green">مفعّل</span>{% else %}<span class="badge red">غير مفعّل</span>{% endif %}
+              {% else %}
+                {{ obj|get_attr:field }}
+              {% endif %}
+            </td>
+          {% endfor %}
+          <td class="actions-cell">
+            <a class="btn btn-outline btn-sm" href="{% url 'dashboard:edit' model_slug obj.pk %}">✏️ تعديل</a>
+            {% if model_slug == 'lectures' %}
+              <a class="btn btn-outline btn-sm" href="{% url 'dashboard:lecture_attendance' obj.pk %}">👥 الحضور</a>
+            {% elif model_slug == 'exams' %}
+              <a class="btn btn-outline btn-sm" href="{% url 'dashboard:exam_attendance' obj.pk %}">👥 الحضور</a>
+              <a class="btn btn-outline btn-sm" href="{% url 'dashboard:question_list_for_exam' obj.pk %}">❓ الأسئلة</a>
+            {% endif %}
+            <a class="btn btn-danger btn-sm" href="{% url 'dashboard:delete' model_slug obj.pk %}">🗑️ حذف</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="empty-state">
+      <div class="emoji">📭</div>
+      لا توجد بيانات بعد. اضغط "إضافة {{ config.label_singular }}" للبدء.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

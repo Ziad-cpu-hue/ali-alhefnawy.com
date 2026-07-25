@@ -1,0 +1,63 @@
+{% extends "dashboard/base.html" %}
+{% block title %}سجل النشاط{% endblock %}
+{% block content %}
+
+<div class="dash-topbar">
+  <div>
+    <h1>📊 سجل نشاط الطلاب</h1>
+    <div class="subtitle">آخر 300 نشاط مسجل على المنصة</div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <form class="search-box" method="get" style="min-width:260px;">
+    <span>🔎</span>
+    <input type="text" name="student" placeholder="ابحث باسم الطالب أو رقم الهاتف..." value="{{ student_q }}" />
+  </form>
+  <form class="search-box" method="get" style="min-width:220px;">
+    <span>📂</span>
+    <select name="type" onchange="this.form.submit()" style="border:none;background:transparent;font-family:inherit;font-size:0.9rem;flex:1;">
+      <option value="">كل الأنواع</option>
+      {% for key, label in activity_types %}
+        <option value="{{ key }}" {% if type_q == key %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+<div class="panel">
+  {% if logs %}
+  <div class="table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>الطالب</th>
+          <th>النشاط</th>
+          <th>المحاضرة</th>
+          <th>الامتحان</th>
+          <th>الدرجة</th>
+          <th>الوقت</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td>{{ log.student }}</td>
+          <td>{{ log.get_activity_type_display }}</td>
+          <td>{{ log.lecture|default:"—" }}</td>
+          <td>{{ log.exam|default:"—" }}</td>
+          <td>{{ log.score|default:"—" }}</td>
+          <td>{{ log.created_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="emoji">📭</div>
+    لا توجد نتائج مطابقة.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+
+<div class="dash-topbar">
+  <h1>👥 {{ title }}</h1>
+  <a class="btn btn-outline" href="{% url back_url back_slug %}">← رجوع</a>
+</div>
+
+<div class="attendance-grid">
+  <div class="panel">
+    <h2>✅ الحاضرون ({{ present.count }})</h2>
+    {% if present %}
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>الطالب</th><th>تفاصيل</th></tr></thead>
+        <tbody>
+          {% for a in present %}
+          <tr>
+            <td>{{ a.student }}</td>
+            <td>
+              {% if a.watched_seconds is not None %}
+                {{ a.watched_seconds }} / {{ a.lecture_duration }} ثانية
+              {% elif a.answered_count is not None %}
+                {{ a.answered_count }} / {{ a.total_questions }} سؤال
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="empty-state"><div class="emoji">📭</div>لا يوجد حاضرون بعد.</div>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <h2>❌ الغائبون ({{ absent.count }})</h2>
+    {% if absent %}
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>الطالب</th></tr></thead>
+        <tbody>
+          {% for a in absent %}
+          <tr><td>{{ a.student }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="empty-state"><div class="emoji">🎉</div>لا يوجد غائبون.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
