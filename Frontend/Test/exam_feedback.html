@@ -1,0 +1,382 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نتيجة الامتحان — {{ exam.title }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-1: #0b2827;
+      --bg-2: #113c3d;
+      --accent: #17b897;
+      --accent-soft: #e4f7f2;
+      --gold: #f5b301;
+      --red: #ef4444;
+      --red-soft: #fdecec;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --card: #ffffff;
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Tajawal", Arial, sans-serif;
+      background: radial-gradient(circle at top, var(--bg-2), var(--bg-1) 70%);
+      min-height: 100vh;
+      padding: 40px 16px 70px;
+      color: var(--text);
+    }
+
+    .wrap { max-width: 840px; margin: 0 auto; }
+
+    /* ---------- Hero result card ---------- */
+    .hero-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+      padding: 44px 32px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: cardIn 0.6s ease both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-soft), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .exam-name {
+      position: relative;
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .exam-title {
+      position: relative;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--bg-2);
+      margin-bottom: 26px;
+    }
+
+    /* ---------- Circular progress ring ---------- */
+    .ring-wrap {
+      position: relative;
+      width: 210px;
+      height: 210px;
+      margin: 0 auto 22px;
+    }
+    .ring-wrap svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+    .ring-bg { fill: none; stroke: #eef2f0; stroke-width: 14; }
+    .ring-progress {
+      fill: none;
+      stroke: url(#ringGradient);
+      stroke-width: 14;
+      stroke-linecap: round;
+      stroke-dasharray: 565.48;
+      stroke-dashoffset: 565.48;
+      transition: stroke-dashoffset 1.4s cubic-bezier(.2,.9,.25,1) 0.2s;
+    }
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .ring-score {
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: var(--bg-2);
+      line-height: 1;
+    }
+    .ring-score span { font-size: 1.2rem; font-weight: 700; color: var(--muted); }
+    .ring-label { font-size: 0.85rem; color: var(--muted); margin-top: 4px; font-weight: 700; }
+
+    .tier-badge {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+    .tier-excellent { background: var(--accent-soft); color: #0b6b57; }
+    .tier-verygood  { background: #e8f3ff; color: #1d5ba6; }
+    .tier-good      { background: #fff6df; color: #9a6b00; }
+    .tier-weak       { background: var(--red-soft); color: #b3261e; }
+
+    .tier-sub { position: relative; color: var(--muted); font-size: 0.92rem; margin-top: 4px; }
+
+    /* ---------- Stat pills ---------- */
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+      position: relative;
+    }
+    .stat-pill {
+      background: #f7f9fc;
+      border: 1px solid #eaeef3;
+      border-radius: 14px;
+      padding: 14px 20px;
+      min-width: 120px;
+    }
+    .stat-pill .num { font-size: 1.35rem; font-weight: 900; color: var(--bg-2); }
+    .stat-pill .lbl { font-size: 0.78rem; color: var(--muted); font-weight: 700; margin-top: 2px; }
+
+    .attendance-note {
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      position: relative;
+    }
+    .attendance-note .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.78rem;
+    }
+    .badge-present { background: var(--accent-soft); color: #0b6b57; }
+    .badge-absent { background: var(--red-soft); color: #b3261e; }
+
+    /* ---------- Review section ---------- */
+    .review-section { margin-top: 30px; }
+    .review-title {
+      color: #eafaf7;
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin: 0 0 16px;
+      padding: 0 4px;
+    }
+
+    .q-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      border-inline-start: 6px solid var(--muted);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      animation: qIn 0.5s ease both;
+    }
+    .q-card.correct { border-inline-start-color: var(--accent); }
+    .q-card.incorrect { border-inline-start-color: var(--red); }
+    .q-card.pending { border-inline-start-color: var(--gold); }
+    @keyframes qIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+
+    .q-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .q-number { font-size: 0.78rem; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+    .q-text { font-size: 1rem; font-weight: 700; color: var(--text); }
+
+    .q-status {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .status-correct { background: var(--accent-soft); color: #0b6b57; }
+    .status-incorrect { background: var(--red-soft); color: #b3261e; }
+    .status-pending { background: #fff6df; color: #9a6b00; }
+
+    .q-answer {
+      margin-top: 12px;
+      font-size: 0.92rem;
+      color: var(--muted);
+      background: #f7f9fc;
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+    .q-answer strong { color: var(--text); }
+    .q-correct-answer {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      background: var(--accent-soft);
+      color: #0b6b57;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+    }
+
+    /* ---------- Actions ---------- */
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: 0.25s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--accent); color: #06231f; }
+    .btn-primary:hover { background: #12a184; transform: translateY(-2px); }
+    .btn-ghost { background: rgba(255,255,255,0.1); color: #eafaf7; border: 1.5px solid rgba(255,255,255,0.25); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+
+    @media (max-width: 560px) {
+      .hero-card { padding: 32px 18px 28px; }
+      .ring-wrap { width: 170px; height: 170px; }
+      .ring-score { font-size: 2.1rem; }
+      .exam-title { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- ================= Hero: نتيجة الامتحان + الدائرة المتحركة ================= -->
+    <div class="hero-card">
+      <div class="exam-name">نتيجتك في</div>
+      <div class="exam-title">{{ exam.title }}</div>
+
+      <div class="ring-wrap" id="ringWrap">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#17b897" />
+              <stop offset="100%" stop-color="#0d3d3a" />
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="100" cy="100" r="90" />
+          <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="90" />
+        </svg>
+        <div class="ring-center">
+          <div class="ring-score">{{ score|floatformat:0 }}<span>%</span></div>
+          <div class="ring-label">النتيجة النهائية</div>
+        </div>
+      </div>
+
+      {% if score >= 85 %}
+        <div class="tier-badge tier-excellent">🌟 ممتاز جدًا!</div>
+        <div class="tier-sub">أداء رائع، استمر على هذا المستوى 👏</div>
+      {% elif score >= 70 %}
+        <div class="tier-badge tier-verygood">🎯 جيد جدًا</div>
+        <div class="tier-sub">نتيجة قوية، شوية مذاكرة كمان وتوصل للامتياز</div>
+      {% elif score >= 50 %}
+        <div class="tier-badge tier-good">👍 جيد</div>
+        <div class="tier-sub">نتيجة مقبولة، راجع الأسئلة اللي غلطت فيها تحت</div>
+      {% else %}
+        <div class="tier-badge tier-weak">💪 يحتاج مراجعة</div>
+        <div class="tier-sub">متقلقش، راجع الدرس تاني وحاول من جديد</div>
+      {% endif %}
+
+      <div class="stats-row">
+        <div class="stat-pill">
+          <div class="num">{{ correct_answers }}</div>
+          <div class="lbl">إجابة صحيحة</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">{{ total_questions }}</div>
+          <div class="lbl">إجمالي الأسئلة</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">{{ total_questions|subtract:correct_answers }}</div>
+          <div class="lbl">إجابات خاطئة</div>
+        </div>
+      </div>
+
+      <div class="attendance-note">
+        حالة الحضور:
+        {% if attendance_status == 'present' %}
+          <span class="badge badge-present">✅ حاضر</span>
+        {% else %}
+          <span class="badge badge-absent">⛔ غائب</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- ================= مراجعة الإجابات تفصيليًا ================= -->
+    <div class="review-section">
+      <h2 class="review-title">📋 مراجعة إجاباتك</h2>
+
+      {% for question in exam.questions.all %}
+        {% with given=student_answers|get_dict_value:question.id %}
+        {% with correct=question|is_answer_correct:given %}
+        <div class="q-card {% if correct == True %}correct{% elif correct == False %}incorrect{% else %}pending{% endif %}">
+          <div class="q-top">
+            <div>
+              <div class="q-number">سؤال {{ forloop.counter }}</div>
+              <div class="q-text">{{ question.text|default:"سؤال بصورة" }}</div>
+            </div>
+            {% if correct == True %}
+              <span class="q-status status-correct">✅ صحيحة</span>
+            {% elif correct == False %}
+              <span class="q-status status-incorrect">❌ خاطئة</span>
+            {% else %}
+              <span class="q-status status-pending">⏳ بانتظار المراجعة</span>
+            {% endif %}
+          </div>
+
+          {% if question.image %}
+            <img src="{{ question.image.url }}" alt="صورة السؤال" style="max-width:100%; border-radius:10px; margin-top:12px;" />
+          {% endif %}
+
+          <div class="q-answer"><strong>إجابتك:</strong> {{ given }}</div>
+
+          {% if correct == False %}
+            <div class="q-correct-answer">✔️ الإجابة الصحيحة: {{ question|correct_choice_text }}</div>
+          {% endif %}
+        </div>
+        {% endwith %}
+        {% endwith %}
+      {% endfor %}
+    </div>
+
+    <div class="actions">
+      <a href="/" class="btn btn-primary">🏠 العودة للرئيسية</a>
+      <a href="javascript:window.print()" class="btn btn-ghost">🖨️ طباعة النتيجة</a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var score = parseFloat("{{ score|default:0 }}") || 0;
+      var circle = document.getElementById('ringProgress');
+      var circumference = 2 * Math.PI * 90; // r=90
+      var offset = circumference - (Math.min(Math.max(score, 0), 100) / 100) * circumference;
+
+      // نخليها تبدأ فاضية ثم تتحرك للقيمة الصحيحة عشان يبان أنيميشن الملء
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          circle.style.strokeDashoffset = offset;
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

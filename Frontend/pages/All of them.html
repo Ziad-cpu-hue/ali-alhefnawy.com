@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Mr.Mohamed Mostafa</title>
+
+    <!-- Force Somar Sans for header via Google Fonts -->
+    <!-- استيراد خط ExpoArabic -->
+    <link
+      href="https://db.onlinewebfonts.com/c/9004b72f96afb1e5f13389f489791113?family=ExpoArabic-Book"
+      rel="stylesheet"
+    />
+    <link
+      href="https://db.onlinewebfonts.com/c/5a46b722115434b86e5e9719ff7f6f23?family=ExpoArabic-Bold"
+      rel="stylesheet"
+    />
+    <style>
+      /* Force header placeholder and everything inside it to use Somar Sans */
+      #header .scoped-root,
+      #header .scoped-root * {
+        font-family: "ExpoArabic-Book", "ExpoArabic-Bold", sans-serif !important;
+      }
+    </style>
+
+    <style>
+      /* قاعدة عامة آمنة */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background: #fff;
+        color: #222;
+        line-height: 1.4;
+      }
+
+      #components {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        align-items: stretch;
+        width: 100%;
+        max-width: none;
+        margin: 0 auto;
+      }
+
+      #components > .component {
+        width: 100%;
+        padding: 0;
+        border: none;
+        background: transparent;
+      }
+
+      #components #app-root,
+      #components .scoped-root,
+      #components .hero-root {
+        width: 100%;
+      }
+      #components #app-root,
+      #components .hero-root {
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="components" aria-live="polite">
+      <!-- NOTE: we keep these placeholder elements (their ids are important) -->
+      <div id="header" class="component" aria-label="Header"></div>
+      <div id="section2" class="component" aria-label="Section 2"></div>
+      <div
+        id="secondSection"
+        class="component"
+        aria-label="Second Section"
+      ></div>
+      <div id="sectionThree" class="component" aria-label="Section Three"></div>
+      <div id="footer" class="component" aria-label="Footer"></div>
+    </div>
+
+    <script>
+      // نفس الكود الأصلي بالضبط مع تعديل المسارات فقط
+      async function loadComponentReplace(placeholderId, file) {
+        try {
+          const res = await fetch(file);
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          const text = await res.text();
+
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(text, "text/html");
+
+          // نسخ الستايلات واللينكات زي ما هي
+          const headEls = doc.head
+            ? Array.from(
+                doc.head.querySelectorAll(
+                  'link[rel="stylesheet"], link[rel="preconnect"], link[rel="preload"], style'
+                )
+              )
+            : [];
+          headEls.forEach((el) => {
+            if (el.tagName.toLowerCase() === "link") {
+              const href = el.getAttribute("href");
+              const rel = el.getAttribute("rel") || "stylesheet";
+              if (!href) return;
+              if (
+                !document.head.querySelector(
+                  `link[rel="${rel}"][href="${href}"]`
+                )
+              ) {
+                const link = document.createElement("link");
+                for (const attr of Array.from(el.attributes)) {
+                  link.setAttribute(attr.name, attr.value);
+                }
+                document.head.appendChild(link);
+              }
+            } else {
+              const txt = el.textContent || "";
+              const exists = Array.from(
+                document.head.querySelectorAll("style")
+              ).some((s) => (s.textContent || "").trim() === txt.trim());
+              if (!exists) {
+                const s = document.createElement("style");
+                s.textContent = txt;
+                document.head.appendChild(s);
+              }
+            }
+          });
+
+          const scripts = Array.from(doc.querySelectorAll("script"));
+          const fragment = document.createDocumentFragment();
+          const bodyChildren = doc.body ? Array.from(doc.body.childNodes) : [];
+          if (bodyChildren.length === 0) {
+            const wrapper = document.createElement("div");
+            wrapper.innerHTML = text;
+            fragment.appendChild(wrapper);
+          } else {
+            bodyChildren.forEach((node) =>
+              fragment.appendChild(node.cloneNode(true))
+            );
+          }
+
+          const placeholder = document.getElementById(placeholderId);
+          if (!placeholder) return;
+          placeholder.innerHTML = "";
+          placeholder.appendChild(fragment);
+
+          for (const s of scripts) {
+            const newScript = document.createElement("script");
+            if (s.src) {
+              for (const attr of Array.from(s.attributes)) {
+                newScript.setAttribute(attr.name, attr.value);
+              }
+              if (!newScript.hasAttribute("defer")) newScript.defer = true;
+              document.body.appendChild(newScript);
+              await new Promise((resolve) => {
+                newScript.addEventListener("load", resolve);
+                newScript.addEventListener("error", resolve);
+                setTimeout(resolve, 5000);
+              });
+            } else {
+              newScript.textContent = s.textContent || "";
+              document.body.appendChild(newScript);
+            }
+          }
+        } catch (err) {
+          console.error("Error loading " + file, err);
+          const ph = document.getElementById(placeholderId);
+          if (ph)
+            ph.innerHTML =
+              '<p style="color:crimson; padding:12px">خطأ في تحميل المكوّن: ' +
+              file +
+              "</p>";
+        }
+      }
+
+      // ✅ هنا التعديل الوحيد: بدل ما نطلب اسم الملف مباشرة، نطلب URL view الخاص به
+      loadComponentReplace("header", "/header/");
+      loadComponentReplace("section2", "/section2/");
+      loadComponentReplace("secondSection", "/second-section/");
+      loadComponentReplace("sectionThree", "/section-three/");
+      loadComponentReplace("footer", "/footer/");
+
+      // بقية الكود كما هو بدون أي تعديل
+      (function swapTextWithImage() {
+        function trySwapAll() {
+          const containers = Array.from(
+            document.querySelectorAll(".container")
+          );
+          let didSwap = false;
+          containers.forEach((container) => {
+            const text = container.querySelector(".text-section");
+            const img = container.querySelector(".quote-box");
+            if (text && img) {
+              if (
+                img.compareDocumentPosition(text) &
+                Node.DOCUMENT_POSITION_FOLLOWING
+              ) {
+                container.insertBefore(img, text);
+                didSwap = true;
+              }
+            }
+          });
+          return didSwap;
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", () => {
+            if (trySwapAll()) return;
+            const observer = new MutationObserver((mutations, obs) => {
+              if (trySwapAll()) obs.disconnect();
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+            setTimeout(() => observer.disconnect(), 8000);
+          });
+        } else {
+          if (!trySwapAll()) {
+            const observer = new MutationObserver((mutations, obs) => {
+              if (trySwapAll()) obs.disconnect();
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+            setTimeout(() => observer.disconnect(), 8000);
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>

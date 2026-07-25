@@ -1,0 +1,108 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Footer Example</title>
+    <style>
+      /* --- Footer Styles --- */
+      .main-wrapper {
+        margin: 0;
+        padding: 0;
+        background: #111;
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .site-footer {
+        background: #000;
+        color: #7b8faf;
+        text-align: center;
+        padding: 20px 20px 10px;
+        position: relative;
+      }
+      .footer-divider {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: yellow;
+        border: none;
+        margin: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .footer-inner {
+        max-width: 800px;
+        margin: 2px auto 0;
+        padding-top: 10px;
+      }
+      .footer-title {
+        font-size: 1.25rem;
+        margin: 0 0 15px;
+        color: #7b8faf;
+        direction: ltr;
+        font-weight: normal;
+      }
+      .footer-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+      }
+      .footer-icon {
+        width: 300px;
+        height: auto;
+      }
+      .footer-text {
+        font-size: 1rem;
+        line-height: 1.4;
+        direction: rtl;
+        margin: 0;
+      }
+      .footer-dev {
+        margin: 15px 0 8px;
+        font-size: 1.2rem;
+        color: #7b8faf;
+        direction: ltr;
+        font-weight: normal;
+      }
+      .footer-copy {
+        font-size: 1.1rem;
+        color: #7b8faf;
+        direction: rtl;
+        margin: 0;
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-wrapper">
+      <!-- الفوتر -->
+      <footer class="site-footer">
+        <hr class="footer-divider" />
+        <div class="footer-inner">
+          <h2 class="footer-title">Mr.Mohamed Mostafa</h2>
+          <div class="footer-content">
+            <img
+              src="{% static 'images/scholarship_18125026.png' %}"
+              alt="Education Icon"
+              class="footer-icon"
+            />
+            <p class="footer-text">
+              ❤️ تم إنشاء هذه المنصة لدعم الطلاب في مسيرتهم التعليمية ❤️
+            </p>
+          </div>
+          <p class="footer-dev">Developed by programmer Ziad</p>
+          <p class="footer-copy">
+            جميع الحقوق محفوظة © 2025 منصة تعليم اللغة الإنجليزية الثانوية
+            العامة
+          </p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

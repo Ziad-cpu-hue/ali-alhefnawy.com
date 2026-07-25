@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تصميم ثلاث كروت بتجاوب محسن</title>
+    <!-- خط SomarSans -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Somar+Sans:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ----------------- SomarSans @font-face (مرتب وعملي) ----------------- ينصح بوضع نسخ woff2/woff في ./fonts/ لسرعة أفضل، لكن إن كانت OTF محفوظة فقط فالـ fallback يلتقطها من Fonts/Font_(2)/ كما وضعت. --------------------------------------------------------------------- */ /* Helper: حاول المسار ./fonts/ أولاً ثم fallback إلى Fonts/Font_(2)/ */
+      /* ----------------- SomarSans @font-face (جاهزة لبيئة Django) ----------------- */
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Thin.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Thin.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Thin.otf' %}")
+            format("opentype");
+        font-weight: 100;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-ExtraLight.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-ExtraLight.woff' %}")
+            format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraLight.otf' %}")
+            format("opentype");
+        font-weight: 200;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Light.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Light.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Light.otf' %}")
+            format("opentype");
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Regular.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Regular.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Regular.otf' %}")
+            format("opentype");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Medium.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Medium.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Medium.otf' %}")
+            format("opentype");
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-SemiBold.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-SemiBold.woff' %}")
+            format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-SemiBold.otf' %}")
+            format("opentype");
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Bold.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Bold.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Bold.otf' %}")
+            format("opentype");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-ExtraBold.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-ExtraBold.woff' %}")
+            format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-ExtraBold.otf' %}")
+            format("opentype");
+        font-weight: 800;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "SomarSans";
+        src: url("{% static 'fonts/ArbFONTS-Somar-Black.woff2' %}")
+            format("woff2"),
+          url("{% static 'fonts/ArbFONTS-Somar-Black.woff' %}") format("woff"),
+          url("{% static 'Fonts/Font_(2)/ArbFONTS-Somar-Black.otf' %}")
+            format("opentype");
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+      }
+      /* ---------- الآن بقية الستايلات (كما طورتها سابقًا) ---------- */
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #060097;
+        font-family: "SomarSans", sans-serif;
+      }
+
+      .cards-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .container {
+        position: relative;
+        flex: 1 1 300px;
+        max-width: 450px;
+        width: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+        background-color: #132489;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+      }
+      .container:hover {
+        transform: scale(1.08);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+      }
+
+      .header-bar {
+        position: relative;
+        z-index: 1;
+        background: rgb(152 137 203 / 90%);
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-size: 3.2rem;
+        font-weight: 600;
+        font-family: "SomarSans", sans-serif;
+      }
+
+      /* ✅ تغيير لون النص فقط */
+      .header-bar {
+        color: #4c5156; /* اختر اللون اللي تحبه */
+      }
+
+      .header-bar img {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+      }
+
+      .bubble {
+        position: relative;
+        z-index: 1;
+        background: rgb(164 166 220 / 90%);
+        margin: 16px;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(221, 50, 50, 0.4);
+        transition: transform 0.3s ease;
+      }
+      .bubble:hover {
+        transform: translateY(-10px);
+      }
+      .bubble-title {
+        font-size: 3.2rem;
+        font-family: "SomarSans", sans-serif;
+        font-weight: 600;
+        color: #7c718f;
+        margin-bottom: 12px;
+      }
+      .bubble img {
+        width: 100%;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        transition: transform 0.3s ease;
+      }
+      .bubble img:hover {
+        transform: scale(1.05);
+      }
+      .bubble-text {
+        font-size: 3.2rem;
+        font-family: "SomarSans", sans-serif;
+        font-weight: 600;
+        color: #053c3e;
+        margin-bottom: 12px;
+      }
+
+      .footer-bar {
+        position: relative;
+        z-index: 1;
+        background: rgba(242, 242, 242, 0.9);
+        padding: 16px;
+        text-align: center;
+        font-size: 1.9rem;
+        font-family: "SomarSans", sans-serif;
+        font-weight: 600;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cards-wrapper">
+      <!-- الكارت الأول - الصف الثالث الثانوي -->
+      <div
+        class="container"
+        onclick="window.location.href='/content/third/'"
+        style="cursor: pointer"
+      >
+        <div class="header-bar">
+          <img
+            src="{% static 'images/scholarship_18125026.png' %}"
+            alt="Icon"
+          />
+          الصف الثالث الثانوي
+        </div>
+        <div class="bubble">
+          <div class="bubble-title">!دخول</div>
+          <img
+            src="{% static 'images/amr-taha-aoVFDCEt738-unsplash.jpg' %}"
+            alt="صورة"
+          />
+          <div class="bubble-text">ذاكر</div>
+        </div>
+        <div class="footer-bar">جميع كورسات ✔️ الصف الثالث الثانوي 🚀</div>
+      </div>
+
+      <!-- الكارت الثاني - الصف الثاني الثانوي -->
+      <div
+        class="container"
+        onclick="window.location.href='/content/second/'"
+        style="cursor: pointer"
+      >
+        <div class="header-bar">
+          <img
+            src="{% static 'images/scholarship_18125026.png' %}"
+            alt="Icon"
+          />
+          الصف الثاني الثانوي
+        </div>
+        <div class="bubble">
+          <div class="bubble-title">!دخول</div>
+          <img src="{% static 'images/sunset-485016.png' %}" alt="صورة" />
+          <div class="bubble-text">ذاكر</div>
+        </div>
+        <div class="footer-bar">جميع كورسات ✔️ الصف الثاني الثانوي 🚀</div>
+      </div>
+
+      <!-- الكارت الثالث - الصف الأول الثانوي -->
+      <div
+        class="container"
+        onclick="window.location.href='/content/first/'"
+        style="cursor: pointer"
+      >
+        <div class="header-bar">
+          <img
+            src="{% static 'images/scholarship_18125026.png' %}"
+            alt="Icon"
+          />
+          الصف الأول الثانوي
+        </div>
+        <div class="bubble">
+          <div class="bubble-title">!دخول</div>
+          <img src="{% static 'images/study-1968077.jpg' %}" alt="صورة" />
+          <div class="bubble-text">ذاكر</div>
+        </div>
+        <div class="footer-bar">جميع كورسات ✔️ الصف الاول الثانوي 🚀</div>
+      </div>
+    </div>
+  </body>
+</html>
